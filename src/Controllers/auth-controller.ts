@@ -10,7 +10,7 @@ export class AuthController {
     try {
       const { phoneNumber } = req.body;
       const data = await AuthService.userLogin(phoneNumber);
-      res.json(data);
+      res.status(200).json(data);
     } catch (error) {
       next(error);
     }
