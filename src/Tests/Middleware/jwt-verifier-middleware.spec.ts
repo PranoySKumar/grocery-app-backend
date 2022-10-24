@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { it, expect, describe, beforeEach, vi, afterEach } from "vitest";
-import { isAuth } from "../../Middleware/jwt-verifier.middleware";
+import { isAuth } from "../../Middleware/jwt-verifier-middleware";
 import { generateToken } from "../../Utils/jwt-util";
 import { RequestError } from "../../Utils/request-error";
 
