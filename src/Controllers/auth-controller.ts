@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { AuthService } from "../Services/auth.service";
+import { AuthService } from "../Services/auth-service";
 
 export class AuthController {
   static async login(
@@ -8,6 +8,7 @@ export class AuthController {
     next: NextFunction
   ) {
     try {
+      console.log("called");
       const { phoneNumber } = req.body;
       const data = await AuthService.userLogin(phoneNumber);
       res.status(200).json(data);

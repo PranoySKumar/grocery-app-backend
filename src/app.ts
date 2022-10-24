@@ -1,8 +1,8 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import userRoutes from "./Routes/User";
-import { errorHandler } from "./Middleware/error-handler";
+import { UserRoutes } from "./Routes";
+import { errorHandler } from "./Middleware/error-handler-middleware";
 import dotenv from "dotenv";
 import { getEnv } from "./Config";
 
@@ -14,7 +14,7 @@ app.use(cors()); //CORS handler
 
 app.use(express.json()); //body-parser
 
-app.use("/", userRoutes); //registering routes
+app.use("/", UserRoutes); //registering routes
 
 app.use(errorHandler); //registering error handler.
 
