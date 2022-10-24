@@ -1,14 +1,13 @@
-import jwt from "jsonwebtoken";
-import { authConfig } from "../Data/auth-config";
-
 import User from "../Models/User.model";
+import { generateToken } from "../Utils/jwt-util";
 
 export class AuthService {
   static async userLogin(phoneNumber: number) {
     const user = await User.findOne({ _id: phoneNumber });
-    const token = jwt.sign({ phoneNumber }, authConfig.jwt_secret, {
-      expiresIn: "1m",
-    });
+
+    //generates token.
+    const token = await generateToken({ phoneNumber });
+
     //If the user is already there just send that user's details else create a new user.
     if (user) {
       return { token, user };

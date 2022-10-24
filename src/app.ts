@@ -3,6 +3,10 @@ import cors from "cors";
 import mongoose from "mongoose";
 import userRoutes from "./Routes/User";
 import { errorHandler } from "./Middleware/error-handler";
+import dotenv from "dotenv";
+import { getEnv } from "./Config";
+
+dotenv.config(); //configuring env variables
 
 const app = express();
 
@@ -10,14 +14,12 @@ app.use(cors()); //CORS handler
 
 app.use(express.json()); //body-parser
 
-//registering routes
-app.use("/", userRoutes);
+app.use("/", userRoutes); //registering routes
 
-//registering error handler.
-app.use(errorHandler);
+app.use(errorHandler); //registering error handler.
 
 mongoose
-  .connect("mongodb://localhost:27017/grocery_app")
+  .connect(getEnv().DATA_BASE_URL)
   .then(() => {
     console.log("mongoose connected");
     app.listen(process.env.PORT || 4000);
