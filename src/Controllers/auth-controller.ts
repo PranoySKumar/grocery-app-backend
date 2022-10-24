@@ -8,6 +8,7 @@ export class AuthController {
     next: NextFunction
   ) {
     try {
+      console.log("called");
       const { phoneNumber } = req.body;
       const data = await AuthService.userLogin(phoneNumber);
       res.status(200).json(data);

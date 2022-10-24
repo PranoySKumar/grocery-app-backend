@@ -3,17 +3,23 @@ import { body, validationResult } from "express-validator";
 import { RequestError } from "../Utils/request-error";
 
 export default class AuthValidator {
-  static userLoginValidator = [
-    body("phoneNumber").notEmpty().isNumeric().isLength({ min: 10, max: 10 }),
-    validationResult,
+  static userLoginValidators = [
+    body("phoneNumber")
+      .notEmpty()
+      .withMessage("Please fill the required field")
+      .isNumeric()
+      .withMessage("Should be a 10-digit number")
+      .isLength({ min: 10, max: 10 })
+      .withMessage("Should be a 10-digit number"),
+    this.validateErrors,
   ];
 
-  static validateResult(req: Request, res: Response, next: NextFunction) {
-    const errors = validationResult(req);
-    if (errors.isEmpty()) {
+  static validateErrors(req: Request, res: Response, next: NextFunction) {
+    const result = validationResult(req);
+    if (result.isEmpty()) {
       next();
     } else {
-      throw new RequestError(406, "Not Valid Data", { validationError: errors.array });
+      next(new RequestError(406, "Not Valid Data", { validationError: result.array() }));
     }
   }
 }
