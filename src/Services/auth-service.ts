@@ -1,5 +1,5 @@
-import User from "../Models/User.model";
-import { generateToken } from "../Utils/jwt-util";
+import { User } from "../Models";
+import { generateToken } from "../Utils";
 
 export default class AuthService {
   static async userLogin(phoneNumber: number) {

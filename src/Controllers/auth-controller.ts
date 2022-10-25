@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { AuthService } from "../Services";
 
-export class AuthController {
+export default class AuthController {
   static async login(
     req: Request<any, any, { phoneNumber: number }>,
     res: Response,
