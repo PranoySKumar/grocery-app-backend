@@ -1,9 +1,9 @@
 export enum Discount {
-  PERCENTAGE,
-  PRICE,
+  percentage,
+  price,
 }
 
 export enum Quantity {
-  NOS,
-  WGT,
+  nos,
+  wgt,
 }
