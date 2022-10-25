@@ -4,7 +4,7 @@ import { getEnv } from "../Config";
 import { RequestError } from "../Utils/request-error";
 
 //This middle ware is used to validate the token.
-export const isAuth: RequestHandler = (req, res, next) => {
+const isAuth: RequestHandler = (req, res, next) => {
   if (!req.headers.authorization) {
     throw new RequestError(401, "no authorization token set");
   }
@@ -21,3 +21,5 @@ export const isAuth: RequestHandler = (req, res, next) => {
   req.body.user = decodedTokenData;
   next();
 };
+
+export default isAuth;

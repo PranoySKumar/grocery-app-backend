@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import { UserRoutes } from "./Routes";
-import { errorHandler } from "./Middleware/error-handler-middleware";
+import { errorHandler } from "./Middleware";
 import dotenv from "dotenv";
 import { getEnv } from "./Config";
 

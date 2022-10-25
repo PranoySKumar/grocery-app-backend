@@ -1,7 +1,7 @@
 import User from "../Models/User.model";
 import { generateToken } from "../Utils/jwt-util";
 
-export class AuthService {
+export default class AuthService {
   static async userLogin(phoneNumber: number) {
     const user = await User.findOne({ _id: phoneNumber });
 
