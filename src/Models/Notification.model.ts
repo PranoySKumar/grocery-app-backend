@@ -1,7 +1,9 @@
-import { model, Schema } from "mongoose";
+import { model, ObjectId, Schema, SchemaTypes } from "mongoose";
 import { NotificationType } from "../Data";
+import { IUser } from "./";
 
-interface INotification {
+export interface INotification {
+  userId?: ObjectId | IUser;
   title: string;
   description: string;
   notificationType: NotificationType;
@@ -11,6 +13,7 @@ interface INotification {
 
 const notificationSchema = new Schema<INotification>(
   {
+    userId: { type: SchemaTypes.ObjectId, ref: "Users" },
     title: { type: String, required: true },
     description: { type: String, required: true },
     notificationType: { type: String, enum: Object.values(NotificationType), required: true },
