@@ -13,8 +13,8 @@ export interface IStore {
   phoneNumber: number;
   password: string;
   editing: Editing;
-  updatedAt: Date;
-  createdAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const editingSchema = new Schema<Editing>(

@@ -15,15 +15,15 @@ type TQuantity = {
 export interface IProduct {
   id: ObjectId;
   name: string;
-  description: string;
+  description?: string;
   price: number;
 
-  discount: TDiscount;
+  discount?: TDiscount;
   quantity: TQuantity;
   totalQuantity: number;
   categoryId: ObjectId | ICategory;
-  updatedAt: Date;
-  createdAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const discountSchema = new Schema<TDiscount>(

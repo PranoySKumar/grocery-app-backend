@@ -13,8 +13,8 @@ export interface IOrder {
   transactionAmount: number;
   userId: ObjectId | IUser;
   cart: CartItem[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const cartItemSchema = new Schema<CartItem>(

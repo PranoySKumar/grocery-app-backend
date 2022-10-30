@@ -7,6 +7,8 @@ export interface IUser {
   address?: string;
   profileImageUrl?: string;
   favourites?: ObjectId[];
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const userSchema = new Schema<IUser>(
