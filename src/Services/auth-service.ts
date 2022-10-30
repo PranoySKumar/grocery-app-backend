@@ -1,9 +1,10 @@
 import { User } from "../Models";
 import { generateToken } from "../Utils";
+import { UserService } from "./";
 
 export default class AuthService {
   static async userLogin(phoneNumber: number) {
-    const user = await User.findOne({ _id: phoneNumber });
+    const user = await UserService.findOneUser({ _id: phoneNumber });
 
     //generates token.
     const token = await generateToken({ phoneNumber });
@@ -12,7 +13,7 @@ export default class AuthService {
     if (user) {
       return { token, user };
     } else {
-      const newUser = await new User({ _id: phoneNumber }).save();
+      const newUser = UserService.createUser({ _id: phoneNumber });
       return { token, user: newUser };
     }
   }
