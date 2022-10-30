@@ -1,5 +1,5 @@
-export enum Notification {
+export enum NotificationType {
   flashSales,
-  productStatus,
-  orderStatus,
+  productStatusUpdate,
+  orderStatusUpdate,
 }
