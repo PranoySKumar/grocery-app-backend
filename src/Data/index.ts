@@ -1,2 +1,3 @@
 export { Discount, Quantity } from "./product-enum";
-export { OrderStatus } from "./order-status-enum";
+export { OrderStatus } from "./orders-enum";
+export { NotificationType } from "./notification-enum";
