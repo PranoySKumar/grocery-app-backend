@@ -8,7 +8,7 @@ export interface ICategory {
   updatedAt?: Date;
 }
 
-const categorySchema = new Schema(
+const categorySchema = new Schema<ICategory>(
   {
     name: { type: SchemaTypes.String, required: true },
     type: { type: SchemaTypes.String, required: true },

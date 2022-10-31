@@ -3,6 +3,7 @@ import { NotificationType } from "../Data";
 import { IUser } from "./";
 
 export interface INotification {
+  id?: ObjectId;
   userId?: ObjectId | IUser;
   title: string;
   description: string;
