@@ -16,9 +16,9 @@ type Address = {
 export interface IUser {
   _id: number;
   userName?: string;
-  location?: { type: "Point"; coordinates: number[] };
+  location?: { lat: number; lng: number };
   address?: Address;
-  pincode?: string;
+  pincode?: number;
   profileImageUrl?: string;
   favourites?: ObjectId[];
   createdAt?: Date;
@@ -45,6 +45,7 @@ const userSchema = new Schema<IUser>(
     _id: { type: SchemaTypes.Number, required: true }, //phoneNumber;
     userName: SchemaTypes.String,
     address: { type: [addressSchema], default: [] },
+    pincode: Number,
     location: { type: { lat: SchemaTypes.Number, lng: SchemaTypes.Number } },
     favourites: { type: [SchemaTypes.ObjectId], ref: "product" },
     profileImageUrl: SchemaTypes.String,
