@@ -1,9 +1,10 @@
-import { User } from "../Models";
+import { LoginRequestBody } from "../Controllers";
 import { generateToken } from "../Utils";
 import { UserService } from "./";
 
 export default class AuthService {
-  static async userLogin(phoneNumber: number) {
+  static async userLogin(body: LoginRequestBody) {
+    const { phoneNumber, userName, location, pincode } = body;
     const user = await UserService.findOneUser({ _id: phoneNumber });
 
     //generates token.
@@ -13,7 +14,7 @@ export default class AuthService {
     if (user) {
       return { token, user };
     } else {
-      const newUser = UserService.createUser({ _id: phoneNumber });
+      const newUser = UserService.createUser({ _id: phoneNumber, userName, location, pincode });
       return { token, user: newUser };
     }
   }
