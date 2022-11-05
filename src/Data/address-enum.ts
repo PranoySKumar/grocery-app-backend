@@ -3,3 +3,5 @@ export enum AddressType {
   work = "work",
   other = "other",
 }
+
+AddressType.home;

@@ -1,19 +1,19 @@
 import { model, ObjectId, Schema, SchemaTypes } from "mongoose";
-import { Discount, Quantity } from "../Data/product-enum";
+import { DiscountType, QuantityType } from "../Data/product-enum";
 import { ICategory } from "./Category.model";
 
 type TDiscount = {
-  type: Discount;
+  type: DiscountType;
   value: number;
 };
 
 type TQuantity = {
-  type: Quantity;
+  type: QuantityType;
   value: number;
 };
 
 export interface IProduct {
-  id: ObjectId;
+  _id: ObjectId;
   name: string;
   description?: string;
   price: number;

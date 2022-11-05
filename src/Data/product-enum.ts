@@ -1,9 +1,9 @@
-export enum Discount {
+export enum DiscountType {
   percentage,
   price,
 }
 
-export enum Quantity {
+export enum QuantityType {
   nos,
   wgt,
 }
