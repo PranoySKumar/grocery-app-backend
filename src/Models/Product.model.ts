@@ -43,7 +43,7 @@ const productSchema = new Schema<IProduct>(
     price: { type: Number, required: true },
     quantity: { type: quantitySchema, required: true },
     discount: { type: discountSchema },
-    totalQuantity: { Number, required: true },
+    totalQuantity: { type: Number, required: true },
     categoryId: { type: SchemaTypes.ObjectId, required: true, ref: "Category" },
   },
   { timestamps: true }
