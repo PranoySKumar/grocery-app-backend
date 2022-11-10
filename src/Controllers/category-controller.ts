@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { Types } from "mongoose";
 import { CategoryService } from "../Services";
 
 export interface FindAllCategoriesRequestQueryParams {
@@ -70,6 +71,19 @@ export default class CategoryController {
 
       await CategoryService.delete(_id);
       res.status(200).json({ deleted: true });
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async getCategory(
+    req: Request<EditCategoryRequestParams>,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const _id = req.params._id;
+      const category = await CategoryService.getOne({ _id: new Types.ObjectId(_id) });
+      res.status(200).json({ category });
     } catch (error) {
       next(error);
     }
