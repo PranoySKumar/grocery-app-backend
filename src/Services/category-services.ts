@@ -10,10 +10,16 @@ export default class CategoryService {
   static async update(_id: string, data: { type?: string; name?: string }) {
     return await Category.findByIdAndUpdate(_id, { $set: data }, { omitUndefined: true });
   }
-  static async getAll(filter: object) {
-    return await Category.find(filter);
+  static async getAll(filter?: object) {
+    if (filter) {
+      return await Category.find(filter);
+    }
+    return await Category.find();
   }
-  static async getOne(filter: object) {
-    return await Category.findOne(filter);
+  static async getOne(filter?: object) {
+    if (filter) {
+      return await Category.findOne(filter);
+    }
+    return await Category.findOne();
   }
 }
