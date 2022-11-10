@@ -1,19 +1,19 @@
 import { NextFunction, Request, Response } from "express";
 import { CategoryService } from "../Services";
 
-interface FindAllCategoriesRequestQueryParams {
+export interface FindAllCategoriesRequestQueryParams {
   type: string;
 }
 
-interface AddNewCategoryRequestBody {
+export interface AddNewCategoryRequestBody {
   type: string;
   name: string;
 }
-interface EditCategoryRequestParams {
+export interface EditCategoryRequestParams {
   _id: string;
 }
 
-class CategoryController {
+export default class CategoryController {
   static async findAllCategories(
     req: Request<any, any, any, FindAllCategoriesRequestQueryParams>,
     res: Response,
