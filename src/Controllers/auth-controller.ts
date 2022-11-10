@@ -15,6 +15,10 @@ export type VerifyOtpRequestParams = {
   phoneNumber: number;
   code: number;
 };
+export interface StoreLoginRequestBody {
+  email: string;
+  password: string;
+}
 
 export default class AuthController {
   static async login(req: Request<any, any, LoginRequestBody>, res: Response, next: NextFunction) {
@@ -31,13 +35,25 @@ export default class AuthController {
     res: Response,
     next: NextFunction
   ) {
-    console.log(req.params.phoneNumber);
-    const result = await AuthService.sendOtp(req.params);
+    const result = await AuthService.sendUserOtp(req.params);
     res.status(200).json(result);
   }
 
   static async verifyOtp(req: Request<VerifyOtpRequestParams>, res: Response) {
-    const result = await AuthService.verifyOtp(req.body);
+    const result = await AuthService.verifyUserOtp(req.body);
     res.status(200).json(result);
+  }
+  static async storeLogin(
+    req: Request<any, any, StoreLoginRequestBody>,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const result = await AuthService.storeLogin(req.body);
+
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
   }
 }

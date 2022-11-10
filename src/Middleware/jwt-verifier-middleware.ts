@@ -13,7 +13,6 @@ const isAuth: RequestHandler = (req, res, next) => {
   let decodedTokenData;
 
   try {
-    console.log(getEnv().JWT_SECRET, token);
     decodedTokenData = jwt.verify(token, getEnv().JWT_SECRET);
   } catch (error) {
     throw new RequestError(401, "Un-Authorised Request");
