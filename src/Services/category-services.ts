@@ -1,10 +1,19 @@
 import { Category, ICategory } from "../Models";
 
-class CategoryServices {
-  static async addCategory(name: string, type: string) {
+export default class CategoryService {
+  static async add(name: string, type: string) {
     return await new Category({ name, type }).save();
   }
-  static async deleteCategory(_id: string) {
+  static async delete(_id: string) {
     return await Category.findByIdAndDelete(_id);
+  }
+  static async update(_id: string, data: { type?: string; name?: string }) {
+    return await Category.findByIdAndUpdate(_id, { $set: data }, { omitUndefined: true });
+  }
+  static async getAll(filter: object) {
+    return await Category.find(filter);
+  }
+  static async getOne(filter: object) {
+    return await Category.findOne(filter);
   }
 }

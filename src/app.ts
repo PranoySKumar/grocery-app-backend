@@ -6,7 +6,7 @@ import { errorHandler } from "./Middleware";
 import dotenv from "dotenv";
 import { getEnv } from "./Config";
 import path from "path";
-import { StoreService } from "./Services";
+import { CategoryService, StoreService } from "./Services";
 
 dotenv.config(); //configuring env variables
 
