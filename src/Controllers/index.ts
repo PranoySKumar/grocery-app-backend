@@ -1,1 +1,7 @@
-export { default as AuthController, LoginRequestBody } from "./auth-controller";
+export {
+  default as AuthController,
+  LoginRequestBody,
+  VerifyOtpRequestParams,
+  VerifyPhoneNumberRequestParams,
+  StoreLoginRequestBody,
+} from "./auth-controller";

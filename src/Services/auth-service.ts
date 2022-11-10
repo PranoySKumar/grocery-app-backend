@@ -1,12 +1,12 @@
-import { LoginRequestBody } from "../Controllers";
-import {
-  VerifyOtpRequestParams,
-  VerifyPhoneNumberRequestParams,
-} from "../Controllers/auth-controller";
-import { generateToken } from "../Utils";
-import { UserService } from "./";
+import bcrypt from "bcrypt";
+
+import { LoginRequestBody, StoreLoginRequestBody } from "../Controllers";
+import { VerifyOtpRequestParams, VerifyPhoneNumberRequestParams } from "../Controllers";
+import { generateToken, RequestError } from "../Utils";
+import { StoreService, UserService } from "./";
 
 export default class AuthService {
+  //user auth
   static async userLogin(body: LoginRequestBody) {
     const { phoneNumber, userName, location, pincode } = body;
     const user = await UserService.findOneUser({ _id: phoneNumber });
@@ -28,14 +28,34 @@ export default class AuthService {
       return { token, user: { userName, location, pincode, id: newUser._id } };
     }
   }
-  static async sendOtp(body: VerifyPhoneNumberRequestParams) {
+  static async sendUserOtp(body: VerifyPhoneNumberRequestParams) {
     const { phoneNumber } = body;
     await timeout(2000);
     return { send: true };
   }
-  static async verifyOtp(body: VerifyOtpRequestParams) {
+  static async verifyUserOtp(body: VerifyOtpRequestParams) {
     await timeout(2000);
     return { verified: true };
+  }
+
+  //store auth
+  static async storeLogin(body: StoreLoginRequestBody) {
+    const { email, password } = body;
+    const store = await StoreService.getStore({ email });
+
+    if (!store) {
+      throw new RequestError(401, "Not Authorized");
+    }
+
+    const result = await bcrypt.compare(password, store!.password!);
+
+    if (result) {
+      const token = await generateToken({ _id: store!._id.toString() });
+
+      return { token, store };
+    } else {
+      throw new RequestError(401, "Not Authorized");
+    }
   }
 }
 
