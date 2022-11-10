@@ -1,9 +1,9 @@
 export enum DiscountType {
-  percentage,
-  price,
+  percentage = "percentage",
+  price = "price",
 }
 
 export enum QuantityType {
-  nos,
-  wgt,
+  nos = "nos",
+  wgt = "wgt",
 }

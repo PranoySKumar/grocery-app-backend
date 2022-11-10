@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { IProduct, Product } from "../Models";
+import { Category, IProduct, Product } from "../Models";
 
 export default class ProductService {
   //get all products;
@@ -30,11 +30,7 @@ export default class ProductService {
   }
 
   //get single product;
-  static async getProduct(filter?: object, projection?: IProduct) {
-    if (!filter) {
-      return await Product.findOne({}, projection);
-    } else {
-      return await Product.findOne(filter, projection);
-    }
+  static async getProduct(filter: object, projection?: IProduct) {
+    return await Product.findOne(filter, projection).populate(Category.modelName);
   }
 }
