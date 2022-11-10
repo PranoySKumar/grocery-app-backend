@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
+import { body } from "express-validator";
 import { Types } from "mongoose";
-import { CategoryService } from "../Services";
+import { CategoryService, FileService } from "../Services";
 
 export interface FindAllCategoriesRequestQueryParams {
   type: string;
@@ -41,7 +42,9 @@ export default class CategoryController {
   ) {
     try {
       const { type, name } = req.body;
-      const newCategory = await CategoryService.add(type, name);
+
+      const imageUrl = FileService.saveImage(req.file!);
+      const newCategory = await CategoryService.add(type, name, imageUrl);
       res.status(201).json(newCategory);
     } catch (error) {
       next(error);
@@ -55,7 +58,11 @@ export default class CategoryController {
     try {
       const _id = req.params._id;
       const { type, name } = req.body;
-      const newCategory = await CategoryService.update(_id, { type, name });
+      let imageUrl;
+      if (req.file) {
+        imageUrl = FileService.saveImage(req.file);
+      }
+      const newCategory = await CategoryService.update(_id, { type, name, imageUrl });
       res.status(200).json(newCategory);
     } catch (error) {
       next(error);
