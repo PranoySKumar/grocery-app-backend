@@ -14,10 +14,11 @@ categoryRouter.patch(
   CategoryController.editCategory as RequestHandler<any>
 );
 categoryRouter.put("/category", isAuth, CategoryController.addNewCategory as RequestHandler);
-categoryRouter.put(
+categoryRouter.delete(
   "/category/:_id",
   isAuth,
   CategoryController.deleteCategory as RequestHandler<any>
 );
+categoryRouter.get("/category/:_id", isAuth, CategoryController.getCategory as RequestHandler<any>);
 
 export default categoryRouter;
