@@ -22,7 +22,7 @@ app.get("/image/fish", (req, res) =>
 );
 
 //registering routes
-app.use("/", routes);
+app.use(routes);
 
 app.use(errorHandler); //registering error handler.
 

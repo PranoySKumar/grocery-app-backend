@@ -6,34 +6,34 @@ import { isAuth } from "../Middleware";
 
 const upload = multer();
 
-const categoryRouter = Router();
+const categoryRoutes = Router();
 
-categoryRouter.get(
+categoryRoutes.get(
   "/category",
   isAuth,
   CategoryController.findAllCategories as RequestHandler<any, any, any, any>
 );
 
-categoryRouter.patch(
+categoryRoutes.patch(
   "/category/:_id",
   isAuth,
   upload.single("image"),
   CategoryController.editCategory as RequestHandler<any>
 );
 
-categoryRouter.put(
+categoryRoutes.put(
   "/category",
   isAuth,
   upload.single("image"),
   CategoryController.addNewCategory as RequestHandler
 );
 
-categoryRouter.delete(
+categoryRoutes.delete(
   "/category/:_id",
   isAuth,
   CategoryController.deleteCategory as RequestHandler<any>
 );
 
-categoryRouter.get("/category/:_id", isAuth, CategoryController.getCategory as RequestHandler<any>);
+categoryRoutes.get("/category/:_id", isAuth, CategoryController.getCategory as RequestHandler<any>);
 
-export default categoryRouter;
+export default categoryRoutes;
