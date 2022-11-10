@@ -43,7 +43,7 @@ export default class CategoryController {
     try {
       const { type, name } = req.body;
 
-      const imageUrl = FileService.saveImage(req.file!);
+      const imageUrl = await FileService.saveImage(req.file!);
       const newCategory = await CategoryService.add(type, name, imageUrl);
       res.status(201).json(newCategory);
     } catch (error) {
@@ -60,7 +60,7 @@ export default class CategoryController {
       const { type, name } = req.body;
       let imageUrl;
       if (req.file) {
-        imageUrl = FileService.saveImage(req.file);
+        imageUrl = await FileService.saveImage(req.file);
       }
       const newCategory = await CategoryService.update(_id, { type, name, imageUrl });
       res.status(200).json(newCategory);
