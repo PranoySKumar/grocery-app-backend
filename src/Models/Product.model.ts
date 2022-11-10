@@ -13,7 +13,7 @@ type TQuantity = {
 };
 
 export interface IProduct {
-  _id: ObjectId;
+  _id?: ObjectId;
   name: string;
   description?: string;
   price: number;
