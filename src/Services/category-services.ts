@@ -10,7 +10,11 @@ export default class CategoryService {
     return await Category.deleteOne({ _id: new Types.ObjectId(_id) });
   }
   static async update(_id: string, data: { type?: string; name?: string; imageUrl?: string }) {
-    return await Category.findByIdAndUpdate(_id, { $set: data }, { omitUndefined: true });
+    return await Category.updateOne(
+      { _id: new Types.ObjectId(_id) },
+      { $set: data },
+      { omitUndefined: true }
+    );
   }
   static async getAll(filter?: object) {
     if (filter) {

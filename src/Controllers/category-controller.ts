@@ -62,8 +62,8 @@ export default class CategoryController {
       if (req.file) {
         imageUrl = await FileService.saveImage(req.file);
       }
-      const newCategory = await CategoryService.update(_id, { type, name, imageUrl });
-      res.status(200).json(newCategory);
+      await CategoryService.update(_id, { type, name, imageUrl });
+      res.status(200).json({ updated: true });
     } catch (error) {
       next(error);
     }
