@@ -1,8 +1,8 @@
 import multer from "multer";
 
 import { RequestHandler, Router } from "express";
-import { CategoryController } from "../../Controllers";
-import { isAuth } from "../../Middleware";
+import { CategoryController } from "../Controllers";
+import { isAuth } from "../Middleware";
 
 const upload = multer();
 
