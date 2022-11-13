@@ -13,7 +13,7 @@ type TQuantity = {
 };
 
 export interface IProduct {
-  _id: ObjectId;
+  _id?: ObjectId;
   name: string;
   description?: string;
   price: number;
@@ -22,18 +22,22 @@ export interface IProduct {
   quantity: TQuantity;
   totalQuantity: number;
   categoryId: ObjectId | ICategory;
+  imageUrl?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 const discountSchema = new Schema<TDiscount>(
   {
-    type: Number,
+    type: { type: String, enum: Object.values(DiscountType), required: true },
     value: Number,
   },
   { _id: false }
 );
-const quantitySchema = new Schema<TQuantity>({ type: Number, value: Number }, { _id: false });
+const quantitySchema = new Schema<TQuantity>(
+  { type: { type: String, enum: Object.values(QuantityType), required: true }, value: Number },
+  { _id: false }
+);
 
 //TODO: assign categoryId using Ref
 const productSchema = new Schema<IProduct>(
@@ -44,6 +48,7 @@ const productSchema = new Schema<IProduct>(
     quantity: { type: quantitySchema, required: true },
     discount: { type: discountSchema },
     totalQuantity: { type: Number, required: true },
+    imageUrl: { type: String },
     categoryId: { type: SchemaTypes.ObjectId, required: true, ref: "Category" },
   },
   { timestamps: true }

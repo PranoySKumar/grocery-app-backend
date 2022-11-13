@@ -11,3 +11,4 @@ export {
   EditCategoryRequestParams,
   FindAllCategoriesRequestQueryParams,
 } from "./category-controller";
+export { default as ProductController } from "./product-controller";

@@ -13,7 +13,7 @@ export default class CategoryService {
     return await Category.updateOne(
       { _id: new Types.ObjectId(_id) },
       { $set: data },
-      { omitUndefined: true }
+      { runValidators: true, omitUndefined: true }
     );
   }
   static async getAll(filter?: object) {
