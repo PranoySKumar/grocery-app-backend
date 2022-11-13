@@ -9,31 +9,35 @@ const upload = multer();
 const categoryRoutes = Router();
 
 categoryRoutes.get(
-  "/category",
+  "/categories",
   isAuth,
   CategoryController.findAllCategories as RequestHandler<any, any, any, any>
 );
 
 categoryRoutes.patch(
-  "/category/:_id",
+  "/categories/:_id",
   isAuth,
   upload.single("image"),
   CategoryController.editCategory as RequestHandler<any>
 );
 
 categoryRoutes.put(
-  "/category",
+  "/categories",
   isAuth,
   upload.single("image"),
   CategoryController.addNewCategory as RequestHandler
 );
 
 categoryRoutes.delete(
-  "/category/:_id",
+  "/categories/:_id",
   isAuth,
   CategoryController.deleteCategory as RequestHandler<any>
 );
 
-categoryRoutes.get("/category/:_id", isAuth, CategoryController.getCategory as RequestHandler<any>);
+categoryRoutes.get(
+  "/categories/:_id",
+  isAuth,
+  CategoryController.getCategory as RequestHandler<any>
+);
 
 export default categoryRoutes;
