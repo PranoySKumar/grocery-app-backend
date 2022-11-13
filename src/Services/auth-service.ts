@@ -50,7 +50,7 @@ export default class AuthService {
     const result = await bcrypt.compare(password, store!.password!);
 
     if (result) {
-      const token = await generateToken({ _id: store!._id.toString() });
+      const token = await generateToken({ _id: store!._id.toString(), email: store.email });
 
       return { token, store };
     } else {

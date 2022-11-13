@@ -22,7 +22,7 @@ export interface IProduct {
   quantity: TQuantity;
   totalQuantity: number;
   categoryId: ObjectId | ICategory;
-  imageUrl: string;
+  imageUrl?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -48,7 +48,7 @@ const productSchema = new Schema<IProduct>(
     quantity: { type: quantitySchema, required: true },
     discount: { type: discountSchema },
     totalQuantity: { type: Number, required: true },
-    imageUrl: { type: String, required: true },
+    imageUrl: { type: String },
     categoryId: { type: SchemaTypes.ObjectId, required: true, ref: "Category" },
   },
   { timestamps: true }
