@@ -60,6 +60,7 @@ export default class CategoryController {
       const { type, name } = req.body;
       let imageUrl;
       if (req.file) {
+        await FileService.deleteImage("");
         imageUrl = await FileService.saveImage(req.file);
       }
       await CategoryService.update(_id, { type, name, imageUrl });

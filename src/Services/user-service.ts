@@ -4,7 +4,7 @@ import { IUser, User } from "../Models";
 export default class UserService {
   //find single user by id
   static async findUserById(_id: string, projection?: object) {
-    return await User.findById(_id, projection);
+    return await User.findOne({ _id }, projection);
   }
 
   //find all users.
@@ -20,14 +20,18 @@ export default class UserService {
 
   //delete single user
   static async deleteUser(_id: string) {
-    return await User.deleteOne({ _id: new Types.ObjectId(_id) });
+    return await User.deleteOne({ _id });
   }
 
   //update  user details
   static async updateUserDetails(_id: string, userDetails: IUser) {
-    return await User.updateOne({ _id: new Types.ObjectId(_id) }, userDetails, {
-      runValidators: true,
-      omitUndefined: true,
-    });
+    return await User.updateOne(
+      { _id },
+      { $set: userDetails },
+      {
+        runValidators: true,
+        omitUndefined: true,
+      }
+    );
   }
 }

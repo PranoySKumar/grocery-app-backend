@@ -2,11 +2,11 @@ import { Request, Response, NextFunction } from "express";
 import { IUser } from "../Models";
 import { FileService, UserService } from "../Services";
 
-class UserController {
+export default class UserController {
   //get all users
   static async getAllUsers(req: Request, res: Response, next: NextFunction) {
     try {
-      const users = UserService.findAllUsers({}, { createdAt: 0, updatedAt: 0 });
+      const users = await UserService.findAllUsers({}, { createdAt: 0, updatedAt: 0 });
       res.status(200).json(users);
     } catch (error) {
       next(error);
@@ -16,7 +16,7 @@ class UserController {
   static async getSingleUser(req: Request<{ _id: string }>, res: Response, next: NextFunction) {
     try {
       const { _id } = req.params;
-      const user = UserService.findUserById(_id, { createdAt: 0, updatedAt: 0 });
+      const user = await UserService.findUserById(_id, { createdAt: 0, updatedAt: 0 });
       res.status(200).json(user);
     } catch (error) {
       next(error);
@@ -50,8 +50,9 @@ class UserController {
       // if profile image is present create a url resource.
       if (profileImage) {
         if (user?.profileImageUrl) await FileService.deleteImage(user.profileImageUrl);
-        userDetails.profileImageUrl = await FileService.saveImage(req.file);
+        userDetails.profileImageUrl = await FileService.saveImage(profileImage);
       }
+
       await UserService.updateUserDetails(_id, userDetails);
 
       res.status(201).json({ updated: true });
@@ -72,12 +73,10 @@ class UserController {
       if (user) return res.status(406).json({ created: false, message: "user already present" });
 
       // if profile image is present create a url resource.
-      if (profileImage) {
-        userDetails.profileImageUrl = await FileService.saveImage(req.file);
-      }
-      const newUser = await UserService.createUser(userDetails);
+      if (profileImage) userDetails.profileImageUrl = await FileService.saveImage(profileImage);
 
-      res.status(201).json({ created: true, user });
+      const newUser = await UserService.createUser(userDetails);
+      res.status(201).json({ created: true, user: newUser });
     } catch (error) {
       next(error);
     }

@@ -12,3 +12,4 @@ export {
   FindAllCategoriesRequestQueryParams,
 } from "./category-controller";
 export { default as ProductController } from "./product-controller";
+export { default as UserController } from "./user-controller";

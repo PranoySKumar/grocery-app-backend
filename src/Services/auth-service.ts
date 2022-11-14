@@ -19,7 +19,7 @@ export default class AuthService {
       return { token, user };
     } else {
       const newUser = await UserService.createUser({
-        _id: phoneNumber,
+        _id: phoneNumber.toString(),
         userName,
         location,
         pincode,
