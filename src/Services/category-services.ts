@@ -1,4 +1,4 @@
-import { Category } from "../Models";
+import { Category, ICategory } from "../Models";
 import { Types } from "mongoose";
 import { FileService } from "./";
 
@@ -22,10 +22,10 @@ export default class CategoryService {
     }
     return await Category.find();
   }
-  static async getOne(filter?: object) {
+  static async getOne(filter?: object, projection?: Object) {
     if (filter) {
-      return await Category.findOne(filter);
+      return await Category.findOne(filter, projection);
     }
-    return await Category.findOne();
+    return await Category.findOne({}, projection);
   }
 }
