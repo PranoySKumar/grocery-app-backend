@@ -14,7 +14,7 @@ type Address = {
 };
 
 export interface IUser {
-  _id: number;
+  _id: string;
   userName?: string;
   location?: { lat: number; lng: number };
   address?: Address;
@@ -42,7 +42,7 @@ const addressSchema = new Schema<Address>(
 
 const userSchema = new Schema<IUser>(
   {
-    _id: { type: SchemaTypes.Number, required: true }, //phoneNumber;
+    _id: { type: SchemaTypes.String, required: true }, //phoneNumber;
     userName: SchemaTypes.String,
     address: { type: [addressSchema], default: [] },
     pincode: Number,

@@ -21,8 +21,8 @@ export default class ProductService {
   }
 
   //edit single product;
-  static async editNewProduct(_id: string, data: IProduct) {
-    return Product.updateOne({ _id: new Types.ObjectId(_id) }, data, {
+  static async editNewProduct(_id: string, productDetails: IProduct) {
+    return Product.updateOne({ _id: new Types.ObjectId(_id) }, productDetails, {
       runValidators: true,
       omitUndefined: true,
     });

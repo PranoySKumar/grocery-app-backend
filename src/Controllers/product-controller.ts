@@ -96,11 +96,14 @@ export default class ProductController {
       const productData = req.body;
       const imageFile = req.file;
 
+      const currentProduct = await ProductService.getProduct(_id);
+
       //parse the json data.
       if (req.body.discount) productData.discount = JSON.parse(productData.discount);
       if (req.body.quantity) productData.quantity = JSON.parse(productData.quantity);
 
       if (imageFile) {
+        if (currentProduct?.imageUrl) await FileService.deleteImage(currentProduct?.imageUrl!);
         productData.imageUrl = await FileService.saveImage(imageFile);
       }
       await ProductService.editNewProduct(_id, productData);

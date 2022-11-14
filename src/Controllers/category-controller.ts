@@ -59,7 +59,10 @@ export default class CategoryController {
       const _id = req.params._id;
       const { type, name } = req.body;
       let imageUrl;
+
+      const currentCategory = await CategoryService.getOne({ _id }, { createdAt: 0, updatedAt: 0 });
       if (req.file) {
+        if (currentCategory?.imageUrl) await FileService.deleteImage("");
         imageUrl = await FileService.saveImage(req.file);
       }
       await CategoryService.update(_id, { type, name, imageUrl });
