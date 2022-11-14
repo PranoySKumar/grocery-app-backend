@@ -9,7 +9,7 @@ export default class AuthService {
   //user auth
   static async userLogin(body: LoginRequestBody) {
     const { phoneNumber, userName, location, pincode } = body;
-    const user = await UserService.findOneUser({ _id: phoneNumber });
+    const user = await UserService.findUserById(phoneNumber.toString());
 
     //generates token.
     const token = await generateToken({ phoneNumber });
