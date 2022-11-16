@@ -7,13 +7,13 @@ export default class NotificationService {
     return await Notification.find({ "reciever.type": NotificationReciever.store }, projection);
   }
 
-  async createStoreNotification(notification: INotification, projection?: object) {
+  async createStoreNotification(notification: INotification) {
     return await new Notification({
       ...notification,
       reciever: { type: NotificationReciever.store },
     });
   }
-  async createUserNotification(userId: string, notification: INotification, projection?: object) {
+  async createUserNotification(userId: string, notification: INotification) {
     return await new Notification({
       ...notification,
       reciever: { type: NotificationReciever.store },
