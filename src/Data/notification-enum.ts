@@ -3,3 +3,8 @@ export enum NotificationType {
   productStatusUpdate = "product-status-update",
   orderStatusUpdate = "order-status-update",
 }
+
+export enum NotificationReciever {
+  store = "store",
+  user = "user",
+}
