@@ -3,8 +3,14 @@ import jwt from "jsonwebtoken";
 import { getEnv } from "../Config";
 import { RequestError } from "../Utils/request-error";
 
+export interface AuthTokenData {
+  userId?: string;
+  storeId?: string;
+  dashboardId?: string;
+}
+
 //This middle ware is used to validate the token.
-const isAuth: RequestHandler = (req, res, next) => {
+const isAuthToken: RequestHandler = (req, res, next) => {
   if (!req.headers.authorization) {
     throw new RequestError(401, "no authorization token set");
   }
@@ -17,8 +23,8 @@ const isAuth: RequestHandler = (req, res, next) => {
   } catch (error) {
     throw new RequestError(401, "Un-Authorised Request");
   }
-  req.body.user = decodedTokenData;
+  req.body.tokenData = decodedTokenData as AuthTokenData;
   next();
 };
 
-export default isAuth;
+export default isAuthToken;
