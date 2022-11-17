@@ -11,7 +11,7 @@ export interface IOrder {
   _id: ObjectId;
   status: OrderStatus;
   transactionAmount: number;
-  userId: ObjectId | IUser;
+  userId: string | IUser;
   cart: CartItem[];
   createdAt?: Date;
   updatedAt?: Date;
@@ -29,7 +29,7 @@ const orderSchema = new Schema<IOrder>(
   {
     status: { type: Number, required: true },
     transactionAmount: { type: Number, required: true },
-    userId: { type: SchemaTypes.ObjectId, required: true, ref: "User" },
+    userId: { type: String, required: true, ref: "User" },
     cart: { type: [cartItemSchema], required: true },
   },
   { timestamps: true }
