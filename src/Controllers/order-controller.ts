@@ -4,6 +4,7 @@ import { IOrder } from "../Models";
 import { OrderService } from "../Services";
 
 export default class OrderController {
+  // get single user orders
   static async getSingleUserOrders(
     req: Request<{ userId: string }>,
     res: Response,
@@ -17,6 +18,8 @@ export default class OrderController {
       next(error);
     }
   }
+
+  //get all orders
   static async getAllOrders(
     req: Request<any, any, IOrder, { asce?: true }>,
     res: Response,
@@ -30,6 +33,8 @@ export default class OrderController {
       next(error);
     }
   }
+
+  //create order
   static async createOrder(req: Request<any, any, IOrder>, res: Response, next: NextFunction) {
     try {
       const orderDetails = req.body;
@@ -43,6 +48,7 @@ export default class OrderController {
     }
   }
 
+  //update order
   static async updateOrder(
     req: Request<{ orderId: string }, any, IOrder>,
     res: Response,
@@ -57,6 +63,7 @@ export default class OrderController {
     }
   }
 
+  //delete order
   static async deleteOrder(req: Request<{ orderId: string }>, res: Response, next: NextFunction) {
     try {
       const { orderId } = req.params;
