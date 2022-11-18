@@ -16,9 +16,9 @@ export default class CategoryService {
       { runValidators: true, omitUndefined: true }
     );
   }
-  static async getAll(filter?: object) {
+  static async getAll(filter?: object, projection?: object) {
     if (filter) {
-      return await Category.find(filter);
+      return await Category.find(filter, projection);
     }
     return await Category.find();
   }

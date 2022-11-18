@@ -1,18 +1,20 @@
 import { NextFunction, Request, Response } from "express";
 import { OrderStatus } from "../Data";
+import { AuthTokenData } from "../Middleware";
 import { IOrder } from "../Models";
 import { OrderService } from "../Services";
 
 export default class OrderController {
   // get single user orders
   static async getSingleUserOrders(
-    req: Request<{ userId: string }>,
+    req: Request<{ userId: string }, any, { tokenData: AuthTokenData }>,
     res: Response,
     next: NextFunction
   ) {
     try {
       const { userId } = req.params;
-      const orders = await OrderService.getSingleUserOrders(userId);
+      const { userId: tokenUserId } = req.body.tokenData;
+      const orders = await OrderService.getSingleUserOrders(tokenUserId ?? userId);
       res.status(200).json(orders);
     } catch (error) {
       next(error);

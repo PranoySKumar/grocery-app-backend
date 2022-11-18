@@ -5,6 +5,6 @@ import userAuthRoutes from "./user-auth-routes";
 const userRoutes = Router();
 
 //store
-userRoutes.use(userAuthRoutes);
+userRoutes.use("/user", userAuthRoutes);
 
 export default userRoutes;

@@ -16,11 +16,15 @@ export default class ProductController {
   }
 
   //get single product
-  static async getSingleProduct(req: Request<{ _id: string }>, res: Response, next: NextFunction) {
+  static async getSingleProduct(
+    req: Request<{ productId: string }>,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
-      const _id = req.params._id;
+      const productId = req.params.productId;
 
-      const product = await ProductService.getProduct({ _id });
+      const product = await ProductService.getProduct({ productId });
       res.status(200).json(product ? { product } : {});
     } catch (error) {
       next(error);

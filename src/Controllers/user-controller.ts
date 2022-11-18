@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { AuthTokenData } from "../Middleware";
 import { IUser } from "../Models";
 import { FileService, UserService } from "../Services";
 
@@ -13,10 +14,18 @@ export default class UserController {
     }
   }
   //find single user by id
-  static async getSingleUser(req: Request<{ _id: string }>, res: Response, next: NextFunction) {
+  static async getSingleUser(
+    req: Request<{ userId: string }, any, { tokenData: AuthTokenData }>,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
-      const { _id } = req.params;
-      const user = await UserService.findUserById(_id, { createdAt: 0, updatedAt: 0 });
+      const { userId } = req.params;
+      const { userId: tokenUserId } = req.body.tokenData;
+      const user = await UserService.findUserById(tokenUserId ?? userId, {
+        createdAt: 0,
+        updatedAt: 0,
+      });
       res.status(200).json(user);
     } catch (error) {
       next(error);
@@ -36,16 +45,17 @@ export default class UserController {
 
   //update user details.
   static async updateUserDetails(
-    req: Request<{ _id: string }, any, IUser>,
+    req: Request<{ userId: string }, any, { userDetails: IUser; tokenData: AuthTokenData }>,
     res: Response,
     next: NextFunction
   ) {
     try {
-      const { _id } = req.params;
-      const userDetails = req.body;
+      const { userId } = req.params;
+      const { userId: tokenUserId } = req.body.tokenData;
+      const userDetails = req.body.userDetails;
       const profileImage = req.file;
 
-      const user = await UserService.findUserById(_id);
+      const user = await UserService.findUserById(tokenUserId ?? userId);
 
       // if profile image is present create a url resource.
       if (profileImage) {
@@ -53,7 +63,7 @@ export default class UserController {
         userDetails.profileImageUrl = await FileService.saveImage(profileImage);
       }
 
-      await UserService.updateUserDetails(_id, userDetails);
+      await UserService.updateUserDetails(tokenUserId ?? userId, userDetails);
 
       res.status(201).json({ updated: true });
     } catch (error) {

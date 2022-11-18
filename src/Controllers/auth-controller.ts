@@ -21,7 +21,11 @@ export interface StoreLoginRequestBody {
 }
 
 export default class AuthController {
-  static async login(req: Request<any, any, LoginRequestBody>, res: Response, next: NextFunction) {
+  static async userLogin(
+    req: Request<any, any, LoginRequestBody>,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const data = await AuthService.userLogin(req.body);
       res.status(201).json(data);
@@ -30,7 +34,7 @@ export default class AuthController {
     }
   }
 
-  static async verifyPhoneNumber(
+  static async userVerifyPhoneNumber(
     req: Request<VerifyPhoneNumberRequestParams>,
     res: Response,
     next: NextFunction
@@ -39,7 +43,7 @@ export default class AuthController {
     res.status(200).json(result);
   }
 
-  static async verifyOtp(req: Request<VerifyOtpRequestParams>, res: Response) {
+  static async userVerifyOtp(req: Request<VerifyOtpRequestParams>, res: Response) {
     const result = await AuthService.verifyUserOtp(req.body);
     res.status(200).json(result);
   }

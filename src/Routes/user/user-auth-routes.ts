@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { AuthController } from "../../Controllers";
 
-//user
 const userAuthRoutes = Router();
-userAuthRoutes.post("/user/user", AuthController.login);
-userAuthRoutes.get("/user/auth/verify/:phoneNumber", AuthController.verifyPhoneNumber);
-userAuthRoutes.get("/user/auth/verify/:phoneNumber/otp/:code", AuthController.verifyOtp);
+
+userAuthRoutes.post("/auth", AuthController.userLogin);
+userAuthRoutes.get("/auth/verify/:phoneNumber", AuthController.userVerifyPhoneNumber);
+userAuthRoutes.get("/auth/verify/:phoneNumber/otp/:code", AuthController.userVerifyOtp);
 
 export default userAuthRoutes;

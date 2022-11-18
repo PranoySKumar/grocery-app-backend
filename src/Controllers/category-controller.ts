@@ -12,7 +12,7 @@ export interface AddNewCategoryRequestBody {
   name: string;
 }
 export interface EditCategoryRequestParams {
-  _id: string;
+  categoryId: string;
 }
 
 export default class CategoryController {
@@ -50,49 +50,54 @@ export default class CategoryController {
       next(error);
     }
   }
+
   static async editCategory(
     req: Request<EditCategoryRequestParams, any, AddNewCategoryRequestBody>,
     res: Response,
     next: NextFunction
   ) {
     try {
-      const _id = req.params._id;
+      const categoryId = req.params.categoryId;
       const { type, name } = req.body;
       let imageUrl;
 
-      const currentCategory = await CategoryService.getOne({ _id }, { createdAt: 0, updatedAt: 0 });
+      const currentCategory = await CategoryService.getOne(
+        { _id: categoryId },
+        { createdAt: 0, updatedAt: 0 }
+      );
       if (req.file) {
         if (currentCategory?.imageUrl) await FileService.deleteImage("");
         imageUrl = await FileService.saveImage(req.file);
       }
-      await CategoryService.update(_id, { type, name, imageUrl });
+      await CategoryService.update(categoryId, { type, name, imageUrl });
       res.status(200).json({ updated: true });
     } catch (error) {
       next(error);
     }
   }
+
   static async deleteCategory(
     req: Request<EditCategoryRequestParams>,
     res: Response,
     next: NextFunction
   ) {
     try {
-      const _id = req.params._id;
-
-      await CategoryService.delete(_id);
+      const categoryId = req.params.categoryId;
+      await CategoryService.delete(categoryId);
       res.status(200).json({ deleted: true });
     } catch (error) {
       next(error);
     }
   }
+
   static async getCategory(
     req: Request<EditCategoryRequestParams>,
     res: Response,
     next: NextFunction
   ) {
     try {
-      const _id = req.params._id;
-      const category = await CategoryService.getOne({ _id: new Types.ObjectId(_id) });
+      const { categoryId } = req.params;
+      const category = await CategoryService.getOne({ _id: new Types.ObjectId(categoryId) });
       res.status(200).json({ category });
     } catch (error) {
       next(error);
