@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { OrderStatus } from "../Data";
+
 import { IOrder, Order } from "../Models";
 
 export default class OrderService {

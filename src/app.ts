@@ -1,12 +1,11 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import { routes } from "./Routes";
+import { userRoutes } from "./Routes";
 import { errorHandler } from "./Middleware";
 import dotenv from "dotenv";
 import { getEnv } from "./Config";
 import path from "path";
-import { CategoryService, StoreService } from "./Services";
 
 dotenv.config(); //configuring env variables
 
@@ -22,7 +21,7 @@ app.get("/image/fish", (req, res) =>
 );
 
 //registering routes
-app.use(routes);
+app.use(userRoutes);
 
 app.use(errorHandler); //registering error handler.
 
