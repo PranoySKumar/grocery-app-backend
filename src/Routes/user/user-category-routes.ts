@@ -6,13 +6,13 @@ const userCategoryRoutes = Router();
 
 userCategoryRoutes.get(
   "/categories",
-  isAuthToken,
+
   CategoryController.findAllCategories as RequestHandler<any, any, any, any>
 );
 
 userCategoryRoutes.get(
   "/categories/:categoryId",
-  isAuthToken,
+
   CategoryController.getCategory as RequestHandler<any>
 );
 

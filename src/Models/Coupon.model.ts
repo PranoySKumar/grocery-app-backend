@@ -7,9 +7,9 @@ type CouponDiscount = {
 
 export interface ICoupon {
   _id?: ObjectId;
-  title: string;
-  description: string;
-  couponDiscount: CouponDiscount;
+  title?: string;
+  description?: string;
+  couponDiscount?: CouponDiscount;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -31,4 +31,4 @@ const couponSchema = new Schema<ICoupon>(
   { timestamps: true }
 );
 
-export const Coupon = model("Coupons", couponSchema);
+export const Coupon = model("Coupon", couponSchema);

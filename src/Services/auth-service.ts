@@ -12,7 +12,7 @@ export default class AuthService {
     const user = await UserService.findUserById(phoneNumber.toString());
 
     //generates token.
-    const token = await generateToken({ phoneNumber });
+    const token = await generateToken({ userId: phoneNumber });
 
     //If the user is already there just send that user's details else create a new user.
     if (user) {
@@ -28,11 +28,15 @@ export default class AuthService {
       return { token, user: { userName, location, pincode, id: newUser._id } };
     }
   }
+
+  //TODO: need to complete the send otp
   static async sendUserOtp(body: VerifyPhoneNumberRequestParams) {
     const { phoneNumber } = body;
     await timeout(2000);
     return { send: true };
   }
+
+  //TODO: need to complete the verify otp
   static async verifyUserOtp(body: VerifyOtpRequestParams) {
     await timeout(2000);
     return { verified: true };
@@ -50,7 +54,7 @@ export default class AuthService {
     const result = await bcrypt.compare(password, store!.password!);
 
     if (result) {
-      const token = await generateToken({ _id: store!._id.toString(), email: store.email });
+      const token = await generateToken({ storeId: store!._id.toString(), email: store.email });
 
       return { token, store };
     } else {

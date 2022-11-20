@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { OrderStatus } from "../Data";
 import { AuthTokenData } from "../Middleware";
 import { IOrder } from "../Models";
 import { OrderService } from "../Services";
@@ -37,13 +36,14 @@ export default class OrderController {
   }
 
   //create order
-  static async createOrder(req: Request<any, any, IOrder>, res: Response, next: NextFunction) {
+  static async createOrder(
+    req: Request<any, any, IOrder & { couponId: string }>,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const orderDetails = req.body;
-      await OrderService.createOrder({
-        ...orderDetails,
-        status: OrderStatus.placed,
-      });
+      await OrderService.createOrder(orderDetails);
       res.status(201).json({ orderStatus: "placed" });
     } catch (error) {
       next(error);

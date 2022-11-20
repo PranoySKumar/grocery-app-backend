@@ -5,7 +5,7 @@ import userRoutes from "./routes";
 
 const userProfileRoutes = Router();
 
-userProfileRoutes.get("/profile", isAuthToken, UserController.getSingleUser);
-userProfileRoutes.patch("/profile", isAuthToken, UserController.updateUserDetails);
+userProfileRoutes.get("/profile", UserController.getSingleUser);
+userProfileRoutes.patch("/profile", UserController.updateUserDetails);
 
 export default userProfileRoutes;

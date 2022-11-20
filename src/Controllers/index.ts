@@ -13,3 +13,6 @@ export {
 } from "./category-controller";
 export { default as ProductController } from "./product-controller";
 export { default as UserController } from "./user-controller";
+export { default as CouponController } from "./coupon-controller";
+export { default as OrderController } from "./order-controller";
+export { default as StoreController } from "./store-controller";

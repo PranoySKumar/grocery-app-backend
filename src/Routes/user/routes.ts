@@ -1,10 +1,20 @@
-import { Router } from "express";
+import { RequestHandler, Router } from "express";
+import { AccessVerifier, isAuthToken } from "../../Middleware";
 
 import userAuthRoutes from "./user-auth-routes";
+import userCategoryRoutes from "./user-category-routes";
+import userCouponRoutes from "./user-coupon-routes";
+import userOrderRoutes from "./user-order-routes";
+import userProductRoutes from "./user-product-routes";
+import userProfileRoutes from "./user-profile-routes";
 
 const userRoutes = Router();
 
-//store
 userRoutes.use("/user", userAuthRoutes);
+userRoutes.use("/user", isAuthToken, AccessVerifier.isUser, userCategoryRoutes);
+userRoutes.use("/user", isAuthToken, AccessVerifier.isUser, userCouponRoutes);
+userRoutes.use("/user", isAuthToken, AccessVerifier.isUser, userOrderRoutes);
+userRoutes.use("/user", isAuthToken, AccessVerifier.isUser, userProductRoutes);
+userRoutes.use("/user", isAuthToken, AccessVerifier.isUser, userProfileRoutes);
 
 export default userRoutes;

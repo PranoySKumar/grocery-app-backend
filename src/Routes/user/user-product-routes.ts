@@ -4,11 +4,11 @@ import { isAuthToken } from "../../Middleware";
 
 const userProductRoutes = Router();
 
-userProductRoutes.get("/products", isAuthToken, ProductController.getAllProducts);
-userProductRoutes.get("/products/:productId", isAuthToken, ProductController.getSingleProduct);
+userProductRoutes.get("/products", ProductController.getAllProducts);
+userProductRoutes.get("/products/:productId", ProductController.getSingleProduct);
 userProductRoutes.get(
   "/category/:categoryId/products",
-  isAuthToken,
+
   ProductController.getSingleCategoryProducts
 );
 

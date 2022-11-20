@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import { userRoutes } from "./Routes";
+import { storeRoutes, userRoutes } from "./Routes";
 import { errorHandler } from "./Middleware";
 import dotenv from "dotenv";
 import { getEnv } from "./Config";
@@ -22,9 +22,11 @@ app.get("/image/fish", (req, res) =>
 
 //registering routes
 app.use(userRoutes);
+app.use(storeRoutes);
 
 app.use(errorHandler); //registering error handler.
 
+//connecting to db.
 mongoose
   .connect(getEnv().DATA_BASE_URL)
   .then(() => {

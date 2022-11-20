@@ -24,8 +24,8 @@ export default class ProductController {
     try {
       const productId = req.params.productId;
 
-      const product = await ProductService.getProduct({ productId });
-      res.status(200).json(product ? { product } : {});
+      const product = await ProductService.getProductById(productId);
+      res.status(200).json(product);
     } catch (error) {
       next(error);
     }
@@ -59,7 +59,6 @@ export default class ProductController {
       const imageFile = req.file;
 
       //parse the json data.
-      if (req.body.discount) productData.discount = JSON.parse(productData.discount);
       if (req.body.quantity) productData.quantity = JSON.parse(productData.quantity);
 
       if (imageFile) {
@@ -100,10 +99,10 @@ export default class ProductController {
       const productData = req.body;
       const imageFile = req.file;
 
-      const currentProduct = await ProductService.getProduct(_id);
+      const currentProduct = await ProductService.getProductById(_id);
 
       //parse the json data.
-      if (req.body.discount) productData.discount = JSON.parse(productData.discount);
+
       if (req.body.quantity) productData.quantity = JSON.parse(productData.quantity);
 
       if (imageFile) {

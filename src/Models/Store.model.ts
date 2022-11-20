@@ -7,13 +7,13 @@ type Editing = {
 };
 
 export interface IStore {
-  id: ObjectId;
-  name: string;
-  email: string;
-  phoneNumber: number;
-  password: string;
-  editing: Editing;
-  deliveryTimeSlots: { start: string; end: string }[];
+  id?: ObjectId;
+  name?: string;
+  email?: string;
+  phoneNumber?: number;
+  password?: string;
+  editing?: Editing;
+  deliveryTimeSlots?: { start: string; end: string }[];
   createdAt?: Date;
   updatedAt?: Date;
 }

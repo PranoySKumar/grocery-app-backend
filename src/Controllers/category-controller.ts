@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { body } from "express-validator";
+
 import { Types } from "mongoose";
 import { CategoryService, FileService } from "../Services";
 
@@ -35,6 +35,7 @@ export default class CategoryController {
     }
   }
 
+  //add new category
   static async addNewCategory(
     req: Request<any, any, AddNewCategoryRequestBody>,
     res: Response,
@@ -50,7 +51,7 @@ export default class CategoryController {
       next(error);
     }
   }
-
+  //edit category
   static async editCategory(
     req: Request<EditCategoryRequestParams, any, AddNewCategoryRequestBody>,
     res: Response,

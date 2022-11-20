@@ -4,6 +4,6 @@ import { AuthController } from "../../Controllers";
 const storeAuthRoutes = Router();
 
 //store
-storeAuthRoutes.post("/store/auth", AuthController.storeLogin);
+storeAuthRoutes.post("/auth", AuthController.storeLogin);
 
 export default storeAuthRoutes;

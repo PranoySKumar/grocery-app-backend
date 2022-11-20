@@ -4,7 +4,7 @@ import { isAuthToken } from "../../Middleware";
 
 const userOrderRoutes = Router();
 
-userOrderRoutes.get("/orders", isAuthToken, OrderController.getSingleUserOrders);
-userOrderRoutes.post("/orders", isAuthToken, OrderController.createOrder);
+userOrderRoutes.get("/orders", OrderController.getSingleUserOrders);
+userOrderRoutes.post("/orders", OrderController.createOrder);
 
 export default userOrderRoutes;
