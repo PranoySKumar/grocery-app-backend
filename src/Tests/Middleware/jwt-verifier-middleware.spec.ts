@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { it, expect, describe, beforeEach, vi, afterEach } from "vitest";
-import { isAuth } from "../../Middleware";
+import { isAuthToken } from "../../Middleware";
 import { generateToken } from "../../Utils/jwt-util";
 import { RequestError } from "../../Utils/request-error";
 
@@ -26,16 +26,16 @@ describe("isAuth()", () => {
 
     mockRequest.headers.authorization = `Bearer ${token}`;
 
-    isAuth(mockRequest, mockResponse, mockNextFunction);
+    isAuthToken(mockRequest, mockResponse, mockNextFunction);
 
-    expect(mockRequest.body.user.email).toEqual(body.email);
+    expect(mockRequest.body.tokenData.email).toEqual(body.email);
   });
 
   it("should throw Request Error if no authorised header is provided", () => {
-    const fn = () => isAuth(mockRequest, mockResponse, mockNextFunction);
+    const fn = () => isAuthToken(mockRequest, mockResponse, mockNextFunction);
     let err: RequestError;
     try {
-      isAuth(mockRequest, mockResponse, mockNextFunction);
+      isAuthToken(mockRequest, mockResponse, mockNextFunction);
     } catch (error) {
       err = error as RequestError;
     }
@@ -46,10 +46,10 @@ describe("isAuth()", () => {
 
   it("should throw unauthorized error for a invalid token", () => {
     mockRequest.headers.authorization = "some token";
-    const fn = () => isAuth(mockRequest, mockResponse, mockNextFunction);
+    const fn = () => isAuthToken(mockRequest, mockResponse, mockNextFunction);
     let err: RequestError;
     try {
-      isAuth(mockRequest, mockResponse, mockNextFunction);
+      isAuthToken(mockRequest, mockResponse, mockNextFunction);
     } catch (error) {
       err = error as RequestError;
     }
@@ -66,7 +66,7 @@ describe("isAuth()", () => {
 
     const fn = vi.fn();
 
-    isAuth(mockRequest, mockResponse, fn as NextFunction);
+    isAuthToken(mockRequest, mockResponse, fn as NextFunction);
 
     expect(fn).toBeCalled();
   });

@@ -1,5 +1,7 @@
-import { model, ObjectId, Schema, SchemaTypes } from "mongoose";
+import { model, ObjectId, Schema, SchemaTypes, Types } from "mongoose";
 import { AddressType } from "../Data";
+import { Coupon, ICoupon } from "./Coupon.model";
+import { Product } from "./Product.model";
 
 type Address = {
   name: string;
@@ -20,6 +22,7 @@ export interface IUser {
   address?: Address;
   pincode?: number;
   profileImageUrl?: string;
+  coupons?: ObjectId[] | ICoupon[];
   favourites?: ObjectId[];
   createdAt?: Date;
   updatedAt?: Date;
@@ -47,8 +50,9 @@ const userSchema = new Schema<IUser>(
     address: { type: [addressSchema], default: [] },
     pincode: Number,
     location: { type: { lat: SchemaTypes.Number, lng: SchemaTypes.Number } },
-    favourites: { type: [SchemaTypes.ObjectId], ref: "product" },
+    favourites: { type: [SchemaTypes.ObjectId], ref: Product.modelName },
     profileImageUrl: SchemaTypes.String,
+    coupons: { type: [SchemaTypes.ObjectId], ref: Coupon.modelName, default: [] },
   },
   { timestamps: true }
 );

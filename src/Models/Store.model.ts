@@ -7,12 +7,13 @@ type Editing = {
 };
 
 export interface IStore {
-  id: ObjectId;
-  name: string;
-  email: string;
-  phoneNumber: number;
-  password: string;
-  editing: Editing;
+  id?: ObjectId;
+  name?: string;
+  email?: string;
+  phoneNumber?: number;
+  password?: string;
+  editing?: Editing;
+  deliveryTimeSlots?: { start: string; end: string }[];
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -33,6 +34,10 @@ const storeSchema = new Schema<IStore>(
     phoneNumber: { type: SchemaTypes.Number, required: true },
     password: { type: SchemaTypes.String, required: true },
     editing: editingSchema,
+    deliveryTimeSlots: {
+      type: [{ start: SchemaTypes.String, end: SchemaTypes.String }],
+      default: [],
+    },
   },
   { timestamps: true }
 );

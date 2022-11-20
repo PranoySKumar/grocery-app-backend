@@ -1,4 +1,3 @@
-import { Types } from "mongoose";
 import { IUser, User } from "../Models";
 
 export default class UserService {

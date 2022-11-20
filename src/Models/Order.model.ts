@@ -1,6 +1,6 @@
 import { model, ObjectId, Schema, SchemaTypes } from "mongoose";
 import { OrderStatus } from "../Data";
-import { IProduct, IUser } from "./";
+import { Coupon, ICoupon, IProduct, IUser } from "./";
 
 type CartItem = {
   productId: ObjectId | IProduct;
@@ -9,10 +9,11 @@ type CartItem = {
 
 export interface IOrder {
   _id: ObjectId;
-  status: OrderStatus;
-  transactionAmount: number;
-  userId: ObjectId | IUser;
+  status?: OrderStatus;
+  transactionAmount?: number;
+  userId?: string | IUser;
   cart: CartItem[];
+  couponId?: ObjectId | ICoupon;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -29,8 +30,9 @@ const orderSchema = new Schema<IOrder>(
   {
     status: { type: Number, required: true },
     transactionAmount: { type: Number, required: true },
-    userId: { type: SchemaTypes.ObjectId, required: true, ref: "User" },
+    userId: { type: String, required: true, ref: "User" },
     cart: { type: [cartItemSchema], required: true },
+    couponId: { type: SchemaTypes.ObjectId, ref: "Coupon" },
   },
   { timestamps: true }
 );
