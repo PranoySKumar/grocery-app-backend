@@ -28,7 +28,7 @@ describe("isAuth()", () => {
 
     isAuthToken(mockRequest, mockResponse, mockNextFunction);
 
-    expect(mockRequest.body.user.email).toEqual(body.email);
+    expect(mockRequest.body.tokenData.email).toEqual(body.email);
   });
 
   it("should throw Request Error if no authorised header is provided", () => {
