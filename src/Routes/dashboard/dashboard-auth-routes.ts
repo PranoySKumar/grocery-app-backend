@@ -3,7 +3,8 @@ import { AuthController } from "../../Controllers";
 
 const dashboardAuthRoutes = Router();
 
-//store
-dashboardAuthRoutes.post("/auth", AuthController.storeLogin);
+//dashboard
+//TODO: need to implement auth controller method of dashboard login.
+dashboardAuthRoutes.post("/auth", AuthController.dashboardLogin);
 
 export default dashboardAuthRoutes;

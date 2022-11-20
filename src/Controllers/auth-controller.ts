@@ -21,6 +21,9 @@ export interface StoreLoginRequestBody {
 }
 
 export default class AuthController {
+  static dashboardLogin(arg0: string, dashboardLogin: any) {
+    throw new Error("Method not implemented.");
+  }
   static async userLogin(
     req: Request<any, any, LoginRequestBody>,
     res: Response,
@@ -47,6 +50,7 @@ export default class AuthController {
     const result = await AuthService.verifyUserOtp(req.body);
     res.status(200).json(result);
   }
+
   static async storeLogin(
     req: Request<any, any, StoreLoginRequestBody>,
     res: Response,
