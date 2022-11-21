@@ -1,9 +1,10 @@
 import bcrypt from "bcrypt";
 
-import { LoginRequestBody, StoreLoginRequestBody } from "../Controllers";
+import { LoginRequestBody } from "../Controllers";
 import { VerifyOtpRequestParams, VerifyPhoneNumberRequestParams } from "../Controllers";
 import { generateToken, RequestError } from "../Utils";
 import { StoreService, UserService } from "./";
+import DashboardService from "./dashboard-service";
 
 export default class AuthService {
   //user auth
@@ -43,7 +44,7 @@ export default class AuthService {
   }
 
   //store auth
-  static async storeLogin(body: StoreLoginRequestBody) {
+  static async storeLogin(body: { email: string; password: string }) {
     const { email, password } = body;
     const store = await StoreService.getStore({ email });
 
@@ -57,6 +58,29 @@ export default class AuthService {
       const token = await generateToken({ storeId: store!._id.toString(), email: store.email });
 
       return { token, store };
+    } else {
+      throw new RequestError(401, "Not Authorized");
+    }
+  }
+
+  //dashboard auth
+  static async dashboardLogin(body: { email: string; password: string }) {
+    const { email, password } = body;
+    const dashboard = await DashboardService.getDashboard({ email });
+
+    if (!dashboard) {
+      throw new RequestError(401, "Not Authorized");
+    }
+
+    const result = await bcrypt.compare(password, dashboard!.password!);
+
+    if (result) {
+      const token = await generateToken({
+        dashboardId: dashboard!._id.toString(),
+        email: dashboard.email,
+      });
+
+      return { token, store: dashboard };
     } else {
       throw new RequestError(401, "Not Authorized");
     }

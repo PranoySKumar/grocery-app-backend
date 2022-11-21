@@ -3,5 +3,6 @@ export { User, IUser } from "./User.model";
 export { Store, IStore } from "./Store.model";
 export { Category, ICategory } from "./Category.model";
 export { Order, IOrder } from "./Order.model";
-
 export { ICoupon, Coupon } from "./Coupon.model";
+export { Dashboard, IDashboard } from "./Dashboard.model";
+export { IAnnouncements, Announcement } from "./Announcement.model";

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { AccessVerifier } from "../../Middleware";
+import dashboardAnnouncementRoutes from "./dashboard-announcement-routes";
 import dashboardAuthRoutes from "./dashboard-auth-routes";
 import dashboardCategoryRoutes from "./dashboard-category-routes";
 import dashboardCouponRoutes from "./dashboard-coupon-routes";
@@ -9,11 +10,12 @@ import dashboardProfileRoutes from "./dashboard-profile-routes";
 
 const dashboardRoutes = Router();
 
-dashboardRoutes.use("/store", AccessVerifier.isStore, dashboardAuthRoutes);
-dashboardRoutes.use("/store", AccessVerifier.isStore, dashboardProductRoutes);
-dashboardRoutes.use("/store", AccessVerifier.isStore, dashboardCategoryRoutes);
-dashboardRoutes.use("/store", AccessVerifier.isStore, dashboardOrderRoutes);
-dashboardRoutes.use("/store", AccessVerifier.isStore, dashboardCouponRoutes);
-dashboardRoutes.use("/store", AccessVerifier.isStore, dashboardProfileRoutes);
+dashboardRoutes.use("/store", AccessVerifier.isDashboard, dashboardAuthRoutes);
+dashboardRoutes.use("/store", AccessVerifier.isDashboard, dashboardProductRoutes);
+dashboardRoutes.use("/store", AccessVerifier.isDashboard, dashboardCategoryRoutes);
+dashboardRoutes.use("/store", AccessVerifier.isDashboard, dashboardOrderRoutes);
+dashboardRoutes.use("/store", AccessVerifier.isDashboard, dashboardCouponRoutes);
+dashboardRoutes.use("/store", AccessVerifier.isDashboard, dashboardProfileRoutes);
+dashboardRoutes.use("/store", AccessVerifier.isDashboard, dashboardAnnouncementRoutes);
 
 export default dashboardRoutes;

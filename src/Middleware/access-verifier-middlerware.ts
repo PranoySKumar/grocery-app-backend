@@ -3,7 +3,7 @@ import { RequestError } from "../Utils";
 import { AuthTokenData } from "./jwt-verifier-middleware";
 
 export default class AccessVerifier {
-  static async isStore(
+  static async isDashboard(
     req: Request<any, any, { tokenData: AuthTokenData }>,
     res: Response,
     next: NextFunction
