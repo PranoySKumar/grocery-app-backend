@@ -1,14 +1,27 @@
 import { NextFunction, Request, Response } from "express";
 import { Types } from "mongoose";
-import { IProduct } from "../Models";
+import { IProduct, Product } from "../Models";
 import { FileService } from "../Services";
 import ProductService from "../Services/product-service";
 
 export default class ProductController {
   //get all products
-  static async getAllProducts(req: Request, res: Response, next: NextFunction) {
+  static async getAllProducts(
+    req: Request<any, any, any, { withCategory: boolean; discount: true; limit: string }>,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
-      const products = await ProductService.getAllProducts();
+      const { discount, limit, withCategory } = req.query;
+
+      let products;
+      if (discount) {
+        const parsedLimit = limit ? parseInt(req.query.limit) : undefined;
+
+        products = await ProductService.findAllDiscountedProducts(parsedLimit);
+      } else {
+        products = await ProductService.findAllProducts({}, {}, withCategory ? true : false);
+      }
       res.status(200).json({ products });
     } catch (error) {
       next(error);
@@ -24,7 +37,7 @@ export default class ProductController {
     try {
       const productId = req.params.productId;
 
-      const product = await ProductService.getProductById(productId);
+      const product = await ProductService.findProductById(productId);
       res.status(200).json(product);
     } catch (error) {
       next(error);
@@ -39,7 +52,7 @@ export default class ProductController {
   ) {
     try {
       const categoryId = req.params.categoryId;
-      const products = await ProductService.getAllProducts({
+      const products = await ProductService.findAllProducts({
         categoryId: new Types.ObjectId(categoryId),
       });
       res.status(200).json({ products });
@@ -99,7 +112,7 @@ export default class ProductController {
       const productData = req.body;
       const imageFile = req.file;
 
-      const currentProduct = await ProductService.getProductById(_id);
+      const currentProduct = await ProductService.findProductById(_id);
 
       //parse the json data.
 

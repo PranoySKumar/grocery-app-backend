@@ -19,7 +19,7 @@ export default class OrderService {
     cart.forEach(async (item) => {
       const product = await Product.findById(item.productId);
       if (product?.discount) {
-        totalAmount = totalAmount + product.price - product.price * (product.discount / 100);
+        totalAmount = totalAmount + product.price! - product.price! * (product.discount / 100);
       } else {
         totalAmount = totalAmount + product?.price!;
       }

@@ -8,8 +8,8 @@ userProductRoutes.get("/products", ProductController.getAllProducts);
 userProductRoutes.get("/products/:productId", ProductController.getSingleProduct);
 userProductRoutes.get(
   "/category/:categoryId/products",
-
   ProductController.getSingleCategoryProducts
 );
+//gets discounted products
 
 export default userProductRoutes;

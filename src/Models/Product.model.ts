@@ -9,14 +9,14 @@ type TQuantity = {
 
 export interface IProduct {
   _id?: ObjectId;
-  name: string;
+  name?: string;
   description?: string;
-  price: number;
+  price?: number;
 
   discount?: number;
-  quantity: TQuantity;
-  totalQuantityRemaining: number;
-  categoryId: ObjectId | ICategory;
+  quantity?: TQuantity;
+  totalQuantityRemaining?: number;
+  categoryId?: ObjectId | ICategory;
   imageUrl?: string;
   createdAt?: Date;
   updatedAt?: Date;

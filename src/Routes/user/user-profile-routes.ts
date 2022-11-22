@@ -1,7 +1,5 @@
 import { Router } from "express";
 import { UserController } from "../../Controllers";
-import { isAuthToken } from "../../Middleware";
-import userRoutes from "./routes";
 
 const userProfileRoutes = Router();
 
