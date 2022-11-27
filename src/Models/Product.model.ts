@@ -13,11 +13,10 @@ export interface IProduct {
   name?: string;
   description?: string;
   price?: number;
-
+  unitsSold?: number;
   discount?: number;
   quantity?: TQuantity;
-
-  categoryId?: ObjectId | ICategory;
+  category?: ObjectId | ICategory;
   imageUrl?: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -40,9 +39,9 @@ const productSchema = new Schema<IProduct>(
     price: { type: Number, required: true },
     quantity: { type: quantitySchema, required: true },
     discount: { type: SchemaTypes.Number },
-
+    unitsSold: { type: SchemaTypes.Number, default: 0 },
     imageUrl: { type: String },
-    categoryId: { type: SchemaTypes.ObjectId, required: true, ref: "Category" },
+    category: { type: SchemaTypes.ObjectId, required: true, ref: "Category" },
   },
   { timestamps: true }
 );

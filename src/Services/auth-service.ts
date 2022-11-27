@@ -17,7 +17,8 @@ export default class AuthService {
 
     //If the user is already there just send that user's details else create a new user.
     if (user) {
-      return { token, user };
+      const { userName, location, pincode, _id } = user;
+      return { token, user: { userName, location, pincode, _id } };
     } else {
       const newUser = await UserService.createUser({
         _id: phoneNumber.toString(),
@@ -26,7 +27,7 @@ export default class AuthService {
         pincode,
       });
 
-      return { token, user: { userName, location, pincode, id: newUser._id } };
+      return { token, user: { userName, location, pincode, _id: newUser._id } };
     }
   }
 

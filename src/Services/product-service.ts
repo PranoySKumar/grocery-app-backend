@@ -4,19 +4,12 @@ import { Category, IProduct, Product } from "../Models";
 export default class ProductService {
   //get all products;
   static async findAllProducts(filter?: object, projection?: IProduct, withCategory?: boolean) {
-    if (withCategory)
-      return await Product.find(filter ?? {}, projection).populate({
-        path: "categoryId",
-        select: "name type",
-      });
-    if (!withCategory) return await Product.find(filter ?? {}, projection);
+    return await Product.find(filter ?? {}, projection).populate(withCategory ? "category" : "");
   }
 
-  //get all products;
-  static async findAllDiscountedProducts(limit?: number) {
-    console.log("hey inside ");
-    if (limit) return await Product.find({ discount: { $exists: true } }, {}, { limit });
-    else return await Product.find({ discount: { $exists: true } });
+  //get all discounted products;
+  static async findAllDiscountedProducts(projection?: object, limit?: number) {
+    return await Product.find({ discount: { $exists: true } }, projection, limit ? { limit } : {});
   }
 
   //delete new product;
@@ -41,7 +34,7 @@ export default class ProductService {
   //get single product;
   static async findProductById(productId: string) {
     console.log(productId);
-    const prod = await Product.findById(productId).populate("categoryId");
+    const prod = await Product.findById(productId).populate("category");
 
     return prod;
   }
