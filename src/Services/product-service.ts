@@ -3,14 +3,24 @@ import { Category, IProduct, Product } from "../Models";
 
 export default class ProductService {
   //get all products;
-  static async findAllProducts(filter?: object, projection?: IProduct, withCategory?: boolean) {
+  static async findAllProducts(
+    filter?: object,
+    projection?: object | IProduct,
+    withCategory?: boolean
+  ) {
     return await Product.find(filter ?? {}, projection).populate(withCategory ? "category" : "");
   }
 
   //get all discounted products;
-  static async findAllDiscountedProducts(projection?: object, limit?: number) {
+  static async findAllDiscountedProducts(projection?: object | IProduct, limit?: number) {
     if (limit) return await Product.find({ discount: { $exists: true } }, projection).limit(limit);
     else return await Product.find({ discount: { $exists: true } }, projection);
+  }
+
+  //gets most sold products
+  static async findMostSoldProducts(limit?: number, projection?: object | IProduct) {
+    if (limit) return await Product.find({}, projection).sort({ unitsSold: 1 }).limit(limit);
+    else return await Product.find({}, projection).sort({ unitsSold: 1 });
   }
 
   //delete new product;

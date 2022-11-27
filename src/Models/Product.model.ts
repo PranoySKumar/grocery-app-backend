@@ -37,6 +37,7 @@ const productSchema = new Schema<IProduct>(
     name: { type: String, required: true },
     description: { type: SchemaTypes.String },
     price: { type: Number, required: true },
+
     quantity: { type: quantitySchema, required: true },
     discount: { type: SchemaTypes.Number },
     unitsSold: { type: SchemaTypes.Number, default: 0 },
