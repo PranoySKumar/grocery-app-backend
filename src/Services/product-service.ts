@@ -13,8 +13,12 @@ export default class ProductService {
 
   //get all discounted products;
   static async findAllDiscountedProducts(projection?: object | IProduct, limit?: number) {
-    if (limit) return await Product.find({ discount: { $exists: true } }, projection).limit(limit);
-    else return await Product.find({ discount: { $exists: true } }, projection);
+    if (limit)
+      return await Product.find({ discount: { $exists: true } }, projection)
+        .limit(limit)
+        .sort({ discount: 1 });
+    else
+      return await Product.find({ discount: { $exists: true } }, projection).sort({ discount: 1 });
   }
 
   //gets most sold products

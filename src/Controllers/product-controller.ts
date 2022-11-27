@@ -31,7 +31,10 @@ export default class ProductController {
             parsedLimit
           );
         } else if (mostPopular) {
-          products = await ProductService.findMostSoldProducts(parsedLimit, { unitsSold: 0 });
+          products = await ProductService.findMostSoldProducts(parsedLimit, {
+            unitsSold: 0,
+            category: 0,
+          });
         } else {
           products = await ProductService.findAllProducts(
             {},
