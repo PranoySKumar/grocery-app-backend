@@ -16,9 +16,9 @@ export default class ProductService {
     if (limit)
       return await Product.find({ discount: { $exists: true } }, projection)
         .limit(limit)
-        .sort({ discount: 1 });
+        .sort({ discount: -1 });
     else
-      return await Product.find({ discount: { $exists: true } }, projection).sort({ discount: 1 });
+      return await Product.find({ discount: { $exists: true } }, projection).sort({ discount: -1 });
   }
 
   //gets most sold products
