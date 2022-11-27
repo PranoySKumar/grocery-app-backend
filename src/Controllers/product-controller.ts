@@ -15,8 +15,8 @@ export default class ProductController {
       const { discount, limit, withCategory } = req.query;
 
       let products;
+      const parsedLimit = limit ? parseInt(req.query.limit) : undefined;
       if (discount) {
-        const parsedLimit = limit ? parseInt(req.query.limit) : undefined;
         products = await ProductService.findAllDiscountedProducts({ category: 0 }, parsedLimit);
       } else {
         products = await ProductService.findAllProducts({}, {}, withCategory ? true : false);

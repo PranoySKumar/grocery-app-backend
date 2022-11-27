@@ -5,6 +5,7 @@ import { CategoryService, FileService } from "../Services";
 
 export interface FindAllCategoriesRequestQueryParams {
   type: string;
+  limit: string;
 }
 
 export interface AddNewCategoryRequestBody {
@@ -22,13 +23,11 @@ export default class CategoryController {
     next: NextFunction
   ) {
     try {
-      const type = req.query.type;
-      let categories;
-      if (type) {
-        categories = await CategoryService.getAll({ type });
-      } else {
-        categories = await CategoryService.getAll();
-      }
+      const type = req.query.type; // product type.
+      const limit = req.query.limit ? parseInt(req.query.limit) : undefined; // amount of products to retrieve.
+
+      const categories = await CategoryService.getAll(type ? { type } : {}, {}, limit);
+
       res.status(200).json({ categories });
     } catch (error) {
       next(error);

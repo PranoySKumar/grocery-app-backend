@@ -9,7 +9,8 @@ export default class ProductService {
 
   //get all discounted products;
   static async findAllDiscountedProducts(projection?: object, limit?: number) {
-    return await Product.find({ discount: { $exists: true } }, projection, limit ? { limit } : {});
+    if (limit) return await Product.find({ discount: { $exists: true } }, projection).limit(limit);
+    else return await Product.find({ discount: { $exists: true } }, projection);
   }
 
   //delete new product;

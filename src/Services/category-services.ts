@@ -9,6 +9,8 @@ export default class CategoryService {
   static async delete(_id: string) {
     return await Category.deleteOne({ _id: new Types.ObjectId(_id) });
   }
+
+  //updates category
   static async update(_id: string, data: { type?: string; name?: string; imageUrl?: string }) {
     return await Category.updateOne(
       { _id: new Types.ObjectId(_id) },
@@ -16,16 +18,15 @@ export default class CategoryService {
       { runValidators: true, omitUndefined: true }
     );
   }
-  static async getAll(filter?: object, projection?: object) {
-    if (filter) {
-      return await Category.find(filter, projection);
-    }
-    return await Category.find();
+
+  //gets all categories.
+  static async getAll(filter?: object, projection?: object, limit?: number) {
+    if (limit) return await Category.find(filter ?? {}, projection).limit(limit);
+    else return await Category.find(filter ?? {}, projection);
   }
+
+  //gets single category
   static async getOne(filter?: object, projection?: Object) {
-    if (filter) {
-      return await Category.findOne(filter, projection);
-    }
-    return await Category.findOne({}, projection);
+    return await Category.findOne(filter ?? {}, projection);
   }
 }
