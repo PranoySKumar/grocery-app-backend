@@ -1,12 +1,14 @@
 import express from "express";
 import cors from "cors";
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { storeRoutes, userRoutes } from "./Routes";
 import { errorHandler } from "./Middleware";
 import dotenv from "dotenv";
 import { getEnv } from "./Config";
 import path from "path";
 import { StoreService } from "./Services";
+import { Category, Product } from "./Models";
+import { categoriesData, productsdata } from "./data";
 
 dotenv.config(); //configuring env variables
 

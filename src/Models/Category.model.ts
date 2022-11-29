@@ -1,9 +1,9 @@
 import { model, ObjectId, Schema, SchemaTypes } from "mongoose";
 
 export interface ICategory {
-  _id: ObjectId;
-  type: string;
-  name: string;
+  _id?: ObjectId;
+  type?: string;
+  name?: string;
   imageUrl: string;
   createdAt?: Date;
   updatedAt?: Date;

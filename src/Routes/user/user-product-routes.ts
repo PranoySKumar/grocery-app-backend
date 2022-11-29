@@ -12,7 +12,7 @@ userProductRoutes.get(
 
 userProductRoutes.get("/products/:productId", ProductController.getSingleProduct);
 userProductRoutes.get(
-  "/category/:categoryId/products",
+  "/categories/:categoryId/products",
   ProductController.getSingleCategoryProducts
 );
 //gets discounted products

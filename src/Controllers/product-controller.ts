@@ -75,7 +75,7 @@ export default class ProductController {
     try {
       const categoryId = req.params.categoryId;
       const products = await ProductService.findAllProducts({
-        categoryId: new Types.ObjectId(categoryId),
+        categories: new Types.ObjectId(categoryId),
       });
       res.status(200).json({ products });
     } catch (error) {

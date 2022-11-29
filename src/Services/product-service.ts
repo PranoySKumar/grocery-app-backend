@@ -8,7 +8,7 @@ export default class ProductService {
     projection?: object | IProduct,
     withCategory?: boolean
   ) {
-    return await Product.find(filter ?? {}, projection).populate(withCategory ? "category" : "");
+    return await Product.find(filter ?? {}, projection).populate(withCategory ? "categories" : "");
   }
 
   //get all discounted products;
@@ -49,7 +49,7 @@ export default class ProductService {
   //get single product;
   static async findProductById(productId: string) {
     console.log(productId);
-    const prod = await Product.findById(productId).populate("category");
+    const prod = await Product.findById(productId).populate("categories");
 
     return prod;
   }
