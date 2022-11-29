@@ -46,6 +46,11 @@ export default class ProductService {
     });
   }
 
+  //find products by search term
+  static async findBySearchTerm(searchTerm: string, projection: object | IProduct) {
+    return await Product.find({ name: { $regex: searchTerm, options: "i" } });
+  }
+
   //get single product;
   static async findProductById(productId: string) {
     console.log(productId);

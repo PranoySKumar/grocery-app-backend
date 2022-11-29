@@ -12,13 +12,13 @@ export default class ProductController {
       any,
       any,
       { tokenData: AuthTokenData },
-      { mostPopular: boolean; withCategory: boolean; discount: true; limit: string }
+      { search: string; mostPopular: boolean; withCategory: boolean; discount: true; limit: string }
     >,
     res: Response,
     next: NextFunction
   ) {
     try {
-      const { mostPopular, discount, limit, withCategory } = req.query;
+      const { search, mostPopular, discount, limit, withCategory } = req.query;
       const { userId } = req.body.tokenData;
       let products;
       const parsedLimit = limit ? parseInt(req.query.limit) : undefined;
@@ -35,6 +35,8 @@ export default class ProductController {
             unitsSold: 0,
             category: 0,
           });
+        } else if (search) {
+          products = await ProductService.findBySearchTerm(search, { unitsSold: 0 });
         } else {
           products = await ProductService.findAllProducts(
             {},
