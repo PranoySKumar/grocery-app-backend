@@ -19,6 +19,7 @@ export default class ProductController {
   ) {
     try {
       const { search, mostPopular, discount, limit, withCategory } = req.query;
+      console.log(search);
       const { userId } = req.body.tokenData;
       let products;
       const parsedLimit = limit ? parseInt(req.query.limit) : undefined;
