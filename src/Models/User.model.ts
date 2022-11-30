@@ -7,7 +7,7 @@ export interface IUser {
   _id: string;
   userName?: string;
   location?: { lat: number; lng: number };
-  address?: String;
+  shippingAddresses?: IShippingAddress[];
   pincode?: number;
   profileImageUrl?: string;
   coupons?: ObjectId[] | ICoupon[];
@@ -15,12 +15,24 @@ export interface IUser {
   createdAt?: Date;
   updatedAt?: Date;
 }
+interface IShippingAddress {
+  recipientName: string;
+  address: string;
+}
+
+const addressSchema = new Schema<IShippingAddress>(
+  {
+    address: { type: SchemaTypes.String, required: true },
+    recipientName: { type: SchemaTypes.String, required: true },
+  },
+  { _id: false }
+);
 
 const userSchema = new Schema<IUser>(
   {
     _id: { type: SchemaTypes.String, required: true }, //phoneNumber;
     userName: SchemaTypes.String,
-    address: { type: [String], default: [] },
+    shippingAddresses: { type: [addressSchema], default: [] },
     pincode: Number,
     location: { type: { lat: SchemaTypes.Number, lng: SchemaTypes.Number } },
     favourites: { type: [SchemaTypes.ObjectId], ref: Product.modelName },
