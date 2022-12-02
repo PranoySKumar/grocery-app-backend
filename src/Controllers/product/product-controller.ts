@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import { Types } from "mongoose";
-import { AuthTokenData } from "../Middleware";
-import { IProduct, Product } from "../Models";
-import { FileService } from "../Services";
-import ProductService from "../Services/product-service";
+import { AuthTokenData } from "../../Middleware";
+import { IProduct, Product } from "../../Models";
+import { FileService } from "../../Services";
+import ProductService from "../../Services/product-service";
 
 export default class ProductController {
   //get all products
@@ -11,41 +11,26 @@ export default class ProductController {
     req: Request<
       any,
       any,
-      { tokenData: AuthTokenData },
+      { tokenData: AuthTokenData; limit?: number; projection: object },
       { search: string; mostPopular: boolean; withCategory: boolean; discount: true; limit: string }
     >,
     res: Response,
     next: NextFunction
   ) {
     try {
-      const { search, mostPopular, discount, limit, withCategory } = req.query;
-      const { userId } = req.body.tokenData;
+      const { search, mostPopular, discount, withCategory } = req.query;
+      const { limit, projection } = req.body;
       let products;
-      const parsedLimit = limit ? parseInt(req.query.limit) : undefined;
 
-      // if user.
-      if (userId) {
-        if (discount) {
-          products = await ProductService.findAllDiscountedProducts(
-            { category: 0, unitsSold: 0 },
-            parsedLimit
-          );
-        } else if (mostPopular) {
-          products = await ProductService.findMostSoldProducts(parsedLimit, {
-            unitsSold: 0,
-            category: 0,
-          });
-        } else if (search) {
-          products = await ProductService.findBySearchTerm(search, { unitsSold: 0 });
-        } else {
-          products = await ProductService.findAllProducts(
-            {},
-            { unitsSold: 0 },
-            withCategory ? true : false
-          );
-        }
+      if (discount) {
+        products = await ProductService.findAllDiscountedProducts(projection, limit);
+      } else if (mostPopular) {
+        products = await ProductService.findMostSoldProducts(limit, projection);
+      } else if (search) {
+        products = await ProductService.findBySearchTerm(search, projection);
+      } else {
+        products = await ProductService.findAllProducts({}, projection);
       }
-
       res.status(200).json({ products });
     } catch (error) {
       next(error);

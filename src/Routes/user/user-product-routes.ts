@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { ProductController } from "../../Controllers";
+import { ProductController, ProductControllerManager } from "../../Controllers";
 import { isAuthToken } from "../../Middleware";
 
 const userProductRoutes = Router();
 
 userProductRoutes.get(
   "/products",
-
+  ProductControllerManager.getAllProductsUserManager,
   ProductController.getAllProducts
 );
 

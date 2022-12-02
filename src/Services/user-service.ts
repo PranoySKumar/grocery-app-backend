@@ -8,8 +8,7 @@ export default class UserService {
 
   //find all users.
   static async findAllUsers(filter?: object, projection?: object) {
-    if (!filter) return await User.find({}, projection);
-    return await User.find(filter, projection);
+    return await User.find(filter ?? {}, projection);
   }
 
   //create new user.
