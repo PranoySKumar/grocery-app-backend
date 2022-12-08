@@ -18,11 +18,15 @@ export interface IUser {
 interface IShippingAddress {
   recipientName: string;
   address: string;
+  pincode: number;
+  landmark?: string;
 }
 
 const addressSchema = new Schema<IShippingAddress>(
   {
     address: { type: SchemaTypes.String, required: true },
+    pincode: { type: SchemaTypes.Number, required: true },
+    landmark: { type: SchemaTypes.String },
     recipientName: { type: SchemaTypes.String, required: true },
   },
   { _id: false }
