@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { AccessVerifier } from "../../Middleware";
-import dashboardAnnouncementRoutes from "./dashboard-announcement-routes";
 import dashboardAuthRoutes from "./dashboard-auth-routes";
 import dashboardCategoryRoutes from "./dashboard-category-routes";
 import dashboardCouponRoutes from "./dashboard-coupon-routes";
@@ -16,6 +15,5 @@ dashboardRoutes.use("/store", AccessVerifier.isDashboard, dashboardCategoryRoute
 dashboardRoutes.use("/store", AccessVerifier.isDashboard, dashboardOrderRoutes);
 dashboardRoutes.use("/store", AccessVerifier.isDashboard, dashboardCouponRoutes);
 dashboardRoutes.use("/store", AccessVerifier.isDashboard, dashboardProfileRoutes);
-dashboardRoutes.use("/store", AccessVerifier.isDashboard, dashboardAnnouncementRoutes);
 
 export default dashboardRoutes;

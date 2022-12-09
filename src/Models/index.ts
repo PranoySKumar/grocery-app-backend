@@ -5,4 +5,3 @@ export { Category, ICategory } from "./Category.model";
 export { Order, IOrder } from "./Order.model";
 export { ICoupon, Coupon } from "./Coupon.model";
 export { Dashboard, IDashboard } from "./Dashboard.model";
-export { IAnnouncements, Announcement } from "./Announcement.model";

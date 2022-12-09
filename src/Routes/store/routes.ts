@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { AccessVerifier } from "../../Middleware";
-import storeAnnouncementRoutes from "./store-announcement-routes";
 import storeAuthRoutes from "./store-auth-routes";
 import storeCategoryRoutes from "./store-category-routes";
 import storeCouponRoutes from "./store-coupon-routes";
@@ -16,6 +15,5 @@ storeRoutes.use("/store", AccessVerifier.isDashboard, storeCategoryRoutes);
 storeRoutes.use("/store", AccessVerifier.isDashboard, storeOrderRoutes);
 storeRoutes.use("/store", AccessVerifier.isDashboard, storeCouponRoutes);
 storeRoutes.use("/store", AccessVerifier.isDashboard, storeProfileRoutes);
-storeRoutes.use("/store", AccessVerifier.isDashboard, storeAnnouncementRoutes);
 
 export default storeRoutes;
