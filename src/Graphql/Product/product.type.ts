@@ -1,16 +1,24 @@
-import { disconnect, ObjectId } from "mongoose";
 import { Field, FieldResolver, ID, ObjectType, Root } from "type-graphql";
 import { QuantityType } from "../../Data";
-import { ICategory, IProduct } from "../../Models";
+import { IProduct } from "../../Models";
 import CategoryType from "../Category/category.type";
+
+@ObjectType()
+class ProductQuantityType {
+  @Field(() => QuantityType)
+  type!: QuantityType;
+
+  @Field()
+  value!: number;
+
+  @Field()
+  totalQuantity?: number;
+}
 
 @ObjectType()
 export class ProductType {
   @Field((type) => ID)
-  @FieldResolver()
-  id(@Root() product: IProduct) {
-    return product._id!.toString();
-  }
+  id!: string;
 
   @Field()
   name!: string;
@@ -27,12 +35,8 @@ export class ProductType {
   @Field({ nullable: true })
   discount?: number;
 
-  @Field((type) => ({
-    type: QuantityType,
-    value: Number,
-    totalQuantity: Number,
-  }))
-  quantity!: { type: QuantityType; value: number; totalQuantity: number };
+  @Field((type) => ProductQuantityType)
+  quantity!: ProductQuantityType;
 
   @Field((type) => [CategoryType])
   categories!: CategoryType[];

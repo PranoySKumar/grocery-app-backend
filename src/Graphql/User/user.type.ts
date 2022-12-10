@@ -1,14 +1,36 @@
 import { ObjectType, Field, ID, Int, FieldResolver, Root } from "type-graphql";
 import { IUser } from "../../Models";
 import { CouponType } from "../Coupon/coupon.type";
+import { ProductType } from "../Product/product.type";
+
+@ObjectType()
+class ShippingAddressType {
+  @Field()
+  recipientName!: string;
+
+  @Field()
+  address!: string;
+
+  @Field()
+  pincode!: number;
+
+  @Field()
+  landmark?: string;
+}
+
+@ObjectType()
+export class LocationType {
+  @Field()
+  lat!: number;
+
+  @Field()
+  lng!: number;
+}
 
 @ObjectType()
 export default class UserType {
   @Field((type) => ID)
-  @FieldResolver()
-  id(@Root() user: IUser) {
-    return user._id!.toString();
-  }
+  id!: string;
 
   @Field()
   userName!: string;
@@ -19,14 +41,17 @@ export default class UserType {
   @Field({ nullable: true })
   profileImageUrl?: string;
 
-  @Field((type) => ({ lat: Number, lng: Number }), { nullable: true })
-  location?: { lat: number; lng: number };
+  @Field((type) => LocationType, { nullable: true })
+  location?: LocationType;
 
   @Field((type) => [CouponType], { defaultValue: [] })
   coupons!: CouponType[];
 
-  @Field({ defaultValue: [] })
-  favourites!: [];
+  @Field((type) => [ProductType], { defaultValue: [] })
+  favourites!: ProductType[];
+
+  @Field((type) => [ShippingAddressType], { defaultValue: [] })
+  shippingAddresses!: ShippingAddressType[];
 
   @Field()
   createdAt!: Date;
