@@ -1,8 +1,10 @@
-import { ObjectType, Field, ID, Int, FieldResolver, Root } from "type-graphql";
+import { isRequiredInputField } from "graphql";
+import { ObjectType, Field, ID, Int, FieldResolver, Root, InputType } from "type-graphql";
 import { IUser } from "../../Models";
 import { CouponType } from "../Coupon/coupon.type";
 import { ProductType } from "../Product/product.type";
 
+@InputType("ShippingAddressInputType")
 @ObjectType()
 class ShippingAddressType {
   @Field()
@@ -18,6 +20,7 @@ class ShippingAddressType {
   landmark?: string;
 }
 
+@InputType("LocationInputType")
 @ObjectType()
 export class LocationType {
   @Field()
@@ -27,13 +30,14 @@ export class LocationType {
   lng!: number;
 }
 
+@InputType("UserInputType")
 @ObjectType()
 export default class UserType {
   @Field((type) => ID)
   id!: string;
 
   @Field()
-  userName!: string;
+  userName?: string;
 
   @Field((type) => Int, { nullable: true })
   pincode?: number;
@@ -45,17 +49,17 @@ export default class UserType {
   location?: LocationType;
 
   @Field((type) => [CouponType], { defaultValue: [] })
-  coupons!: CouponType[];
+  coupons?: CouponType[];
 
   @Field((type) => [ProductType], { defaultValue: [] })
-  favourites!: ProductType[];
+  favourites?: ProductType[];
 
   @Field((type) => [ShippingAddressType], { defaultValue: [] })
-  shippingAddresses!: ShippingAddressType[];
+  shippingAddresses?: ShippingAddressType[];
 
   @Field()
-  createdAt!: Date;
+  createdAt?: Date;
 
   @Field()
-  updatedAt!: Date;
+  updatedAt?: Date;
 }

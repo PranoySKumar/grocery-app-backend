@@ -1,8 +1,9 @@
-import { Field, FieldResolver, ID, ObjectType, Root } from "type-graphql";
+import { Field, FieldResolver, ID, InputType, ObjectType, Root } from "type-graphql";
 import { QuantityType } from "../../Data";
 import { IProduct } from "../../Models";
 import CategoryType from "../Category/category.type";
 
+@InputType("ProductQuantityInputType")
 @ObjectType()
 class ProductQuantityType {
   @Field(() => QuantityType)
@@ -15,38 +16,38 @@ class ProductQuantityType {
   totalQuantity?: number;
 }
 
+@InputType("ProductInputType")
 @ObjectType()
 export class ProductType {
   @Field((type) => ID)
-  id!: string;
+  id?: string;
 
   @Field()
-  name!: string;
+  name?: string;
 
   @Field()
-  description!: string;
+  description?: string;
 
   @Field()
-  price!: number;
+  price?: number;
 
   @Field()
-  unitsSold!: number;
+  unitsSold?: number;
 
-  @Field({ nullable: true })
   discount?: number;
 
   @Field((type) => ProductQuantityType)
-  quantity!: ProductQuantityType;
+  quantity?: ProductQuantityType;
 
   @Field((type) => [CategoryType])
-  categories!: CategoryType[];
+  categories?: CategoryType[];
 
   @Field()
-  imageUrl!: string;
+  imageUrl?: string;
 
   @Field()
-  createdAt!: Date;
+  createdAt?: Date;
 
   @Field()
-  updatedAt!: Date;
+  updatedAt?: Date;
 }

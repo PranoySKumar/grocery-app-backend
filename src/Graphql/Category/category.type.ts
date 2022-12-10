@@ -1,23 +1,24 @@
-import { Field, FieldResolver, ID, ObjectType, Root } from "type-graphql";
+import { Field, FieldResolver, ID, InputType, ObjectType, Root } from "type-graphql";
 import { ICategory } from "../../Models";
 
+@InputType("CategoryInputType")
 @ObjectType()
 export default class CategoryType {
   @Field((type) => ID)
-  id!: string;
+  id?: string;
 
   @Field()
-  type!: string;
+  type?: string;
 
   @Field()
-  name!: string;
+  name?: string;
 
   @Field()
-  imageUrl!: string;
+  imageUrl?: string;
 
   @Field()
-  createdAt!: Date;
+  createdAt?: Date;
 
   @Field()
-  updatedAt!: Date;
+  updatedAt?: Date;
 }

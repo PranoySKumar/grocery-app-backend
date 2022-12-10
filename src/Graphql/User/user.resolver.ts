@@ -1,5 +1,6 @@
 import {
   Arg,
+  Authorized,
   Field,
   FieldResolver,
   InputType,
@@ -12,7 +13,8 @@ import {
 import { IUser } from "../../Models";
 import { UserService } from "../../Services";
 import { generateToken } from "../../Utils";
-import UserType from "./user.type";
+import { Role } from "../../Utils/auth";
+import UserType, { LocationType } from "./user.type";
 
 //UserLoginInputType.
 @InputType()
@@ -20,11 +22,8 @@ class UserLoginInput implements Partial<UserType> {
   @Field()
   userName!: string;
 
-  @Field({ nullable: true })
-  lat?: number;
-
-  @Field({ nullable: true })
-  lng?: number;
+  @Field((type) => LocationType, { nullable: true })
+  location?: LocationType;
 
   @Field({ nullable: true })
   pincode?: number;
@@ -32,6 +31,7 @@ class UserLoginInput implements Partial<UserType> {
   @Field()
   phoneNumber!: string;
 }
+
 @ObjectType()
 class UserLoginResponse {
   @Field()
@@ -43,36 +43,43 @@ class UserLoginResponse {
 
 @Resolver((of) => UserType)
 export class UserResolver {
-  constructor(private userService: UserService = new UserService()) {}
+  constructor(private readonly userService: UserService = new UserService()) {}
 
   @FieldResolver()
   id(@Root() user: IUser) {
     return user._id!.toString();
   }
 
+  @Authorized([Role.admin])
   @Query((returns) => [UserType])
   async users() {
     const users = await this.userService.findAllUsers({}, 10, 0, {});
     return users;
   }
+
+  @Authorized([Role.admin, Role.user])
   @Query((returns) => UserType)
   async user(@Arg("id") id: string) {
     const user = await this.userService.findUserById(id);
     return user;
   }
 
+  @Authorized([Role.user])
   @Mutation((type) => Boolean)
   async sendUserOtp(@Arg("phoneNumber") phoneNumber: string) {
     return true;
   }
 
+  @Authorized([Role.user])
   @Mutation((type) => Boolean)
   async verifyUserOtp(@Arg("phoneNumber") phoneNumber: string) {
     return true;
   }
+
+  @Authorized([Role.user])
   @Mutation((type) => UserLoginResponse)
   async userLogin(@Arg("data") data: UserLoginInput) {
-    const { phoneNumber, userName, lat, lng, pincode } = data;
+    const { phoneNumber, userName, location, pincode } = data;
 
     const user = await this.userService.findUserById(phoneNumber.toString());
 
@@ -81,11 +88,8 @@ export class UserResolver {
 
     //If the user is already there just send that user's details else create a new user.
     if (user) {
-      const { userName, location, pincode, _id } = user;
       return { token, user };
     } else {
-      let location;
-      if (lat != null && lng != null) location = { lat, lng };
       const newUser = await this.userService.createUser({
         _id: phoneNumber.toString(),
         userName,
@@ -95,5 +99,12 @@ export class UserResolver {
 
       return { token, user: newUser };
     }
+  }
+
+  @Authorized(Role.user, Role.admin)
+  @Mutation((type) => Boolean)
+  async updateUser(@Arg("id") id: string, @Arg("data") data: UserType) {
+    this.userService.updateUserDetails(id, data);
+    return true;
   }
 }

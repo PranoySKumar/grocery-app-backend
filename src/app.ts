@@ -22,7 +22,11 @@ import { customAuthChecker } from "./Utils/auth";
   app.use(express.json()); //body-parser
 
   //setting up graphql
-  const schema = await buildSchema({ resolvers: [UserResolver], authChecker: customAuthChecker });
+  const schema = await buildSchema({
+    nullableByDefault: true,
+    resolvers: [UserResolver],
+    authChecker: customAuthChecker,
+  });
   app.use(
     "/graphql",
     isAuthToken,

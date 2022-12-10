@@ -27,7 +27,7 @@ export default class UserService {
   }
 
   //update  user details
-  async updateUserDetails(_id: string, userDetails: IUser) {
+  async updateUserDetails(_id: string, userDetails: IUser | any) {
     return await User.updateOne(
       { _id },
       { $set: userDetails },
