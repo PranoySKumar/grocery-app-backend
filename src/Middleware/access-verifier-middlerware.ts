@@ -21,7 +21,7 @@ export default class AccessVerifier {
     next: NextFunction
   ) {
     try {
-      if (req.body.tokenData.dashboardId) return next();
+      if (req.body.tokenData.AdminId) return next();
       else throw new RequestError(401, "Not Authorized");
     } catch (error) {
       next(error);

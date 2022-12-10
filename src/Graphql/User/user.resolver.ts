@@ -4,6 +4,7 @@ import {
   FieldResolver,
   InputType,
   Mutation,
+  ObjectType,
   Query,
   Resolver,
   Root,
@@ -11,22 +12,33 @@ import {
 import { IUser } from "../../Models";
 import { UserService } from "../../Services";
 import { generateToken } from "../../Utils";
-import UserType, { LocationType } from "./user.type";
+import UserType from "./user.type";
 
 //UserLoginInputType.
 @InputType()
-class UserLoginInputType implements Partial<UserType> {
+class UserLoginInput implements Partial<UserType> {
   @Field()
   userName!: string;
 
-  @Field()
-  location?: LocationType;
+  @Field({ nullable: true })
+  lat?: number;
 
-  @Field()
+  @Field({ nullable: true })
+  lng?: number;
+
+  @Field({ nullable: true })
   pincode?: number;
 
   @Field()
   phoneNumber!: string;
+}
+@ObjectType()
+class UserLoginResponse {
+  @Field()
+  token!: string;
+
+  @Field((type) => UserType)
+  user!: UserType;
 }
 
 @Resolver((of) => UserType)
@@ -49,29 +61,31 @@ export class UserResolver {
     return user;
   }
 
-  @Mutation()
+  @Mutation((type) => Boolean)
   async sendUserOtp(@Arg("phoneNumber") phoneNumber: string) {
     return true;
   }
 
-  @Mutation()
+  @Mutation((type) => Boolean)
   async verifyUserOtp(@Arg("phoneNumber") phoneNumber: string) {
     return true;
   }
-  @Mutation()
-  async userLogin(@Arg("data") loginInputData: UserLoginInputType) {
-    const { phoneNumber, userName, location, pincode } = loginInputData;
+  @Mutation((type) => UserLoginResponse)
+  async userLogin(@Arg("data") data: UserLoginInput) {
+    const { phoneNumber, userName, lat, lng, pincode } = data;
 
     const user = await this.userService.findUserById(phoneNumber.toString());
 
     //generates token.
-    const token = await generateToken({ userId: phoneNumber });
+    const token = (await generateToken({ userId: phoneNumber })) as string;
 
     //If the user is already there just send that user's details else create a new user.
     if (user) {
       const { userName, location, pincode, _id } = user;
-      return { token, user: { userName, location, pincode, _id } };
+      return { token, user };
     } else {
+      let location;
+      if (lat != null && lng != null) location = { lat, lng };
       const newUser = await this.userService.createUser({
         _id: phoneNumber.toString(),
         userName,
@@ -79,7 +93,7 @@ export class UserResolver {
         pincode,
       });
 
-      return { token, user: { userName, location, pincode, _id: newUser._id } };
+      return { token, user: newUser };
     }
   }
 }
