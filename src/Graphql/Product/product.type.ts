@@ -1,6 +1,6 @@
 import { disconnect, ObjectId } from "mongoose";
 import { Field, FieldResolver, ID, ObjectType, Root } from "type-graphql";
-import { QuantityType } from "../../Data/product-enum";
+import { QuantityType } from "../../Data";
 import { ICategory, IProduct } from "../../Models";
 import CategoryType from "../Category/category.type";
 

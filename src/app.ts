@@ -1,8 +1,7 @@
 import express from "express";
 import cors from "cors";
 import "reflect-metadata";
-import mongoose, { Types } from "mongoose";
-import { storeRoutes, userRoutes } from "./Routes";
+import mongoose from "mongoose";
 import { errorHandler } from "./Middleware";
 import dotenv from "dotenv";
 import { getEnv } from "./Config";
@@ -15,10 +14,6 @@ const app = express();
 app.use(cors()); //CORS handler
 
 app.use(express.json()); //body-parser
-
-//registering routes
-app.use(userRoutes);
-app.use(storeRoutes);
 
 app.use(errorHandler); //registering error handler.
 

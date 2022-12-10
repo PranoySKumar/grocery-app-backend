@@ -1,5 +1,5 @@
 import { model, ObjectId, Schema, SchemaTypes } from "mongoose";
-import { QuantityType } from "../Data/product-enum";
+import { QuantityType } from "../Data";
 import { Category, ICategory } from "./Category.model";
 
 type TQuantity = {
