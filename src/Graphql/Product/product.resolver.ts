@@ -1,10 +1,11 @@
-import { Arg, ID, Query, Resolver } from "type-graphql";
+import { Arg, Authorized, ID, Query, Resolver } from "type-graphql";
 import ProductService from "../../Services/product-service";
 import UserType from "../User/user.type";
 import { ProductType } from "./product.type";
 
 @Resolver()
-class ProductResolver {
+export default class ProductResolver {
+  @Authorized()
   @Query((type) => [ProductType])
   async products(
     @Arg("discountFilter") discountFilter?: true,
@@ -19,6 +20,7 @@ class ProductResolver {
     return await ProductService.findAllProducts(limit, skip);
   }
 
+  @Authorized()
   @Query((type) => ProductType)
   async product(@Arg("id") id: string) {
     return await ProductService.findProductById(id);

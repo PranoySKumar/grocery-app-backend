@@ -11,6 +11,8 @@ import { UserResolver } from "./Graphql/User/user.resolver";
 import { graphqlHTTP } from "express-graphql";
 import createGraphqlContext from "./Utils/graphql-context";
 import { customAuthChecker } from "./Utils/auth";
+import { Product } from "./Models";
+import ProductResolver from "./Graphql/Product/product.resolver";
 
 (async () => {
   dotenv.config(); //configuring env variables
@@ -23,13 +25,11 @@ import { customAuthChecker } from "./Utils/auth";
 
   //setting up graphql
   const schema = await buildSchema({
-    nullableByDefault: true,
-    resolvers: [UserResolver],
+    resolvers: [UserResolver, ProductResolver],
     authChecker: customAuthChecker,
   });
   app.use(
     "/graphql",
-    isAuthToken,
     graphqlHTTP({ schema: schema, context: createGraphqlContext, graphiql: true })
   );
 

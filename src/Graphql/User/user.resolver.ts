@@ -1,9 +1,13 @@
+import { ContextHandlerImpl } from "express-validator/src/chain";
 import {
   Arg,
   Authorized,
+  Ctx,
   Field,
   FieldResolver,
+  ID,
   InputType,
+  Int,
   Mutation,
   ObjectType,
   Query,
@@ -14,7 +18,10 @@ import { IUser } from "../../Models";
 import { UserService } from "../../Services";
 import { generateToken } from "../../Utils";
 import { Role } from "../../Utils/auth";
-import UserType, { LocationType } from "./user.type";
+import { GraphqlContext } from "../../Utils/graphql-context";
+import { CouponType } from "../Coupon/coupon.type";
+import { ProductType } from "../Product/product.type";
+import UserType, { LocationType, ShippingAddressType } from "./user.type";
 
 //UserLoginInputType.
 @InputType()
@@ -50,6 +57,7 @@ export class UserResolver {
     return user._id!.toString();
   }
 
+  //Query Users
   @Authorized([Role.admin])
   @Query((returns) => [UserType])
   async users() {
@@ -57,26 +65,34 @@ export class UserResolver {
     return users;
   }
 
+  //Query User Details
   @Authorized([Role.admin, Role.user])
   @Query((returns) => UserType)
-  async user(@Arg("id") id: string) {
-    const user = await this.userService.findUserById(id);
+  async user(@Ctx() context: GraphqlContext, @Arg("id", { nullable: true }) id?: string) {
+    let user;
+    if (context.tokenData?.userId) {
+      // if userid is there in token data use that for finding user.
+      user = await this.userService.findUserById(context.tokenData.userId);
+    } else {
+      //otherwise if id is present as an arg use id for finding user.
+      user = await this.userService.findUserById(id!);
+    }
     return user;
   }
 
-  @Authorized([Role.user])
+  //Send Otp
   @Mutation((type) => Boolean)
   async sendUserOtp(@Arg("phoneNumber") phoneNumber: string) {
     return true;
   }
 
-  @Authorized([Role.user])
+  //Verify Otp
   @Mutation((type) => Boolean)
-  async verifyUserOtp(@Arg("phoneNumber") phoneNumber: string) {
+  async verifyUserOtp(@Arg("code") code: number) {
     return true;
   }
 
-  @Authorized([Role.user])
+  //User Login
   @Mutation((type) => UserLoginResponse)
   async userLogin(@Arg("data") data: UserLoginInput) {
     const { phoneNumber, userName, location, pincode } = data;
@@ -101,10 +117,45 @@ export class UserResolver {
     }
   }
 
-  @Authorized(Role.user, Role.admin)
+  //Update User
+  @Authorized([Role.user, Role.admin])
   @Mutation((type) => Boolean)
-  async updateUser(@Arg("id") id: string, @Arg("data") data: UserType) {
-    this.userService.updateUserDetails(id, data);
+  async updateUser(@Arg("id") id: string, @Arg("data") data: UserInputType) {
+    await this.userService.updateUserDetails(id, data);
     return true;
   }
+
+  //Delete User
+  @Authorized([Role.user, Role.admin])
+  @Mutation((type) => Boolean)
+  async deleteUser(@Arg("id") id: string) {
+    await this.userService.deleteUser(id);
+    return true;
+  }
+}
+
+class UserInputType {
+  @Field((type) => ID, { nullable: true })
+  id?: string;
+
+  @Field({ nullable: true })
+  userName?: string;
+
+  @Field((type) => Int, { nullable: true })
+  pincode?: number;
+
+  @Field({ nullable: true })
+  profileImageUrl?: string;
+
+  @Field((type) => LocationType, { nullable: true })
+  location?: LocationType;
+
+  @Field((type) => [CouponType], { nullable: true })
+  coupons?: CouponType[];
+
+  @Field((type) => [ProductType], { nullable: true })
+  favourites?: ProductType[];
+
+  @Field((type) => [ShippingAddressType], { nullable: true })
+  shippingAddresses?: ShippingAddressType[];
 }

@@ -6,7 +6,7 @@ import { ProductType } from "../Product/product.type";
 
 @InputType("ShippingAddressInputType")
 @ObjectType()
-class ShippingAddressType {
+export class ShippingAddressType {
   @Field()
   recipientName!: string;
 
@@ -37,7 +37,7 @@ export default class UserType {
   id!: string;
 
   @Field()
-  userName?: string;
+  userName!: string;
 
   @Field((type) => Int, { nullable: true })
   pincode?: number;
@@ -49,17 +49,17 @@ export default class UserType {
   location?: LocationType;
 
   @Field((type) => [CouponType], { defaultValue: [] })
-  coupons?: CouponType[];
+  coupons!: CouponType[];
 
   @Field((type) => [ProductType], { defaultValue: [] })
-  favourites?: ProductType[];
+  favourites!: ProductType[];
 
   @Field((type) => [ShippingAddressType], { defaultValue: [] })
-  shippingAddresses?: ShippingAddressType[];
+  shippingAddresses!: ShippingAddressType[];
 
   @Field()
-  createdAt?: Date;
+  createdAt!: Date;
 
   @Field()
-  updatedAt?: Date;
+  updatedAt!: Date;
 }
