@@ -6,7 +6,7 @@ import CategoryType from "./category.type";
 export default class CategoryResolver {
   @Authorized()
   @Query((type) => [CategoryType])
-  async categories(@Arg("limit") limit?: number) {
+  async categories(@Arg("limit", { nullable: true }) limit?: number) {
     return await CategoryService.getAll(limit);
   }
 

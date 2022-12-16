@@ -1,4 +1,3 @@
-import { ContextHandlerImpl } from "express-validator/src/chain";
 import {
   Arg,
   Authorized,
@@ -39,6 +38,33 @@ class UserLoginInput implements Partial<UserType> {
   phoneNumber!: string;
 }
 
+//UserInputType
+@InputType()
+class UserInputType {
+  @Field((type) => ID, { nullable: true })
+  id?: string;
+
+  @Field({ nullable: true })
+  userName?: string;
+
+  @Field((type) => Int, { nullable: true })
+  pincode?: number;
+
+  @Field({ nullable: true })
+  profileImageUrl?: string;
+
+  @Field((type) => LocationType, { nullable: true })
+  location?: LocationType;
+
+  @Field((type) => [CouponType], { nullable: true })
+  coupons?: CouponType[];
+
+  @Field((type) => [ProductType], { nullable: true })
+  favourites?: ProductType[];
+
+  @Field((type) => [ShippingAddressType], { nullable: true })
+  shippingAddresses?: ShippingAddressType[];
+}
 @ObjectType()
 class UserLoginResponse {
   @Field()
@@ -82,13 +108,13 @@ export class UserResolver {
 
   //Send Otp
   @Mutation((type) => Boolean)
-  async sendUserOtp(@Arg("phoneNumber") phoneNumber: string) {
+  async sendUserOtp(@Arg("phoneNumber", (type) => String) phoneNumber: string) {
     return true;
   }
 
   //Verify Otp
   @Mutation((type) => Boolean)
-  async verifyUserOtp(@Arg("code") code: number) {
+  async verifyUserOtp(@Arg("code", (type) => Int) code: number) {
     return true;
   }
 
@@ -132,30 +158,4 @@ export class UserResolver {
     await this.userService.deleteUser(id);
     return true;
   }
-}
-
-class UserInputType {
-  @Field((type) => ID, { nullable: true })
-  id?: string;
-
-  @Field({ nullable: true })
-  userName?: string;
-
-  @Field((type) => Int, { nullable: true })
-  pincode?: number;
-
-  @Field({ nullable: true })
-  profileImageUrl?: string;
-
-  @Field((type) => LocationType, { nullable: true })
-  location?: LocationType;
-
-  @Field((type) => [CouponType], { nullable: true })
-  coupons?: CouponType[];
-
-  @Field((type) => [ProductType], { nullable: true })
-  favourites?: ProductType[];
-
-  @Field((type) => [ShippingAddressType], { nullable: true })
-  shippingAddresses?: ShippingAddressType[];
 }

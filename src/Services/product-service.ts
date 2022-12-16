@@ -21,7 +21,7 @@ export default class ProductService {
 
   //get all discounted products;
   static async findAllCategoryProducts(categoryId: string, limit: number = 999) {
-    return await Product.find({ category: new Types.ObjectId(categoryId) })
+    return await Product.find({ categories: new Types.ObjectId(categoryId) })
       .limit(limit)
       .populate("categories");
   }

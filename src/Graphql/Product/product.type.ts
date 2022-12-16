@@ -1,6 +1,7 @@
-import { Field, FieldResolver, ID, InputType, ObjectType, Root } from "type-graphql";
+import { Authorized, Field, FieldResolver, ID, InputType, ObjectType, Root } from "type-graphql";
 import { QuantityType } from "../../Data";
 import { IProduct } from "../../Models";
+import { Role } from "../../Utils/auth";
 import CategoryType from "../Category/category.type";
 
 @InputType("ProductQuantityInputType")
@@ -13,7 +14,7 @@ class ProductQuantityType {
   value!: number;
 
   @Field()
-  totalQuantity?: number;
+  totalQuantity!: number;
 }
 
 @InputType("ProductInputType")
@@ -31,13 +32,15 @@ export class ProductType {
   @Field()
   price?: number;
 
+  @Authorized([Role.admin, Role.store])
   @Field()
   unitsSold?: number;
 
+  @Field({ nullable: true })
   discount?: number;
 
   @Field((type) => ProductQuantityType)
-  quantity?: ProductQuantityType;
+  quantity!: ProductQuantityType;
 
   @Field((type) => [CategoryType])
   categories?: CategoryType[];

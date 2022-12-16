@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request } from "express";
 import cors from "cors";
 import "reflect-metadata";
 import mongoose from "mongoose";
@@ -13,6 +13,7 @@ import createGraphqlContext from "./Utils/graphql-context";
 import { customAuthChecker } from "./Utils/auth";
 import { Product } from "./Models";
 import ProductResolver from "./Graphql/Product/product.resolver";
+import CategoryResolver from "./Graphql/Category/category.resolver";
 
 (async () => {
   dotenv.config(); //configuring env variables
@@ -25,12 +26,16 @@ import ProductResolver from "./Graphql/Product/product.resolver";
 
   //setting up graphql
   const schema = await buildSchema({
-    resolvers: [UserResolver, ProductResolver],
+    resolvers: [UserResolver, ProductResolver, CategoryResolver],
     authChecker: customAuthChecker,
   });
   app.use(
     "/graphql",
-    graphqlHTTP({ schema: schema, context: createGraphqlContext, graphiql: true })
+    graphqlHTTP((req) => ({
+      context: createGraphqlContext(req as Request),
+      schema: schema,
+      graphiql: true,
+    }))
   );
 
   app.use(errorHandler); //registering error handler.

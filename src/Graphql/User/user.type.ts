@@ -16,7 +16,7 @@ export class ShippingAddressType {
   @Field()
   pincode!: number;
 
-  @Field()
+  @Field({ nullable: true })
   landmark?: string;
 }
 

@@ -39,7 +39,7 @@ const userSchema = new Schema<IUser>(
     shippingAddresses: { type: [addressSchema], default: [] },
     pincode: Number,
     location: { type: { lat: SchemaTypes.Number, lng: SchemaTypes.Number } },
-    favourites: { type: [SchemaTypes.ObjectId], ref: Product.modelName },
+    favourites: { type: [SchemaTypes.ObjectId], ref: Product.modelName, default: [] },
     profileImageUrl: SchemaTypes.String,
     coupons: { type: [SchemaTypes.ObjectId], ref: Coupon.modelName, default: [] },
   },
