@@ -2,18 +2,17 @@ import express, { Request } from "express";
 import cors from "cors";
 import "reflect-metadata";
 import mongoose from "mongoose";
-import { errorHandler, isAuthToken } from "./Middleware";
+import { errorHandler } from "./Middleware";
 import dotenv from "dotenv";
 import { getEnv } from "./Config";
-import path from "path";
 import { buildSchema } from "type-graphql";
 import { UserResolver } from "./Graphql/User/user.resolver";
 import { graphqlHTTP } from "express-graphql";
 import createGraphqlContext from "./Utils/graphql-context";
 import { customAuthChecker } from "./Utils/auth";
-import { Product } from "./Models";
 import ProductResolver from "./Graphql/Product/product.resolver";
 import CategoryResolver from "./Graphql/Category/category.resolver";
+import { OrderResolver } from "./Graphql/Order/order.resolver";
 
 (async () => {
   dotenv.config(); //configuring env variables
@@ -24,9 +23,14 @@ import CategoryResolver from "./Graphql/Category/category.resolver";
 
   app.use(express.json()); //body-parser
 
+  app.use(errorHandler); //registering error handler.
+
+  //connecting to db.
+  await mongoose.connect(getEnv().DATA_BASE_URL);
+  console.log("mongoose connected");
   //setting up graphql
   const schema = await buildSchema({
-    resolvers: [UserResolver, ProductResolver, CategoryResolver],
+    resolvers: [UserResolver, ProductResolver, CategoryResolver, OrderResolver],
     authChecker: customAuthChecker,
   });
   app.use(
@@ -37,12 +41,6 @@ import CategoryResolver from "./Graphql/Category/category.resolver";
       graphiql: true,
     }))
   );
-
-  app.use(errorHandler); //registering error handler.
-
-  //connecting to db.
-  await mongoose.connect(getEnv().DATA_BASE_URL);
-  console.log("mongoose connected");
 
   //staring server
   app.listen(process.env.PORT || 4000);

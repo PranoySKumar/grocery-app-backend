@@ -5,11 +5,19 @@ import ProductService from "./product-service";
 
 export default class OrderService {
   static async getSingleUserOrders(userId: string) {
-    return await Order.find({ userId });
+    return await Order.find({ userId })
+      .sort({ _id: -1 })
+      .populate("userId")
+      .populate("cart.productId")
+      .populate("couponId");
   }
 
-  static async getAllOrders(arrange: "asce" | "desc", filter?: object | IOrder) {
-    return await Order.find(filter ?? {}).sort({ _id: arrange === "asce" ? 1 : -1 });
+  static async getAllOrders() {
+    return await Order.find({})
+      .sort({ _id: -1 })
+      .populate("userId")
+      .populate("cart.productId")
+      .populate("couponId");
   }
 
   //creates and calculates order
