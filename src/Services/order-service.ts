@@ -1,6 +1,9 @@
 import { Types } from "mongoose";
+import { OrderStatus } from "../Data";
+import { CartItemInputType } from "../Graphql/Order/order-input.type";
+import { CartItem } from "../Graphql/Order/order.type";
 
-import { Coupon, IOrder, Order, Product } from "../Models";
+import { Coupon, IOrder, Order, Product, Store } from "../Models";
 import ProductService from "./product-service";
 
 export default class OrderService {
@@ -20,9 +23,26 @@ export default class OrderService {
       .populate("couponId");
   }
 
+  static async createNewOrder(data: {
+    cart: CartItemInputType[];
+    tax: number;
+    couponId?: string;
+    transactionAmount: number;
+    userId: string;
+    status: OrderStatus;
+  }) {
+    const cart = data.cart.map((item) => ({
+      ...item,
+      productId: new Types.ObjectId(item.productId),
+    }));
+    const userId = new Types.ObjectId(data.userId);
+    const couponId = new Types.ObjectId(data.couponId);
+
+    await new Order({ ...data, cart, userId, couponId }).save();
+  }
+
   //creates and calculates order
-  static async createOrder(data: IOrder & { couponId?: string }) {
-    const { cart, couponId } = data;
+  static async calculateBill(cart: CartItemInputType[], couponId?: string) {
     let totalAmount = 0;
     cart.forEach(async (item) => {
       const product = await Product.findById(item.productId);
@@ -33,19 +53,27 @@ export default class OrderService {
       }
     });
 
-    const coupon = await Coupon.findById(couponId);
-    let totalCouponDiscount = totalAmount * (coupon?.couponDiscount?.percentage! / 100);
-    if (coupon?.couponDiscount?.upto && totalCouponDiscount > coupon?.couponDiscount?.upto) {
-      totalCouponDiscount = coupon.couponDiscount.upto;
+    //Applying Coupon Discount.
+    let totalCouponDiscount = 0;
+    if (couponId) {
+      const coupon = await Coupon.findById(couponId);
+      totalCouponDiscount = totalAmount * (coupon?.couponDiscount?.percentage! / 100);
+      if (coupon?.couponDiscount?.upto && totalCouponDiscount > coupon?.couponDiscount?.upto) {
+        totalCouponDiscount = coupon.couponDiscount.upto;
+      }
+    }
+
+    //calculating Tax.
+    const store = await Store.findOne();
+    if (store!.tax) {
+      totalAmount = totalAmount - store!.tax;
     }
 
     totalAmount = totalAmount - totalCouponDiscount;
 
-    return await new Order({
-      ...data,
-      transactionAmount: totalAmount,
-      couponId: new Types.ObjectId(couponId),
-    }).save();
+    const bill = { totalAmount, tax: store!.tax ?? 0, couponDiscount: totalCouponDiscount };
+    console.log(bill);
+    return bill;
   }
 
   static async updateOrder(orderId: string, data: IOrder) {

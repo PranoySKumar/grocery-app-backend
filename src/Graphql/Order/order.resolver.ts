@@ -1,9 +1,22 @@
-import { Arg, Authorized, FieldResolver, Query, Resolver, Root } from "type-graphql";
+import {
+  Arg,
+  Authorized,
+  Field,
+  FieldResolver,
+  InputType,
+  Mutation,
+  ObjectType,
+  Query,
+  Resolver,
+  Root,
+} from "type-graphql";
+import { OrderStatus } from "../../Data";
 import { IOrder } from "../../Models";
 import { OrderService } from "../../Services";
 import { Role } from "../../Utils/auth";
 import { CouponType } from "../Coupon/coupon.type";
 import UserType from "../User/user.type";
+import { AddOrderInputType } from "./order-input.type";
 import { CartItem, OrderType } from "./order.type";
 
 @Resolver(OrderType)
@@ -18,6 +31,29 @@ export class OrderResolver {
   @Query((returns) => [OrderType])
   async userOrders(@Arg("userId") userId: string) {
     return OrderService.getSingleUserOrders(userId);
+  }
+
+  @Authorized([Role.user, Role.admin])
+  @Mutation((returns) => Boolean)
+  async addOrder(@Arg("cartData") cartData: AddOrderInputType) {
+    const { cart, couponId, userId } = cartData;
+    const data = await OrderService.calculateBill(cart, couponId);
+    await OrderService.createNewOrder({
+      cart,
+      tax: data.tax,
+      couponId,
+      transactionAmount: data.totalAmount,
+      userId,
+      status: OrderStatus.placed,
+    });
+    return true;
+  }
+
+  @Mutation((returns) => GenerateBillQueryType)
+  async generateBill(@Arg("cartData") cartData: AddOrderInputType) {
+    const { cart, couponId } = cartData;
+
+    return await OrderService.calculateBill(cart, couponId);
   }
 
   @FieldResolver((type) => UserType)
@@ -46,4 +82,16 @@ export class OrderResolver {
       return newProd;
     });
   }
+}
+
+@ObjectType()
+class GenerateBillQueryType {
+  @Field()
+  totalAmount!: number;
+
+  @Field()
+  tax!: number;
+
+  @Field()
+  couponDiscount!: number;
 }
