@@ -23,3 +23,12 @@ export class AddOrderInputType {
   @Field({ nullable: true })
   couponId!: string;
 }
+
+@InputType()
+export class GenerateBillInputType {
+  @Field((type) => [CartItemInputType])
+  cart!: CartItemInputType[];
+
+  @Field({ nullable: true })
+  couponId?: string;
+}

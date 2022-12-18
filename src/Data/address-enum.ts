@@ -1,7 +1,14 @@
-export enum AddressType {
-  home = "home",
-  work = "work",
-  other = "other",
+import { registerEnumType } from "type-graphql";
+
+enum AddressType {
+  home = "Home",
+  work = "Work",
+  other = "Other",
 }
 
-AddressType.home;
+registerEnumType(AddressType, {
+  name: "AddressType", // this one is mandatory
+  description: "different types of quantities", // this one is optional
+});
+
+export default AddressType;

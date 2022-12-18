@@ -20,6 +20,7 @@ interface IShippingAddress {
   address: string;
   pincode: number;
   landmark?: string;
+  addressType?: AddressType;
 }
 
 const addressSchema = new Schema<IShippingAddress>(
@@ -28,6 +29,7 @@ const addressSchema = new Schema<IShippingAddress>(
     pincode: { type: SchemaTypes.Number, required: true },
     landmark: { type: SchemaTypes.String },
     recipientName: { type: SchemaTypes.String, required: true },
+    addressType: { type: SchemaTypes.String, enum: Object.values(AddressType), required: true },
   },
   { _id: false }
 );

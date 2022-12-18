@@ -41,17 +41,22 @@ export default class OrderService {
     await new Order({ ...data, cart, userId, couponId }).save();
   }
 
-  //creates and calculates order
+  //creates and calculates order.
   static async calculateBill(cart: CartItemInputType[], couponId?: string) {
     let totalAmount = 0;
-    cart.forEach(async (item) => {
-      const product = await Product.findById(item.productId);
-      if (product?.discount) {
-        totalAmount = totalAmount + product.price! - product.price! * (product.discount / 100);
-      } else {
-        totalAmount = totalAmount + product?.price!;
-      }
-    });
+
+    await Promise.all(
+      cart.map(async (item) => {
+        const product = await Product.findById(item.productId);
+        if (product?.discount) {
+          totalAmount =
+            (totalAmount + product.price! - product.price! * (product.discount / 100)) * item.count;
+        } else {
+          totalAmount = (totalAmount + product?.price!) * item.count;
+        }
+        return true;
+      })
+    );
 
     //Applying Coupon Discount.
     let totalCouponDiscount = 0;
@@ -61,17 +66,22 @@ export default class OrderService {
       if (coupon?.couponDiscount?.upto && totalCouponDiscount > coupon?.couponDiscount?.upto) {
         totalCouponDiscount = coupon.couponDiscount.upto;
       }
+      totalAmount = totalAmount - totalCouponDiscount;
     }
 
     //calculating Tax.
     const store = await Store.findOne();
-    if (store!.tax) {
-      totalAmount = totalAmount - store!.tax;
-    }
 
-    totalAmount = totalAmount - totalCouponDiscount;
+    totalAmount += store!.tax!;
 
-    const bill = { totalAmount, tax: store!.tax ?? 0, couponDiscount: totalCouponDiscount };
+    totalAmount += store!.deliveryPartnerFee!;
+
+    const bill = {
+      totalAmount: totalAmount,
+      tax: store!.tax ?? 0,
+      couponDiscount: totalCouponDiscount,
+      deliveryPartnerFee: store!.deliveryPartnerFee!,
+    };
     console.log(bill);
     return bill;
   }

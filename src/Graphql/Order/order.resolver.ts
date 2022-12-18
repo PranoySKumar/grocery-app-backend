@@ -3,6 +3,7 @@ import {
   Authorized,
   Field,
   FieldResolver,
+  Float,
   InputType,
   Mutation,
   ObjectType,
@@ -16,7 +17,7 @@ import { OrderService } from "../../Services";
 import { Role } from "../../Utils/auth";
 import { CouponType } from "../Coupon/coupon.type";
 import UserType from "../User/user.type";
-import { AddOrderInputType } from "./order-input.type";
+import { AddOrderInputType, GenerateBillInputType } from "./order-input.type";
 import { CartItem, OrderType } from "./order.type";
 
 @Resolver(OrderType)
@@ -50,9 +51,8 @@ export class OrderResolver {
   }
 
   @Mutation((returns) => GenerateBillQueryType)
-  async generateBill(@Arg("cartData") cartData: AddOrderInputType) {
+  async generateBill(@Arg("cartData") cartData: GenerateBillInputType) {
     const { cart, couponId } = cartData;
-
     return await OrderService.calculateBill(cart, couponId);
   }
 
@@ -89,9 +89,12 @@ class GenerateBillQueryType {
   @Field()
   totalAmount!: number;
 
-  @Field()
+  @Field((type) => Float)
   tax!: number;
 
-  @Field()
+  @Field((type) => Float)
   couponDiscount!: number;
+
+  @Field((type) => Float)
+  deliveryPartnerFee!: number;
 }
