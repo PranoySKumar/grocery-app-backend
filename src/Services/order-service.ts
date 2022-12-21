@@ -1,9 +1,11 @@
 import { Types } from "mongoose";
 import { OrderStatus } from "../Data";
+import { PaymentMethod } from "../Data/orders-enum";
 import { CartItemInputType } from "../Graphql/Order/order-input.type";
 import { CartItem } from "../Graphql/Order/order.type";
 
 import { Coupon, IOrder, Order, Product, Store } from "../Models";
+import { IShippingAddress } from "../Models/User.model";
 import ProductService from "./product-service";
 
 export default class OrderService {
@@ -30,15 +32,17 @@ export default class OrderService {
     transactionAmount: number;
     userId: string;
     status: OrderStatus;
+    shippingAddress: IShippingAddress;
+    paymentMethod: PaymentMethod;
   }) {
     const cart = data.cart.map((item) => ({
       ...item,
       productId: new Types.ObjectId(item.productId),
     }));
-    const userId = new Types.ObjectId(data.userId);
-    const couponId = new Types.ObjectId(data.couponId);
-
-    await new Order({ ...data, cart, userId, couponId }).save();
+    const userId = data.userId;
+    const couponId = data.couponId != undefined ? new Types.ObjectId(data.couponId) : null;
+    const orderNo = await Order.find().count();
+    await new Order({ ...data, cart, userId, couponId, orderNo: orderNo + 1 }).save();
   }
 
   //creates and calculates order.
@@ -82,7 +86,6 @@ export default class OrderService {
       couponDiscount: totalCouponDiscount,
       deliveryPartnerFee: store!.deliveryPartnerFee!,
     };
-    console.log(bill);
     return bill;
   }
 

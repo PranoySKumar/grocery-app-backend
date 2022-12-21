@@ -12,6 +12,7 @@ import {
   Root,
 } from "type-graphql";
 import { OrderStatus } from "../../Data";
+import { PaymentMethod } from "../../Data/orders-enum";
 import { IOrder } from "../../Models";
 import { OrderService } from "../../Services";
 import { Role } from "../../Utils/auth";
@@ -37,7 +38,8 @@ export class OrderResolver {
   @Authorized([Role.user, Role.admin])
   @Mutation((returns) => Boolean)
   async addOrder(@Arg("cartData") cartData: AddOrderInputType) {
-    const { cart, couponId, userId } = cartData;
+    const { cart, couponId, userId, shippingAddress, paymentMethod } = cartData;
+
     const data = await OrderService.calculateBill(cart, couponId);
     await OrderService.createNewOrder({
       cart,
@@ -45,11 +47,14 @@ export class OrderResolver {
       couponId,
       transactionAmount: data.totalAmount,
       userId,
+      shippingAddress,
       status: OrderStatus.placed,
+      paymentMethod: <PaymentMethod>paymentMethod,
     });
     return true;
   }
 
+  @Authorized([Role.user, Role.admin])
   @Mutation((returns) => GenerateBillQueryType)
   async generateBill(@Arg("cartData") cartData: GenerateBillInputType) {
     const { cart, couponId } = cartData;

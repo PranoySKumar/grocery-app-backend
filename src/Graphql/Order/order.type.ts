@@ -1,5 +1,6 @@
 import { Field, ObjectType } from "type-graphql";
 import { OrderStatus } from "../../Data";
+import { PaymentMethod } from "../../Data/orders-enum";
 import { CouponType } from "../Coupon/coupon.type";
 import { ProductType } from "../Product/product.type";
 import UserType from "../User/user.type";
@@ -26,6 +27,12 @@ export class OrderType {
 
   @Field((type) => CouponType, { nullable: true })
   coupon!: CouponType;
+
+  @Field()
+  paymentMethod!: PaymentMethod;
+
+  @Field((type) => Date)
+  createdAt!: Date;
 }
 
 @ObjectType()

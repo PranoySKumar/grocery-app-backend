@@ -1,6 +1,8 @@
 import { model, ObjectId, Schema, SchemaTypes } from "mongoose";
 import { OrderStatus } from "../Data";
+import { PaymentMethod } from "../Data/orders-enum";
 import { Coupon, ICoupon, IProduct, IUser } from "./";
+import { addressSchema, IShippingAddress } from "./User.model";
 
 type CartItem = {
   productId?: ObjectId | IProduct;
@@ -15,6 +17,9 @@ export interface IOrder {
   cart: CartItem[];
   tax: number;
   couponId?: ObjectId | ICoupon;
+  shippingAddress?: IShippingAddress;
+  paymentMethod: PaymentMethod;
+  orderNo: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -35,6 +40,9 @@ const orderSchema = new Schema<IOrder>(
     cart: { type: [cartItemSchema], required: true },
     tax: { type: SchemaTypes.Number, required: true },
     couponId: { type: SchemaTypes.ObjectId, ref: "Coupon" },
+    shippingAddress: { type: addressSchema, required: true },
+    orderNo: { type: SchemaTypes.Number, required: true },
+    paymentMethod: { type: String, required: true, enum: Object.values(PaymentMethod) },
   },
   { timestamps: true }
 );

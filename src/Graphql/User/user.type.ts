@@ -1,6 +1,6 @@
 import { isRequiredInputField } from "graphql";
 import { ObjectType, Field, ID, Int, FieldResolver, Root, InputType } from "type-graphql";
-import { IUser } from "../../Models";
+import { AddressType } from "../../Data";
 import { CouponType } from "../Coupon/coupon.type";
 import { ProductType } from "../Product/product.type";
 
@@ -18,6 +18,9 @@ export class ShippingAddressType {
 
   @Field({ nullable: true })
   landmark?: string;
+
+  @Field((type) => AddressType, { nullable: true })
+  type?: AddressType;
 }
 
 @InputType("LocationInputType")

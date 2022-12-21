@@ -58,7 +58,6 @@ export default class ProductService {
 
   //get single product;
   static async findProductById(productId: string) {
-    console.log(productId);
     const prod = await Product.findById(productId).populate("categories");
 
     return prod;
