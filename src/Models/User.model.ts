@@ -4,7 +4,7 @@ import { Coupon, ICoupon } from "./Coupon.model";
 import { Product } from "./Product.model";
 
 export interface IUser {
-  _id: string;
+  _id?: string;
   userName?: string;
   location?: { lat: number; lng: number };
   shippingAddresses?: IShippingAddress[];

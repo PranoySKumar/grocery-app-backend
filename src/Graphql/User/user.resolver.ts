@@ -59,8 +59,8 @@ class UserInputType {
   @Field((type) => [CouponType], { nullable: true })
   coupons?: CouponType[];
 
-  @Field((type) => [ProductType], { nullable: true })
-  favourites?: ProductType[];
+  @Field((type) => [String], { nullable: true })
+  favourites?: string[];
 
   @Field((type) => [ShippingAddressType], { nullable: true })
   shippingAddresses?: ShippingAddressType[];

@@ -25,6 +25,9 @@ export class OrderType {
   @Field()
   tax!: number;
 
+  @Field()
+  orderNo!: number;
+
   @Field((type) => CouponType, { nullable: true })
   coupon!: CouponType;
 
