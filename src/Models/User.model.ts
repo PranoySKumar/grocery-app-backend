@@ -4,7 +4,7 @@ import { Coupon, ICoupon } from "./Coupon.model";
 import { Product } from "./Product.model";
 
 export interface IUser {
-  _id: string;
+  _id?: string;
   userName?: string;
   location?: { lat: number; lng: number };
   shippingAddresses?: IShippingAddress[];
@@ -15,19 +15,21 @@ export interface IUser {
   createdAt?: Date;
   updatedAt?: Date;
 }
-interface IShippingAddress {
+export interface IShippingAddress {
   recipientName: string;
   address: string;
   pincode: number;
   landmark?: string;
+  type?: AddressType;
 }
 
-const addressSchema = new Schema<IShippingAddress>(
+export const addressSchema = new Schema<IShippingAddress>(
   {
     address: { type: SchemaTypes.String, required: true },
     pincode: { type: SchemaTypes.Number, required: true },
     landmark: { type: SchemaTypes.String },
     recipientName: { type: SchemaTypes.String, required: true },
+    type: { type: SchemaTypes.String, enum: Object.values(AddressType), required: true },
   },
   { _id: false }
 );
@@ -39,11 +41,11 @@ const userSchema = new Schema<IUser>(
     shippingAddresses: { type: [addressSchema], default: [] },
     pincode: Number,
     location: { type: { lat: SchemaTypes.Number, lng: SchemaTypes.Number } },
-    favourites: { type: [SchemaTypes.ObjectId], ref: Product.modelName },
+    favourites: { type: [SchemaTypes.ObjectId], ref: Product.modelName, default: [] },
     profileImageUrl: SchemaTypes.String,
     coupons: { type: [SchemaTypes.ObjectId], ref: Coupon.modelName, default: [] },
   },
   { timestamps: true }
 );
 
-export const User = model("users", userSchema);
+export const User = model("Users", userSchema);

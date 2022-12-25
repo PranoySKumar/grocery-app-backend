@@ -1,13 +1,21 @@
-import { Field, FieldResolver, ID, ObjectType, Root } from "type-graphql";
+import { Field, FieldResolver, ID, InputType, ObjectType, Root } from "type-graphql";
 import { ICoupon } from "../../Models";
 
+@InputType("CouponDiscountInputType")
+@ObjectType()
+class CouponDiscountType {
+  @Field()
+  upto!: number;
+
+  @Field()
+  percentage!: number;
+}
+
+@InputType("CouponInputType")
 @ObjectType()
 export class CouponType {
   @Field((type) => ID)
-  @FieldResolver()
-  id(@Root() coupon: ICoupon) {
-    return coupon._id!.toString();
-  }
+  id!: string;
 
   @Field()
   title!: string;
@@ -15,8 +23,8 @@ export class CouponType {
   @Field()
   description!: string;
 
-  @Field((type) => ({ upTo: String, percentage: Number }))
-  couponDiscount?: { upto: number; percentage: number };
+  @Field((type) => CouponDiscountType)
+  couponDiscount?: CouponDiscountType;
 
   @Field()
   createdAt!: Date;

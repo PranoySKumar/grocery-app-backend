@@ -1,33 +1,48 @@
-import express from "express";
+import express, { Request } from "express";
 import cors from "cors";
 import "reflect-metadata";
-import mongoose, { Types } from "mongoose";
-import { storeRoutes, userRoutes } from "./Routes";
+import mongoose from "mongoose";
 import { errorHandler } from "./Middleware";
 import dotenv from "dotenv";
 import { getEnv } from "./Config";
-import path from "path";
+import { buildSchema } from "type-graphql";
+import { UserResolver } from "./Graphql/User/user.resolver";
+import { graphqlHTTP } from "express-graphql";
+import createGraphqlContext from "./Utils/graphql-context";
+import { customAuthChecker } from "./Utils/auth";
+import ProductResolver from "./Graphql/Product/product.resolver";
+import CategoryResolver from "./Graphql/Category/category.resolver";
+import { OrderResolver } from "./Graphql/Order/order.resolver";
 
-dotenv.config(); //configuring env variables
+(async () => {
+  dotenv.config(); //configuring env variables
 
-const app = express();
+  const app = express();
 
-app.use(cors()); //CORS handler
+  app.use(cors()); //CORS handler
 
-app.use(express.json()); //body-parser
+  app.use(express.json()); //body-parser
 
-//registering routes
-app.use(userRoutes);
-app.use(storeRoutes);
+  app.use(errorHandler); //registering error handler.
 
-app.use(errorHandler); //registering error handler.
+  //connecting to db.
+  await mongoose.connect(getEnv().DATA_BASE_URL);
+  console.log("mongoose connected");
+  //setting up graphql
+  const schema = await buildSchema({
+    resolvers: [UserResolver, ProductResolver, CategoryResolver, OrderResolver],
+    authChecker: customAuthChecker,
+  });
+  app.use(
+    "/graphql",
+    graphqlHTTP((req) => ({
+      context: createGraphqlContext(req as Request),
+      schema: schema,
+      graphiql: true,
+    }))
+  );
 
-//connecting to db.
-mongoose
-  .connect(getEnv().DATA_BASE_URL)
-  .then(() => {
-    console.log("mongoose connected");
-    app.listen(process.env.PORT || 4000);
-    console.log("server started at port 4000");
-  })
-  .catch((error) => console.log(error));
+  //staring server
+  app.listen(process.env.PORT || 4000);
+  console.log("server started at port 4000");
+})();

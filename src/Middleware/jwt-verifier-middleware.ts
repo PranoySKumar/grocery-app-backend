@@ -6,7 +6,7 @@ import { RequestError } from "../Utils/request-error";
 export interface AuthTokenData {
   userId?: string;
   storeId?: string;
-  dashboardId?: string;
+  AdminId?: string;
 }
 
 //This middle ware is used to validate the token.

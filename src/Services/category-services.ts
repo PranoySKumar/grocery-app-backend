@@ -6,6 +6,8 @@ export default class CategoryService {
   static async add(name: string, type: string, imageUrl: string) {
     return await new Category({ name, type, imageUrl }).save();
   }
+
+  //delete category
   static async delete(_id: string) {
     return await Category.deleteOne({ _id: new Types.ObjectId(_id) });
   }
@@ -20,13 +22,12 @@ export default class CategoryService {
   }
 
   //gets all categories.
-  static async getAll(filter?: object, projection?: object, limit?: number) {
-    if (limit) return await Category.find(filter ?? {}, projection).limit(limit);
-    else return await Category.find(filter ?? {}, projection);
+  static async getAll(limit: number = 999) {
+    return await Category.find().limit(limit);
   }
 
   //gets single category
-  static async getOne(filter?: object, projection?: Object) {
-    return await Category.findOne(filter ?? {}, projection);
+  static async getOne(id: string) {
+    return await Category.findOne();
   }
 }

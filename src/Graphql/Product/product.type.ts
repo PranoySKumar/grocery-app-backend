@@ -1,48 +1,56 @@
-import { disconnect, ObjectId } from "mongoose";
-import { Field, FieldResolver, ID, ObjectType, Root } from "type-graphql";
-import { QuantityType } from "../../Data/product-enum";
-import { ICategory, IProduct } from "../../Models";
+import { Authorized, Field, FieldResolver, ID, InputType, ObjectType, Root } from "type-graphql";
+import { QuantityType } from "../../Data";
+import { IProduct } from "../../Models";
+import { Role } from "../../Utils/auth";
 import CategoryType from "../Category/category.type";
 
+@InputType("ProductQuantityInputType")
+@ObjectType()
+class ProductQuantityType {
+  @Field(() => QuantityType)
+  type!: QuantityType;
+
+  @Field()
+  value!: number;
+
+  @Field()
+  totalQuantity!: number;
+}
+
+@InputType("ProductInputType")
 @ObjectType()
 export class ProductType {
   @Field((type) => ID)
-  @FieldResolver()
-  id(@Root() product: IProduct) {
-    return product._id!.toString();
-  }
+  id?: string;
 
   @Field()
-  name!: string;
+  name?: string;
 
   @Field()
-  description!: string;
+  description?: string;
 
   @Field()
-  price!: number;
+  price?: number;
 
+  @Authorized([Role.admin, Role.store])
   @Field()
-  unitsSold!: number;
+  unitsSold?: number;
 
   @Field({ nullable: true })
   discount?: number;
 
-  @Field((type) => ({
-    type: QuantityType,
-    value: Number,
-    totalQuantity: Number,
-  }))
-  quantity!: { type: QuantityType; value: number; totalQuantity: number };
+  @Field((type) => ProductQuantityType)
+  quantity!: ProductQuantityType;
 
   @Field((type) => [CategoryType])
-  categories!: CategoryType[];
+  categories?: CategoryType[];
 
   @Field()
-  imageUrl!: string;
+  imageUrl?: string;
 
   @Field()
-  createdAt!: Date;
+  createdAt?: Date;
 
   @Field()
-  updatedAt!: Date;
+  updatedAt?: Date;
 }

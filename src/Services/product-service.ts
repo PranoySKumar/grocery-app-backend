@@ -4,21 +4,26 @@ import { Category, IProduct, Product } from "../Models";
 export default class ProductService {
   //get all products;
   static async findAllProducts(
-    filter?: object,
-    projection?: object | IProduct,
-    withCategory?: boolean
+    limit: number = 999,
+    skip: number = 0,
+    sort: IProduct | any = { _id: 1 }
   ) {
-    return await Product.find(filter ?? {}, projection).populate(withCategory ? "categories" : "");
+    return await Product.find().populate("categories").limit(limit).skip(skip).sort(sort);
   }
 
   //get all discounted products;
-  static async findAllDiscountedProducts(projection?: object | IProduct, limit?: number) {
-    if (limit)
-      return await Product.find({ discount: { $exists: true } }, projection)
-        .limit(limit)
-        .sort({ discount: -1 });
-    else
-      return await Product.find({ discount: { $exists: true } }, projection).sort({ discount: -1 });
+  static async findAllDiscountedProducts(limit: number = 999) {
+    return await Product.find({ discount: { $exists: true } })
+      .limit(limit)
+      .sort({ discount: -1 })
+      .populate("categories");
+  }
+
+  //get all discounted products;
+  static async findAllCategoryProducts(categoryId: string, limit: number = 999) {
+    return await Product.find({ categories: new Types.ObjectId(categoryId) })
+      .limit(limit)
+      .populate("categories");
   }
 
   //gets most sold products
@@ -47,13 +52,12 @@ export default class ProductService {
   }
 
   //find products by search term
-  static async findBySearchTerm(searchTerm: string, projection: object | IProduct) {
+  static async findBySearchTerm(searchTerm: string) {
     return await Product.find({ name: { $regex: searchTerm, $options: "i" } });
   }
 
   //get single product;
   static async findProductById(productId: string) {
-    console.log(productId);
     const prod = await Product.findById(productId).populate("categories");
 
     return prod;

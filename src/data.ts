@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { QuantityType } from "./Data/product-enum";
+import { QuantityType } from "./Data";
 import { ICategory, IProduct } from "./Models";
 
 export const categoriesData: ICategory[] = [
