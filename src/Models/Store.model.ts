@@ -7,14 +7,14 @@ type Editing = {
 };
 
 export interface IStore {
-  id?: ObjectId;
+  _id?: ObjectId | string;
   name?: string;
   email?: string;
   phoneNumber?: number;
   password?: string;
   editing?: Editing;
   tax?: number;
-  deliveryTimeSlots?: { start: string; end: string }[];
+  deliveryTime?: string;
   deliveryPartnerFee?: number;
   createdAt?: Date;
   updatedAt?: Date;
@@ -38,9 +38,9 @@ const storeSchema = new Schema<IStore>(
     tax: { type: SchemaTypes.Number, required: true, default: 0 },
     editing: editingSchema,
     deliveryPartnerFee: { type: SchemaTypes.Number, required: true, default: 0 },
-    deliveryTimeSlots: {
-      type: [{ start: SchemaTypes.String, end: SchemaTypes.String }],
-      default: [],
+    deliveryTime: {
+      type: String,
+      default: "9:00-17:00",
     },
   },
   { timestamps: true }

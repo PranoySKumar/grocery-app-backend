@@ -13,6 +13,7 @@ import { customAuthChecker } from "./Utils/auth";
 import ProductResolver from "./Graphql/Product/product.resolver";
 import CategoryResolver from "./Graphql/Category/category.resolver";
 import { OrderResolver } from "./Graphql/Order/order.resolver";
+import { StoreResolver } from "./Graphql/Store/store.resolver";
 
 (async () => {
   dotenv.config(); //configuring env variables
@@ -30,7 +31,7 @@ import { OrderResolver } from "./Graphql/Order/order.resolver";
   console.log("mongoose connected");
   //setting up graphql
   const schema = await buildSchema({
-    resolvers: [UserResolver, ProductResolver, CategoryResolver, OrderResolver],
+    resolvers: [UserResolver, ProductResolver, CategoryResolver, OrderResolver, StoreResolver],
     authChecker: customAuthChecker,
   });
   app.use(
@@ -39,9 +40,9 @@ import { OrderResolver } from "./Graphql/Order/order.resolver";
       context: createGraphqlContext(req as Request),
       schema: schema,
       graphiql: true,
+
     }))
   );
-
   //staring server
   app.listen(process.env.PORT || 4000);
   console.log("server started at port 4000");

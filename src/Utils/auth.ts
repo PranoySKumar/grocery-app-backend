@@ -1,4 +1,4 @@
-import { AuthChecker } from "type-graphql";
+import { AuthChecker, registerEnumType } from "type-graphql";
 import { AuthTokenData } from "../Middleware";
 
 export enum Role {
@@ -14,24 +14,21 @@ export const customAuthChecker: AuthChecker<{ tokenData: AuthTokenData }, Role> 
   // here we can read the user from context
   // and check his permission in the db against the `roles` argument
   // that comes from the `@Authorized` decorator, eg. ["ADMIN", "MODERATOR"]
-  if (!context.tokenData) return false;
-  if (roles.length > 0) {
-    roles.forEach((value) => {
-      switch (value) {
-        case Role.admin:
-          if (context.tokenData.AdminId) return true;
-          else break;
-        case Role.user:
-          if (context.tokenData.userId) return true;
-          else break;
-        case Role.store:
-          if (context.tokenData.storeId) return true;
-          else break;
-        default:
-          return false;
-      }
-    });
-  }
 
-  return true; // or false if access is denied
+  if (!context.tokenData || (!context.tokenData.userId && !context.tokenData.AdminId && !context.tokenData.storeId)) return false;
+console.log(roles);
+ 
+  if (roles.length > 0) {
+    console.log(context.tokenData);
+    for (let i = 0; i < roles.length; i++) {
+      if (roles[i] === Role.user && context.tokenData.userId) return true;
+      
+      if (roles[i] === Role.admin && context.tokenData.AdminId) return true;
+      
+      if (roles[i] === Role.store && context.tokenData.storeId) return true;
+    }
+  }else{
+    return true;
+  } // or false if access is denied
+  return false;
 };

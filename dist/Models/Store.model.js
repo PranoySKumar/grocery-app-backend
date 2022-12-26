@@ -15,9 +15,9 @@ const storeSchema = new mongoose_1.Schema({
     tax: { type: mongoose_1.SchemaTypes.Number, required: true, default: 0 },
     editing: editingSchema,
     deliveryPartnerFee: { type: mongoose_1.SchemaTypes.Number, required: true, default: 0 },
-    deliveryTimeSlots: {
-        type: [{ start: mongoose_1.SchemaTypes.String, end: mongoose_1.SchemaTypes.String }],
-        default: [],
+    deliveryTime: {
+        type: String,
+        default: "9:00-17:00"
     },
 }, { timestamps: true });
 exports.Store = (0, mongoose_1.model)("Store", storeSchema);

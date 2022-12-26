@@ -18,6 +18,7 @@ const auth_1 = require("./Utils/auth");
 const product_resolver_1 = __importDefault(require("./Graphql/Product/product.resolver"));
 const category_resolver_1 = __importDefault(require("./Graphql/Category/category.resolver"));
 const order_resolver_1 = require("./Graphql/Order/order.resolver");
+const store_resolver_1 = require("./Graphql/Store/store.resolver");
 (async () => {
     dotenv_1.default.config(); //configuring env variables
     const app = (0, express_1.default)();
@@ -29,7 +30,7 @@ const order_resolver_1 = require("./Graphql/Order/order.resolver");
     console.log("mongoose connected");
     //setting up graphql
     const schema = await (0, type_graphql_1.buildSchema)({
-        resolvers: [user_resolver_1.UserResolver, product_resolver_1.default, category_resolver_1.default, order_resolver_1.OrderResolver],
+        resolvers: [user_resolver_1.UserResolver, product_resolver_1.default, category_resolver_1.default, order_resolver_1.OrderResolver, store_resolver_1.StoreResolver],
         authChecker: auth_1.customAuthChecker,
     });
     app.use("/graphql", (0, express_graphql_1.graphqlHTTP)((req) => ({
