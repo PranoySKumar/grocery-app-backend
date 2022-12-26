@@ -17,7 +17,7 @@ const storeSchema = new mongoose_1.Schema({
     deliveryPartnerFee: { type: mongoose_1.SchemaTypes.Number, required: true, default: 0 },
     deliveryTime: {
         type: String,
-        default: "9:00-17:00"
+        default: "9:00-17:00",
     },
 }, { timestamps: true });
 exports.Store = (0, mongoose_1.model)("Store", storeSchema);

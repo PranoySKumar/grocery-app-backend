@@ -1,4 +1,4 @@
-import { AuthChecker, registerEnumType } from "type-graphql";
+import { AuthChecker } from "type-graphql";
 import { AuthTokenData } from "../Middleware";
 
 export enum Role {
@@ -20,10 +20,8 @@ export const customAuthChecker: AuthChecker<{ tokenData: AuthTokenData }, Role> 
     (!context.tokenData.userId && !context.tokenData.AdminId && !context.tokenData.storeId)
   )
     return false;
-  console.log(roles);
 
   if (roles.length > 0) {
-    console.log(context.tokenData);
     for (let i = 0; i < roles.length; i++) {
       if (roles[i] === Role.user && context.tokenData.userId) return true;
 
