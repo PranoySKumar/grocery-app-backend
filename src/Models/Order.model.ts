@@ -21,7 +21,7 @@ export interface IOrder {
   shippingCharges?: number;
   paymentMethod: PaymentMethod; 
   orderNo: number;
-  deliveryTime: Date;
+  deliveredAt: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -46,7 +46,7 @@ const orderSchema = new Schema<IOrder>(
     orderNo: { type: SchemaTypes.Number, required: true },
     shippingCharges: { type: SchemaTypes.Number, required: true },
 
-    deliveryTime: { type: SchemaTypes.Date },
+    deliveredAt: { type: SchemaTypes.Date },
     paymentMethod: { type: String, required: true, enum: Object.values(PaymentMethod) },
   },
   { timestamps: true }

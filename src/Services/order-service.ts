@@ -31,7 +31,6 @@ export default class OrderService {
     cart: CartItemInputType[];
     tax: number;
     couponId?: string;
-    transactionAmount: number;
     userId: string;
     status: OrderStatus; 
     shippingAddress: IShippingAddress;
@@ -41,13 +40,14 @@ export default class OrderService {
       ...item,
       productId: new Types.ObjectId(item.productId),
     }));
+    const bill = await OrderService.calculateBill(data.cart, data.couponId);
     const store = await Store.findOne();
     const shippingCharges = store?.shippingCharges;
     const userId = data.userId;
     const couponId = data.couponId != undefined ? new Types.ObjectId(data.couponId) : null;
     const orderNo = await Order.find().count();
-    await new Order({ ...data, cart, userId, couponId, orderNo: orderNo + 1, shippingCharges }).save();
-  }
+    await new Order({ ...data, cart, userId, couponId, orderNo: orderNo + 1, shippingCharges, transactionAmount: bill.totalAmount }).save();
+  } 
 
   //creates and calculates order.
   static async calculateBill(cart: CartItemInputType[], couponId?: string) {
@@ -57,15 +57,16 @@ export default class OrderService {
       cart.map(async (item) => {
         const product = await Product.findById(item.productId);
         if (product?.discount) {
-          totalAmount =
-            (totalAmount + product.price! - product.price! * (product.discount / 100)) * item.count;
+          totalAmount +=
+            (product.price! - (product.price! * (product.discount / 100))) * item.count;
         } else {
-          totalAmount = (totalAmount + product?.price!) * item.count;
+          totalAmount += (product?.price! * item.count);
         }
-        return true;
+        console.log(totalAmount);
       })
     );
 
+    console.log(totalAmount);
     //Applying Coupon Discount.
     let totalCouponDiscount = 0;
     if (couponId) {
@@ -85,11 +86,12 @@ export default class OrderService {
     totalAmount += store!.shippingCharges!;
 
     const bill = {
-      totalAmount: totalAmount,
+      totalAmount: Math.round(totalAmount * 10) / 10,
       tax: store!.tax ?? 0,
       couponDiscount: totalCouponDiscount,
       shippingCharges: store!.shippingCharges!,
     };
+    console.log(bill);
     return bill;
   }
 

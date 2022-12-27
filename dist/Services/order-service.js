@@ -27,12 +27,13 @@ class OrderService {
             ...item,
             productId: new mongoose_1.Types.ObjectId(item.productId),
         }));
+        const bill = await OrderService.calculateBill(data.cart, data.couponId);
         const store = await Models_1.Store.findOne();
         const shippingCharges = store === null || store === void 0 ? void 0 : store.shippingCharges;
         const userId = data.userId;
         const couponId = data.couponId != undefined ? new mongoose_1.Types.ObjectId(data.couponId) : null;
         const orderNo = await Models_1.Order.find().count();
-        await new Models_1.Order({ ...data, cart, userId, couponId, orderNo: orderNo + 1, shippingCharges }).save();
+        await new Models_1.Order({ ...data, cart, userId, couponId, orderNo: orderNo + 1, shippingCharges, transactionAmount: bill.totalAmount }).save();
     }
     //creates and calculates order.
     static async calculateBill(cart, couponId) {
@@ -41,14 +42,15 @@ class OrderService {
         await Promise.all(cart.map(async (item) => {
             const product = await Models_1.Product.findById(item.productId);
             if (product === null || product === void 0 ? void 0 : product.discount) {
-                totalAmount =
-                    (totalAmount + product.price - product.price * (product.discount / 100)) * item.count;
+                totalAmount +=
+                    (product.price - (product.price * (product.discount / 100))) * item.count;
             }
             else {
-                totalAmount = (totalAmount + (product === null || product === void 0 ? void 0 : product.price)) * item.count;
+                totalAmount += ((product === null || product === void 0 ? void 0 : product.price) * item.count);
             }
-            return true;
+            console.log(totalAmount);
         }));
+        console.log(totalAmount);
         //Applying Coupon Discount.
         let totalCouponDiscount = 0;
         if (couponId) {
@@ -64,11 +66,12 @@ class OrderService {
         totalAmount += store.tax;
         totalAmount += store.shippingCharges;
         const bill = {
-            totalAmount: totalAmount,
+            totalAmount: Math.round(totalAmount * 10) / 10,
             tax: (_d = store.tax) !== null && _d !== void 0 ? _d : 0,
             couponDiscount: totalCouponDiscount,
             shippingCharges: store.shippingCharges,
         };
+        console.log(bill);
         return bill;
     }
     static async updateOrder(orderId, data) {

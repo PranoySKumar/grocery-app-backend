@@ -46,7 +46,6 @@ export class OrderResolver {
       cart,
       tax: data.tax,
       couponId,
-      transactionAmount: data.totalAmount,
       userId,
       shippingAddress,
       status: OrderStatus.placed,
@@ -90,5 +89,5 @@ class GenerateBillQueryType {
   @Field() totalAmount!: number;
   @Field((type) => Float) tax!: number;
   @Field((type) => Float) couponDiscount!: number;
-  @Field((type) => Float) deliveryPartnerFee!: number;
+  @Field((type) => Float) shippingCharges!: number;
 }

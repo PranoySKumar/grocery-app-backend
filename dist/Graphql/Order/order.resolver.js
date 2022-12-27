@@ -41,7 +41,6 @@ let OrderResolver = class OrderResolver {
             cart,
             tax: data.tax,
             couponId,
-            transactionAmount: data.totalAmount,
             userId,
             shippingAddress,
             status: Data_1.OrderStatus.placed,
@@ -161,7 +160,7 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)((type) => type_graphql_1.Float),
     __metadata("design:type", Number)
-], GenerateBillQueryType.prototype, "deliveryPartnerFee", void 0);
+], GenerateBillQueryType.prototype, "shippingCharges", void 0);
 GenerateBillQueryType = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], GenerateBillQueryType);

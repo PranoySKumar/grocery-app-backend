@@ -19,7 +19,7 @@ const orderSchema = new mongoose_1.Schema({
     shippingAddress: { type: User_model_1.addressSchema, required: true },
     orderNo: { type: mongoose_1.SchemaTypes.Number, required: true },
     shippingCharges: { type: mongoose_1.SchemaTypes.Number, required: true },
-    deliveryTime: { type: mongoose_1.SchemaTypes.Date },
+    deliveredAt: { type: mongoose_1.SchemaTypes.Date },
     paymentMethod: { type: String, required: true, enum: Object.values(orders_enum_1.PaymentMethod) },
 }, { timestamps: true });
 exports.Order = (0, mongoose_1.model)("Order", orderSchema);

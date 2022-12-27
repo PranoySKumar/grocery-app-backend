@@ -3,7 +3,7 @@ import { OrderStatus } from "../../Data";
 import { PaymentMethod } from "../../Data/orders-enum";
 import { CouponType } from "../Coupon/coupon.type";
 import { ProductType } from "../Product/product.type";
-import UserType from "../User/user.type";
+import UserType, { ShippingAddressType } from "../User/user.type";
 
 @ObjectType()
 export class OrderType {
@@ -17,7 +17,8 @@ export class OrderType {
   @Field((type) => CouponType, { nullable: true }) coupon!: CouponType;
   @Field() paymentMethod!: PaymentMethod;
   @Field((type) => Date) createdAt!: Date;
-  @Field((type => Date)) deliveryTime!: Date;
+  @Field((type) => ShippingAddressType) shippingAddress!: ShippingAddressType;
+  @Field((type => Date), { nullable: true }) deliveredAt!: Date;
   @Field() shippingCharges!: number;
 }
 
