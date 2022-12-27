@@ -1,7 +1,7 @@
 import { model, ObjectId, Schema, SchemaTypes } from "mongoose";
 import { OrderStatus } from "../Data";
 import { PaymentMethod } from "../Data/orders-enum";
-import { Coupon, ICoupon, IProduct, IUser } from "./";
+import { ICoupon, IProduct, IUser } from "./";
 import { addressSchema, IShippingAddress } from "./User.model";
 
 type CartItem = {
@@ -18,8 +18,10 @@ export interface IOrder {
   tax: number;
   couponId?: ObjectId | ICoupon;
   shippingAddress?: IShippingAddress;
-  paymentMethod: PaymentMethod;
+  shippingCharges?: number;
+  paymentMethod: PaymentMethod; 
   orderNo: number;
+  deliveryTime: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -42,6 +44,9 @@ const orderSchema = new Schema<IOrder>(
     couponId: { type: SchemaTypes.ObjectId, ref: "Coupon" },
     shippingAddress: { type: addressSchema, required: true },
     orderNo: { type: SchemaTypes.Number, required: true },
+    shippingCharges: { type: SchemaTypes.Number, required: true },
+
+    deliveryTime: { type: SchemaTypes.Date },
     paymentMethod: { type: String, required: true, enum: Object.values(PaymentMethod) },
   },
   { timestamps: true }
@@ -49,14 +54,4 @@ const orderSchema = new Schema<IOrder>(
 
 export const Order = model("Order", orderSchema);
 
-// const data = {
-//   status: "processing",
-//   transactionAmount: 500,
-//   userId: ObjectId("8547917302"),
-//   cart: [
-//     { productId: ObjectId("638598f8056d195b2bbf5bcd"), count: 4 },
-//     { productId: ObjectId("638598f8056d195b2bbf5bce"), count: 4 },
-//   ],
-//   tax: 20,
-//   couponId: null,
-// };
+

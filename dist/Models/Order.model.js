@@ -18,17 +18,8 @@ const orderSchema = new mongoose_1.Schema({
     couponId: { type: mongoose_1.SchemaTypes.ObjectId, ref: "Coupon" },
     shippingAddress: { type: User_model_1.addressSchema, required: true },
     orderNo: { type: mongoose_1.SchemaTypes.Number, required: true },
+    shippingCharges: { type: mongoose_1.SchemaTypes.Number, required: true },
+    deliveryTime: { type: mongoose_1.SchemaTypes.Date },
     paymentMethod: { type: String, required: true, enum: Object.values(orders_enum_1.PaymentMethod) },
 }, { timestamps: true });
 exports.Order = (0, mongoose_1.model)("Order", orderSchema);
-// const data = {
-//   status: "processing",
-//   transactionAmount: 500,
-//   userId: ObjectId("8547917302"),
-//   cart: [
-//     { productId: ObjectId("638598f8056d195b2bbf5bcd"), count: 4 },
-//     { productId: ObjectId("638598f8056d195b2bbf5bce"), count: 4 },
-//   ],
-//   tax: 20,
-//   couponId: null,
-// };

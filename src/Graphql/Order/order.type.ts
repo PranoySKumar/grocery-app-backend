@@ -7,42 +7,22 @@ import UserType from "../User/user.type";
 
 @ObjectType()
 export class OrderType {
-  @Field()
-  id!: string;
-
-  @Field()
-  status!: OrderStatus;
-
-  @Field()
-  transactionAmount!: number;
-
-  @Field((type) => UserType)
-  user!: UserType;
-
-  @Field((type) => [CartItem])
-  cart!: CartItem[];
-
-  @Field()
-  tax!: number;
-
-  @Field()
-  orderNo!: number;
-
-  @Field((type) => CouponType, { nullable: true })
-  coupon!: CouponType;
-
-  @Field()
-  paymentMethod!: PaymentMethod;
-
-  @Field((type) => Date)
-  createdAt!: Date;
+  @Field() id!: string;
+  @Field() status!: OrderStatus;
+  @Field() transactionAmount!: number;
+  @Field((type) => UserType) user!: UserType;
+  @Field((type) => [CartItem]) cart!: CartItem[];
+  @Field() tax!: number;
+  @Field() orderNo!: number;
+  @Field((type) => CouponType, { nullable: true }) coupon!: CouponType;
+  @Field() paymentMethod!: PaymentMethod;
+  @Field((type) => Date) createdAt!: Date;
+  @Field((type => Date)) deliveryTime!: Date;
+  @Field() shippingCharges!: number;
 }
 
 @ObjectType()
 export class CartItem {
-  @Field((type) => ProductType, { nullable: false })
-  product!: ProductType;
-
-  @Field()
-  count!: number;
+  @Field((type) => ProductType, { nullable: false }) product!: ProductType;
+  @Field() count!: number;
 }

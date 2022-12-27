@@ -17,15 +17,22 @@ class OrderService {
             .populate("cart.productId")
             .populate("couponId");
     }
+    //gets single order.
+    static async getSingleOrder(id) {
+        return await Models_1.Order.findById(id).sort({ _id: -1 }).populate("userId").populate("cart.productId")
+            .populate("couponId");
+    }
     static async createNewOrder(data) {
         const cart = data.cart.map((item) => ({
             ...item,
             productId: new mongoose_1.Types.ObjectId(item.productId),
         }));
+        const store = await Models_1.Store.findOne();
+        const shippingCharges = store === null || store === void 0 ? void 0 : store.shippingCharges;
         const userId = data.userId;
         const couponId = data.couponId != undefined ? new mongoose_1.Types.ObjectId(data.couponId) : null;
         const orderNo = await Models_1.Order.find().count();
-        await new Models_1.Order({ ...data, cart, userId, couponId, orderNo: orderNo + 1 }).save();
+        await new Models_1.Order({ ...data, cart, userId, couponId, orderNo: orderNo + 1, shippingCharges }).save();
     }
     //creates and calculates order.
     static async calculateBill(cart, couponId) {
@@ -55,12 +62,12 @@ class OrderService {
         //calculating Tax.
         const store = await Models_1.Store.findOne();
         totalAmount += store.tax;
-        totalAmount += store.deliveryPartnerFee;
+        totalAmount += store.shippingCharges;
         const bill = {
             totalAmount: totalAmount,
             tax: (_d = store.tax) !== null && _d !== void 0 ? _d : 0,
             couponDiscount: totalCouponDiscount,
-            deliveryPartnerFee: store.deliveryPartnerFee,
+            shippingCharges: store.shippingCharges,
         };
         return bill;
     }

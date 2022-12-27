@@ -2,11 +2,8 @@ import { Types } from "mongoose";
 import { OrderStatus } from "../Data";
 import { PaymentMethod } from "../Data/orders-enum";
 import { CartItemInputType } from "../Graphql/Order/order-input.type";
-import { CartItem } from "../Graphql/Order/order.type";
-
 import { Coupon, IOrder, Order, Product, Store } from "../Models";
 import { IShippingAddress } from "../Models/User.model";
-import ProductService from "./product-service";
 
 export default class OrderService {
   static async getSingleUserOrders(userId: string) {
@@ -24,6 +21,11 @@ export default class OrderService {
       .populate("cart.productId")
       .populate("couponId");
   }
+  //gets single order.
+  static async getSingleOrder(id: string) {
+    return await Order.findById(id).sort({ _id: -1 }).populate("userId").populate("cart.productId")
+      .populate("couponId");
+  }
 
   static async createNewOrder(data: {
     cart: CartItemInputType[];
@@ -31,7 +33,7 @@ export default class OrderService {
     couponId?: string;
     transactionAmount: number;
     userId: string;
-    status: OrderStatus;
+    status: OrderStatus; 
     shippingAddress: IShippingAddress;
     paymentMethod: PaymentMethod;
   }) {
@@ -39,10 +41,12 @@ export default class OrderService {
       ...item,
       productId: new Types.ObjectId(item.productId),
     }));
+    const store = await Store.findOne();
+    const shippingCharges = store?.shippingCharges;
     const userId = data.userId;
     const couponId = data.couponId != undefined ? new Types.ObjectId(data.couponId) : null;
     const orderNo = await Order.find().count();
-    await new Order({ ...data, cart, userId, couponId, orderNo: orderNo + 1 }).save();
+    await new Order({ ...data, cart, userId, couponId, orderNo: orderNo + 1, shippingCharges }).save();
   }
 
   //creates and calculates order.
@@ -78,13 +82,13 @@ export default class OrderService {
 
     totalAmount += store!.tax!;
 
-    totalAmount += store!.deliveryPartnerFee!;
+    totalAmount += store!.shippingCharges!;
 
     const bill = {
       totalAmount: totalAmount,
       tax: store!.tax ?? 0,
       couponDiscount: totalCouponDiscount,
-      deliveryPartnerFee: store!.deliveryPartnerFee!,
+      shippingCharges: store!.shippingCharges!,
     };
     return bill;
   }

@@ -3,13 +3,11 @@ import {
   Authorized,
   Field,
   FieldResolver,
-  Float,
-  InputType,
-  Mutation,
+  Float, Mutation,
   ObjectType,
   Query,
   Resolver,
-  Root,
+  Root
 } from "type-graphql";
 import { OrderStatus } from "../../Data";
 import { PaymentMethod } from "../../Data/orders-enum";
@@ -21,16 +19,19 @@ import UserType from "../User/user.type";
 import { AddOrderInputType, GenerateBillInputType } from "./order-input.type";
 import { CartItem, OrderType } from "./order.type";
 
-@Resolver(OrderType)
+@Resolver(OrderType) 
 export class OrderResolver {
-  @Authorized([Role.admin])
-  @Query((returns) => [OrderType])
+  @Authorized([Role.admin]) @Query((returns) => [OrderType])
   async orders() {
     return OrderService.getAllOrders();
   }
 
-  @Authorized([Role.user])
-  @Query((returns) => [OrderType])
+  @Authorized() @Query((returns) => OrderType)
+  async order(@Arg("id") id: string) {
+    return OrderService.getSingleOrder(id);
+  }
+
+  @Authorized([Role.user]) @Query((returns) => [OrderType])
   async userOrders(@Arg("userId") userId: string) {
     return OrderService.getSingleUserOrders(userId);
   }
@@ -54,30 +55,25 @@ export class OrderResolver {
     return true;
   }
 
-  @Authorized([Role.user, Role.admin])
-  @Mutation((returns) => GenerateBillQueryType)
+  @Authorized([Role.user, Role.admin]) @Mutation((returns) => GenerateBillQueryType) 
   async generateBill(@Arg("cartData") cartData: GenerateBillInputType) {
     const { cart, couponId } = cartData;
     return await OrderService.calculateBill(cart, couponId);
   }
 
-  @FieldResolver((type) => UserType)
-  user(@Root() order: IOrder) {
+  @FieldResolver((type) => UserType) user(@Root() order: IOrder) {
     return order.userId;
   }
 
-  @FieldResolver((type) => CouponType, { nullable: true })
-  coupon(@Root() order: IOrder) {
+  @FieldResolver((type) => CouponType, { nullable: true }) coupon(@Root() order: IOrder) {
     return order.couponId;
   }
 
-  @FieldResolver((type) => String)
-  id(@Root() order: IOrder) {
+  @FieldResolver((type) => String) id(@Root() order: IOrder) {
     return order._id!.toString();
   }
 
-  @FieldResolver((type) => [CartItem])
-  cart(@Root() order: IOrder) {
+  @FieldResolver((type) => [CartItem]) cart(@Root() order: IOrder) {
     return order.cart.map((item: any) => {
       const newProd = {
         ...item._doc,
@@ -91,15 +87,8 @@ export class OrderResolver {
 
 @ObjectType()
 class GenerateBillQueryType {
-  @Field()
-  totalAmount!: number;
-
-  @Field((type) => Float)
-  tax!: number;
-
-  @Field((type) => Float)
-  couponDiscount!: number;
-
-  @Field((type) => Float)
-  deliveryPartnerFee!: number;
+  @Field() totalAmount!: number;
+  @Field((type) => Float) tax!: number;
+  @Field((type) => Float) couponDiscount!: number;
+  @Field((type) => Float) deliveryPartnerFee!: number;
 }

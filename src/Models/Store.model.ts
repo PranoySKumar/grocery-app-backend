@@ -1,4 +1,4 @@
-import { model, Schema, ObjectId, SchemaTypes } from "mongoose";
+import { model, ObjectId, Schema, SchemaTypes } from "mongoose";
 
 type Editing = {
   isAllowed: boolean;
@@ -15,7 +15,7 @@ export interface IStore {
   editing?: Editing;
   tax?: number;
   deliveryTime?: string;
-  deliveryPartnerFee?: number;
+  shippingCharges: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -37,7 +37,7 @@ const storeSchema = new Schema<IStore>(
     password: { type: SchemaTypes.String, required: true },
     tax: { type: SchemaTypes.Number, required: true, default: 0 },
     editing: editingSchema,
-    deliveryPartnerFee: { type: SchemaTypes.Number, required: true, default: 0 },
+    shippingCharges: { type: SchemaTypes.Number, required: true },
     deliveryTime: {
       type: String,
       default: "9:00-17:00",

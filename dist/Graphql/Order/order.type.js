@@ -61,6 +61,14 @@ __decorate([
     (0, type_graphql_1.Field)((type) => Date),
     __metadata("design:type", Date)
 ], OrderType.prototype, "createdAt", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type => Date)),
+    __metadata("design:type", Date)
+], OrderType.prototype, "deliveryTime", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", Number)
+], OrderType.prototype, "shippingCharges", void 0);
 OrderType = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], OrderType);

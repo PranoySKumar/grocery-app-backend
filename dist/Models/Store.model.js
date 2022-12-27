@@ -14,7 +14,7 @@ const storeSchema = new mongoose_1.Schema({
     password: { type: mongoose_1.SchemaTypes.String, required: true },
     tax: { type: mongoose_1.SchemaTypes.Number, required: true, default: 0 },
     editing: editingSchema,
-    deliveryPartnerFee: { type: mongoose_1.SchemaTypes.Number, required: true, default: 0 },
+    shippingCharges: { type: mongoose_1.SchemaTypes.Number, required: true },
     deliveryTime: {
         type: String,
         default: "9:00-17:00",

@@ -28,6 +28,9 @@ let OrderResolver = class OrderResolver {
     async orders() {
         return Services_1.OrderService.getAllOrders();
     }
+    async order(id) {
+        return Services_1.OrderService.getSingleOrder(id);
+    }
     async userOrders(userId) {
         return Services_1.OrderService.getSingleUserOrders(userId);
     }
@@ -77,6 +80,14 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], OrderResolver.prototype, "orders", null);
+__decorate([
+    (0, type_graphql_1.Authorized)(),
+    (0, type_graphql_1.Query)((returns) => order_type_1.OrderType),
+    __param(0, (0, type_graphql_1.Arg)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], OrderResolver.prototype, "order", null);
 __decorate([
     (0, type_graphql_1.Authorized)([auth_1.Role.user]),
     (0, type_graphql_1.Query)((returns) => [order_type_1.OrderType]),
