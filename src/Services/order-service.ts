@@ -29,7 +29,6 @@ export default class OrderService {
 
   static async createNewOrder(data: {
     cart: CartItemInputType[];
-    tax: number;
     couponId?: string;
     userId: string;
     status: OrderStatus; 
@@ -40,13 +39,27 @@ export default class OrderService {
       ...item,
       productId: new Types.ObjectId(item.productId),
     }));
+
+    //calculates maxUnitsSold.
+    cart.forEach(async item => {
+      const product = (await Product.findById(item.productId))!;
+      
+      if (product.unitsAvailable! - item.count == 0) {
+        product.unitsAvailable! -= item.count; 
+        product.isAvailable! = false;
+      } else {
+        product.unitsAvailable! -= item.count; 
+      }
+
+      await product?.save();
+    });
     const bill = await OrderService.calculateBill(data.cart, data.couponId);
     const store = await Store.findOne();
     const shippingCharges = store?.shippingCharges;
     const userId = data.userId;
     const couponId = data.couponId != undefined ? new Types.ObjectId(data.couponId) : null;
     const orderNo = await Order.find().count();
-    await new Order({ ...data, cart, userId, couponId, orderNo: orderNo + 1, shippingCharges, transactionAmount: bill.totalAmount }).save();
+    await new Order({ ...data, cart, userId, couponId, orderNo: orderNo + 1, shippingCharges, transactionAmount: bill.totalAmount, tax: bill.tax }).save();
   } 
 
   //creates and calculates order.
@@ -56,17 +69,19 @@ export default class OrderService {
     await Promise.all(
       cart.map(async (item) => {
         const product = await Product.findById(item.productId);
+        //calculates price
         if (product?.discount) {
           totalAmount +=
             (product.price! - (product.price! * (product.discount / 100))) * item.count;
         } else {
           totalAmount += (product?.price! * item.count);
         }
-        console.log(totalAmount);
+        
       })
     );
 
-    console.log(totalAmount);
+
+
     //Applying Coupon Discount.
     let totalCouponDiscount = 0;
     if (couponId) {
@@ -91,8 +106,25 @@ export default class OrderService {
       couponDiscount: totalCouponDiscount,
       shippingCharges: store!.shippingCharges!,
     };
-    console.log(bill);
     return bill;
+  }
+  
+  static async checkItemsAvailability(cart: CartItemInputType[]) {
+    const itemAvailabilityResult: { productId: string, isAvailable?: boolean, unitsAvailable?: number }[] = [];
+    await Promise.all(
+      cart.map(async (item) => {
+        const product = (await Product.findById(item.productId, { unitsAvailable: 1, isAvailable: 1 }))!;
+        //calculates price
+        if (product.unitsAvailable! - item.count < 0) {
+          const unitsAvailable = product.unitsAvailable!;
+          itemAvailabilityResult.push({ productId: product._id!.toString(), unitsAvailable, isAvailable: true });
+        } else if (!product.isAvailable) {
+          itemAvailabilityResult.push({ productId: product._id!.toString(), isAvailable: false, unitsAvailable: 0 });
+        }
+      })
+    );
+   
+    return itemAvailabilityResult;
   }
 
   static async updateOrder(orderId: string, data: IOrder) {

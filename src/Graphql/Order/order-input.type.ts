@@ -2,17 +2,13 @@ import { Field, InputType } from "type-graphql";
 import { IShippingAddress } from "../../Models/User.model";
 import { CouponType } from "../Coupon/coupon.type";
 import { ShippingAddressType } from "../User/user.type";
-import { CartItem } from "./order.type";
 
 @InputType()
 export class CartItemInputType {
-  @Field()
-  productId!: string;
-
-  @Field()
-  count!: number;
-  @Field((type) => CouponType, { nullable: true })
-  coupon!: CouponType;
+  
+  @Field() productId!: string;
+  @Field() count!: number;
+  @Field((type) => CouponType, { nullable: true }) coupon!: CouponType;
 }
 
 //add new order input type.

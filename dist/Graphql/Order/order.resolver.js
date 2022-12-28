@@ -36,10 +36,8 @@ let OrderResolver = class OrderResolver {
     }
     async addOrder(cartData) {
         const { cart, couponId, userId, shippingAddress, paymentMethod } = cartData;
-        const data = await Services_1.OrderService.calculateBill(cart, couponId);
         await Services_1.OrderService.createNewOrder({
             cart,
-            tax: data.tax,
             couponId,
             userId,
             shippingAddress,
@@ -50,7 +48,12 @@ let OrderResolver = class OrderResolver {
     }
     async generateBill(cartData) {
         const { cart, couponId } = cartData;
-        return await Services_1.OrderService.calculateBill(cart, couponId);
+        const bill = await Services_1.OrderService.calculateBill(cart, couponId);
+        return bill;
+    }
+    async checkProductAvailability(cartData) {
+        const cart = cartData;
+        return await Services_1.OrderService.checkItemsAvailability(cart);
     }
     user(order) {
         return order.userId;
@@ -112,6 +115,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], OrderResolver.prototype, "generateBill", null);
 __decorate([
+    (0, type_graphql_1.Authorized)([auth_1.Role.user, auth_1.Role.admin]),
+    (0, type_graphql_1.Query)((returns) => [ProductAvailabilityResultType]),
+    __param(0, (0, type_graphql_1.Arg)("cartData", type => [order_input_type_1.CartItemInputType])),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Array]),
+    __metadata("design:returntype", Promise)
+], OrderResolver.prototype, "checkProductAvailability", null);
+__decorate([
     (0, type_graphql_1.FieldResolver)((type) => user_type_1.default),
     __param(0, (0, type_graphql_1.Root)()),
     __metadata("design:type", Function),
@@ -143,6 +154,23 @@ OrderResolver = __decorate([
     (0, type_graphql_1.Resolver)(order_type_1.OrderType)
 ], OrderResolver);
 exports.OrderResolver = OrderResolver;
+let ProductAvailabilityResultType = class ProductAvailabilityResultType {
+};
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], ProductAvailabilityResultType.prototype, "productId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], ProductAvailabilityResultType.prototype, "unitsAvailable", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], ProductAvailabilityResultType.prototype, "isAvailable", void 0);
+ProductAvailabilityResultType = __decorate([
+    (0, type_graphql_1.ObjectType)()
+], ProductAvailabilityResultType);
 let GenerateBillQueryType = class GenerateBillQueryType {
 };
 __decorate([

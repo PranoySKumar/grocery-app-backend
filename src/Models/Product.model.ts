@@ -1,6 +1,6 @@
 import { model, ObjectId, Schema, SchemaTypes } from "mongoose";
 import { QuantityType } from "../Data";
-import { Category, ICategory } from "./Category.model";
+import { ICategory } from "./Category.model";
 
 type TQuantity = {
   type: QuantityType;
@@ -18,6 +18,8 @@ export interface IProduct {
   quantity?: TQuantity;
   categories?: ObjectId[] | ICategory[];
   imageUrl?: string;
+  isAvailable?: boolean;
+  unitsAvailable?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -37,10 +39,11 @@ const productSchema = new Schema<IProduct>(
     name: { type: String, required: true },
     description: { type: SchemaTypes.String },
     price: { type: Number, required: true },
-
     quantity: { type: quantitySchema, required: true },
     discount: { type: SchemaTypes.Number },
     unitsSold: { type: SchemaTypes.Number, default: 0 },
+    isAvailable: { type: SchemaTypes.Boolean, default: true },
+    unitsAvailable: { type: SchemaTypes.Number, required: true },
     imageUrl: { type: String },
     categories: { type: [SchemaTypes.ObjectId], required: true, ref: "Category", default: [] },
   },

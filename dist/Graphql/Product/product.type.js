@@ -76,6 +76,15 @@ __decorate([
 ], ProductType.prototype, "imageUrl", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
+    __metadata("design:type", Boolean)
+], ProductType.prototype, "isAvailable", void 0);
+__decorate([
+    (0, type_graphql_1.Authorized)([auth_1.Role.admin, auth_1.Role.store]),
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", Number)
+], ProductType.prototype, "maxUnitsSold", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
     __metadata("design:type", Date)
 ], ProductType.prototype, "createdAt", void 0);
 __decorate([

@@ -16,6 +16,8 @@ const productSchema = new mongoose_1.Schema({
     quantity: { type: quantitySchema, required: true },
     discount: { type: mongoose_1.SchemaTypes.Number },
     unitsSold: { type: mongoose_1.SchemaTypes.Number, default: 0 },
+    isAvailable: { type: mongoose_1.SchemaTypes.Boolean, default: true },
+    unitsAvailable: { type: mongoose_1.SchemaTypes.Number, required: true },
     imageUrl: { type: String },
     categories: { type: [mongoose_1.SchemaTypes.ObjectId], required: true, ref: "Category", default: [] },
 }, { timestamps: true });
