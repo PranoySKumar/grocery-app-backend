@@ -27,7 +27,6 @@ let CategoryResolver = class CategoryResolver {
     }
 };
 __decorate([
-    (0, type_graphql_1.Authorized)(),
     (0, type_graphql_1.Query)((type) => [category_type_1.default]),
     __param(0, (0, type_graphql_1.Arg)("limit", { nullable: true })),
     __metadata("design:type", Function),
@@ -35,7 +34,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CategoryResolver.prototype, "categories", null);
 __decorate([
-    (0, type_graphql_1.Authorized)(),
     (0, type_graphql_1.Query)((type) => category_type_1.default),
     __param(0, (0, type_graphql_1.Arg)("id")),
     __metadata("design:type", Function),

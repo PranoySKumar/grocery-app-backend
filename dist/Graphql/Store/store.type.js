@@ -63,7 +63,6 @@ __decorate([
     __metadata("design:type", Number)
 ], StoreType.prototype, "tax", void 0);
 __decorate([
-    (0, type_graphql_1.Authorized)(),
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
 ], StoreType.prototype, "deliveryTime", void 0);

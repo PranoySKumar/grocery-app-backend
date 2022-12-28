@@ -1,6 +1,5 @@
-import { Arg, Authorized, Field, ID, InputType, Query, Resolver } from "type-graphql";
+import { Arg, Field,  InputType, Query, Resolver } from "type-graphql";
 import ProductService from "../../Services/product-service";
-import UserType from "../User/user.type";
 import { ProductType } from "./product.type";
 
 @InputType()
@@ -26,7 +25,7 @@ class ProductsQueryInputType {
 
 @Resolver()
 export default class ProductResolver {
-  @Authorized()
+  
   @Query((type) => [ProductType])
   async products(@Arg("options") options: ProductsQueryInputType) {
     if (options.searchTerm) return await ProductService.findBySearchTerm(options.searchTerm);
@@ -39,7 +38,7 @@ export default class ProductResolver {
     return await ProductService.findAllProducts(options.limit, options.skip);
   }
 
-  @Authorized()
+
   @Query((type) => ProductType)
   async product(@Arg("id") id: string) {
     return await ProductService.findProductById(id);

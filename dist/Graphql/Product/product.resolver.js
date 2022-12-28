@@ -64,7 +64,6 @@ let ProductResolver = class ProductResolver {
     }
 };
 __decorate([
-    (0, type_graphql_1.Authorized)(),
     (0, type_graphql_1.Query)((type) => [product_type_1.ProductType]),
     __param(0, (0, type_graphql_1.Arg)("options")),
     __metadata("design:type", Function),
@@ -72,7 +71,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProductResolver.prototype, "products", null);
 __decorate([
-    (0, type_graphql_1.Authorized)(),
     (0, type_graphql_1.Query)((type) => product_type_1.ProductType),
     __param(0, (0, type_graphql_1.Arg)("id")),
     __metadata("design:type", Function),

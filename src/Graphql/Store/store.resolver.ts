@@ -6,6 +6,7 @@ import { StoreType } from "./store.type";
 
 @Resolver((of) => OrderType)
 export class StoreResolver {
+	
 	@Query(returns => StoreType) async store() {
 		return await StoreService.getStore();
 	}

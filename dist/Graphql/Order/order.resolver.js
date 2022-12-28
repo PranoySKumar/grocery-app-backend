@@ -107,7 +107,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], OrderResolver.prototype, "addOrder", null);
 __decorate([
-    (0, type_graphql_1.Authorized)([auth_1.Role.user, auth_1.Role.admin]),
     (0, type_graphql_1.Mutation)((returns) => GenerateBillQueryType),
     __param(0, (0, type_graphql_1.Arg)("cartData")),
     __metadata("design:type", Function),

@@ -52,8 +52,8 @@ export class OrderResolver {
     return true;
   }
 
-  @Authorized([Role.user, Role.admin]) @Mutation((returns) => GenerateBillQueryType) 
-  async generateBill(@Arg("cartData") cartData: GenerateBillInputType) {
+  @Mutation((returns) => GenerateBillQueryType) 
+  async generateBill(@Arg("cartData") cartData : GenerateBillInputType) {
     const { cart, couponId } = cartData;
 
     const bill = await OrderService.calculateBill(cart, couponId);
