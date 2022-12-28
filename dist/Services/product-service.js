@@ -9,7 +9,7 @@ class ProductService {
     }
     //get all discounted products;
     static async findAllDiscountedProducts(limit = 999) {
-        return await Models_1.Product.find({ discount: { $exists: true }, })
+        return await Models_1.Product.find({ discount: { $exists: true } })
             .limit(limit)
             .sort({ discount: -1 })
             .populate("categories");
