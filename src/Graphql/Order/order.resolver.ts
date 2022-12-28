@@ -53,7 +53,7 @@ export class OrderResolver {
   }
 
   @Mutation((returns) => GenerateBillQueryType) 
-  async generateBill(@Arg("cartData") cartData : GenerateBillInputType) {
+  async generateBill(@Arg("cartData") cartData: GenerateBillInputType) {
     const { cart, couponId } = cartData;
 
     const bill = await OrderService.calculateBill(cart, couponId);
