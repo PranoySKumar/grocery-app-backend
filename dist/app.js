@@ -42,3 +42,4 @@ const store_resolver_1 = require("./Graphql/Store/store.resolver");
     app.listen(process.env.PORT || 4000);
     console.log("server started at port 4000");
 })();
+/// remember to turn back the db url other wise local won't work

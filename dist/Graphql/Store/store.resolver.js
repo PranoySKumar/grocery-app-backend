@@ -21,16 +21,32 @@ let StoreResolver = class StoreResolver {
     async store() {
         return await Services_1.StoreService.getStore();
     }
+    async storeLogin(password) {
+        const token = (await Services_1.StoreService.checkAuth(password));
+        if (token == null) {
+            return null;
+        }
+        else {
+            return token;
+        }
+    }
     id(store) {
         return store._id.toString();
     }
 };
 __decorate([
-    (0, type_graphql_1.Query)(returns => store_type_1.StoreType),
+    (0, type_graphql_1.Query)((returns) => store_type_1.StoreType),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], StoreResolver.prototype, "store", null);
+__decorate([
+    (0, type_graphql_1.Mutation)((returns) => String, { nullable: true }),
+    __param(0, (0, type_graphql_1.Arg)("password")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], StoreResolver.prototype, "storeLogin", null);
 __decorate([
     (0, type_graphql_1.FieldResolver)((type) => String),
     __param(0, (0, type_graphql_1.Root)()),

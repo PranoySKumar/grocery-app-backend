@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt";
+import { Token } from "graphql";
 
 import { IStore, Store } from "../Models";
+import { generateToken } from "../Utils";
 
 export default class StoreService {
   static async getStore(filter?: IStore) {
@@ -9,5 +11,15 @@ export default class StoreService {
   static async setPassword(password: string) {
     const hashedPassword = await bcrypt.hash(password, 10);
     await Store.updateOne({ name: "grocery" }, { password: hashedPassword });
+  }
+
+  static async checkAuth(password: string) {
+    const store = await this.getStore();
+    const result = await bcrypt.compare(password, store?.password!);
+    if (!result) {
+      return null;
+    }
+
+    return await generateToken({ _id: store?._id });
   }
 }

@@ -54,7 +54,7 @@ __decorate([
 ], StoreType.prototype, "phoneNumber", void 0);
 __decorate([
     (0, type_graphql_1.Authorized)([auth_1.Role.admin, auth_1.Role.store]),
-    (0, type_graphql_1.Field)(type => EditingType),
+    (0, type_graphql_1.Field)((type) => EditingType),
     __metadata("design:type", EditingType)
 ], StoreType.prototype, "editing", void 0);
 __decorate([

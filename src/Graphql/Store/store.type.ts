@@ -14,7 +14,7 @@ export class StoreType {
   @Authorized([Role.admin, Role.store]) @Field() name?: string;
   @Authorized([Role.admin, Role.store]) @Field() email?: string;
   @Authorized([Role.admin, Role.store]) @Field() phoneNumber?: number;
-  @Authorized([Role.admin, Role.store]) @Field(type => EditingType) editing?: EditingType;
+  @Authorized([Role.admin, Role.store]) @Field((type) => EditingType) editing?: EditingType;
   @Authorized([Role.admin, Role.store]) @Field() tax?: number;
   @Field() deliveryTime?: string;
   @Authorized([Role.admin, Role.store]) @Field() deliveryPartnerFee?: number;

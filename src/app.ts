@@ -14,6 +14,7 @@ import ProductResolver from "./Graphql/Product/product.resolver";
 import CategoryResolver from "./Graphql/Category/category.resolver";
 import { OrderResolver } from "./Graphql/Order/order.resolver";
 import { StoreResolver } from "./Graphql/Store/store.resolver";
+import { StoreService } from "./Services";
 
 (async () => {
   dotenv.config(); //configuring env variables
@@ -40,10 +41,10 @@ import { StoreResolver } from "./Graphql/Store/store.resolver";
       context: createGraphqlContext(req as Request),
       schema: schema,
       graphiql: true,
-
     }))
   );
   //staring server
   app.listen(process.env.PORT || 4000);
   console.log("server started at port 4000");
 })();
+/// remember to turn back the db url other wise local won't work
