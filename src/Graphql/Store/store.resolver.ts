@@ -1,23 +1,13 @@
-import {
-  Arg,
-  Authorized,
-  Field,
-  FieldResolver,
-  InputType,
-  Mutation,
-  ObjectType,
-  Query,
-  Resolver,
-  Root,
-} from "type-graphql";
+import { Arg, Authorized, FieldResolver, Mutation, Query, Resolver, Root } from "type-graphql";
 import { IStore } from "../../Models";
 import { StoreService } from "../../Services";
+import { Role } from "../../Utils/auth";
 import { OrderType } from "../Order/order.type";
 import { StoreType } from "./store.type";
 
 @Resolver((of) => OrderType)
 export class StoreResolver {
-  @Query((returns) => StoreType) async store() {
+  @Authorized() @Query((returns) => StoreType) async store() {
     return await StoreService.getStore();
   }
 

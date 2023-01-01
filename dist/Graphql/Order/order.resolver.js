@@ -25,8 +25,8 @@ const user_type_1 = __importDefault(require("../User/user.type"));
 const order_input_type_1 = require("./order-input.type");
 const order_type_1 = require("./order.type");
 let OrderResolver = class OrderResolver {
-    async orders() {
-        return Services_1.OrderService.getAllOrders();
+    async orders(status) {
+        return Services_1.OrderService.getAllOrders(status);
     }
     async order(id) {
         return Services_1.OrderService.getSingleOrder(id);
@@ -76,10 +76,11 @@ let OrderResolver = class OrderResolver {
     }
 };
 __decorate([
-    (0, type_graphql_1.Authorized)([auth_1.Role.admin]),
+    (0, type_graphql_1.Authorized)([auth_1.Role.admin, auth_1.Role.store]),
     (0, type_graphql_1.Query)((returns) => [order_type_1.OrderType]),
+    __param(0, (0, type_graphql_1.Arg)("status", { nullable: true })),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], OrderResolver.prototype, "orders", null);
 __decorate([
@@ -116,7 +117,7 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Authorized)([auth_1.Role.user, auth_1.Role.admin]),
     (0, type_graphql_1.Query)((returns) => [ProductAvailabilityResultType]),
-    __param(0, (0, type_graphql_1.Arg)("cartData", type => [order_input_type_1.CartItemInputType])),
+    __param(0, (0, type_graphql_1.Arg)("cartData", (type) => [order_input_type_1.CartItemInputType])),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Array]),
     __metadata("design:returntype", Promise)

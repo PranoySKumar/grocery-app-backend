@@ -70,7 +70,7 @@ __decorate([
     (0, type_graphql_1.Authorized)([auth_1.Role.admin, auth_1.Role.store]),
     (0, type_graphql_1.Field)(),
     __metadata("design:type", Number)
-], StoreType.prototype, "deliveryPartnerFee", void 0);
+], StoreType.prototype, "shippingCharges", void 0);
 __decorate([
     (0, type_graphql_1.Authorized)([auth_1.Role.admin, auth_1.Role.store]),
     (0, type_graphql_1.Field)(),

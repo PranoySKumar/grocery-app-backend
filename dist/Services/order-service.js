@@ -10,8 +10,8 @@ class OrderService {
             .populate("cart.productId")
             .populate("couponId");
     }
-    static async getAllOrders() {
-        return await Models_1.Order.find({})
+    static async getAllOrders(status) {
+        return await Models_1.Order.find(status ? { status } : {})
             .sort({ _id: -1 })
             .populate("userId")
             .populate("cart.productId")
@@ -19,7 +19,10 @@ class OrderService {
     }
     //gets single order.
     static async getSingleOrder(id) {
-        return await Models_1.Order.findById(id).sort({ _id: -1 }).populate("userId").populate("cart.productId")
+        return await Models_1.Order.findById(id)
+            .sort({ _id: -1 })
+            .populate("userId")
+            .populate("cart.productId")
             .populate("couponId");
     }
     static async createNewOrder(data) {
@@ -45,7 +48,16 @@ class OrderService {
         const userId = data.userId;
         const couponId = data.couponId != undefined ? new mongoose_1.Types.ObjectId(data.couponId) : null;
         const orderNo = await Models_1.Order.find().count();
-        await new Models_1.Order({ ...data, cart, userId, couponId, orderNo: orderNo + 1, shippingCharges, transactionAmount: bill.totalAmount, tax: bill.tax }).save();
+        await new Models_1.Order({
+            ...data,
+            cart,
+            userId,
+            couponId,
+            orderNo: orderNo + 1,
+            shippingCharges,
+            transactionAmount: bill.totalAmount,
+            tax: bill.tax,
+        }).save();
     }
     //creates and calculates order.
     static async calculateBill(cart, couponId) {
@@ -55,11 +67,10 @@ class OrderService {
             const product = await Models_1.Product.findById(item.productId);
             //calculates price
             if (product === null || product === void 0 ? void 0 : product.discount) {
-                totalAmount +=
-                    (product.price - (product.price * (product.discount / 100))) * item.count;
+                totalAmount += (product.price - product.price * (product.discount / 100)) * item.count;
             }
             else {
-                totalAmount += ((product === null || product === void 0 ? void 0 : product.price) * item.count);
+                totalAmount += (product === null || product === void 0 ? void 0 : product.price) * item.count;
             }
         }));
         //Applying Coupon Discount.
@@ -87,14 +98,25 @@ class OrderService {
     static async checkItemsAvailability(cart) {
         const itemAvailabilityResult = [];
         await Promise.all(cart.map(async (item) => {
-            const product = (await Models_1.Product.findById(item.productId, { unitsAvailable: 1, isAvailable: 1 }));
+            const product = (await Models_1.Product.findById(item.productId, {
+                unitsAvailable: 1,
+                isAvailable: 1,
+            }));
             //calculates price
             if (product.unitsAvailable - item.count < 0) {
                 const unitsAvailable = product.unitsAvailable;
-                itemAvailabilityResult.push({ productId: product._id.toString(), unitsAvailable, isAvailable: true });
+                itemAvailabilityResult.push({
+                    productId: product._id.toString(),
+                    unitsAvailable,
+                    isAvailable: true,
+                });
             }
             else if (!product.isAvailable) {
-                itemAvailabilityResult.push({ productId: product._id.toString(), isAvailable: false, unitsAvailable: 0 });
+                itemAvailabilityResult.push({
+                    productId: product._id.toString(),
+                    isAvailable: false,
+                    unitsAvailable: 0,
+                });
             }
         }));
         return itemAvailabilityResult;

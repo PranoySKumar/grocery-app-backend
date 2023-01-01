@@ -3,10 +3,13 @@ import {
   Authorized,
   Field,
   FieldResolver,
-  Float, Mutation,
-  ObjectType, Query,
+  Float,
+  InputType,
+  Mutation,
+  ObjectType,
+  Query,
   Resolver,
-  Root
+  Root,
 } from "type-graphql";
 import { OrderStatus } from "../../Data";
 import { PaymentMethod } from "../../Data/orders-enum";
@@ -14,35 +17,48 @@ import { IOrder } from "../../Models";
 import { OrderService } from "../../Services";
 import { Role } from "../../Utils/auth";
 import { CouponType } from "../Coupon/coupon.type";
-import UserType from "../User/user.type";
+import UserType, { ShippingAddressType } from "../User/user.type";
 import { AddOrderInputType, CartItemInputType, GenerateBillInputType } from "./order-input.type";
 import { CartItem, OrderType } from "./order.type";
 
-@Resolver(OrderType) 
+@Resolver(OrderType)
 export class OrderResolver {
-  @Authorized([Role.admin]) @Query((returns) => [OrderType])
-  async orders() {
-    return OrderService.getAllOrders();
+  @Authorized([Role.admin, Role.store])
+  @Query((returns) => [OrderType])
+  async orders(@Arg("status", { nullable: true }) status: string) {
+    return OrderService.getAllOrders(status);
   }
 
-  @Authorized() @Query((returns) => OrderType)
+  @Authorized()
+  @Query((returns) => OrderType)
   async order(@Arg("id") id: string) {
     return OrderService.getSingleOrder(id);
   }
 
-  @Authorized([Role.user]) @Query((returns) => [OrderType])
+  @Authorized([Role.user])
+  @Query((returns) => [OrderType])
   async userOrders(@Arg("userId") userId: string) {
     return OrderService.getSingleUserOrders(userId);
   }
 
+  @Authorized([Role.user, Role.admin])
+  @Query((returns) => [ProductAvailabilityResultType])
+  async checkProductAvailability(
+    @Arg("cartData", (type) => [CartItemInputType]) cartData: CartItemInputType[]
+  ) {
+    const cart = cartData;
+    return await OrderService.checkItemsAvailability(cart);
+  }
 
-  @Authorized([Role.user, Role.admin]) @Mutation((returns) => Boolean)
+  //Mutations
+  @Authorized([Role.user, Role.admin])
+  @Mutation((returns) => Boolean)
   async addOrder(@Arg("cartData") cartData: AddOrderInputType) {
     const { cart, couponId, userId, shippingAddress, paymentMethod } = cartData;
 
     await OrderService.createNewOrder({
       cart,
-      
+
       couponId,
       userId,
       shippingAddress,
@@ -52,21 +68,24 @@ export class OrderResolver {
     return true;
   }
 
-  @Mutation((returns) => GenerateBillQueryType) 
+  @Mutation((returns) => GenerateBillQueryType)
   async generateBill(@Arg("cartData") cartData: GenerateBillInputType) {
     const { cart, couponId } = cartData;
-
     const bill = await OrderService.calculateBill(cart, couponId);
-    return bill 
+    return bill;
   }
 
-  @Authorized([Role.user, Role.admin]) @Query((returns) => [ProductAvailabilityResultType]) 
-  async checkProductAvailability(@Arg("cartData", type => [CartItemInputType]) cartData: CartItemInputType[]) {
-    const cart = cartData;
-    return await OrderService.checkItemsAvailability(cart);
+  @Mutation((returns) => Boolean)
+  async updateOrder(@Arg("id") id: string, @Arg("data") data: UpdateOrderInputType) {
+    try {
+      await OrderService.updateOrder(id, data);
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
-
+  //FieldResolvers
   @FieldResolver((type) => UserType) user(@Root() order: IOrder) {
     return order.userId;
   }
@@ -74,7 +93,7 @@ export class OrderResolver {
   @FieldResolver((type) => CouponType, { nullable: true }) coupon(@Root() order: IOrder) {
     return order.couponId;
   }
-  
+
   @FieldResolver((type) => String) id(@Root() order: IOrder) {
     return order._id!.toString();
   }
@@ -89,7 +108,12 @@ export class OrderResolver {
       return newProd;
     });
   }
-} 
+}
+
+@InputType()
+export class UpdateOrderInputType {
+  @Authorized([Role.admin, Role.store]) @Field() status!: OrderStatus;
+}
 
 @ObjectType()
 class ProductAvailabilityResultType {
@@ -105,5 +129,3 @@ class GenerateBillQueryType {
   @Field((type) => Float) couponDiscount!: number;
   @Field((type) => Float) shippingCharges!: number;
 }
-
-

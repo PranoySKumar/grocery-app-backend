@@ -35,6 +35,7 @@ let StoreResolver = class StoreResolver {
     }
 };
 __decorate([
+    (0, type_graphql_1.Authorized)(),
     (0, type_graphql_1.Query)((returns) => store_type_1.StoreType),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),

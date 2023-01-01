@@ -20,6 +20,6 @@ export default class StoreService {
       return null;
     }
 
-    return await generateToken({ _id: store?._id });
+    return await generateToken({ storeId: store?._id });
   }
 }
