@@ -21,6 +21,11 @@ import UserType, { ShippingAddressType } from "../User/user.type";
 import { AddOrderInputType, CartItemInputType, GenerateBillInputType } from "./order-input.type";
 import { CartItem, OrderType } from "./order.type";
 
+@InputType()
+export class UpdateOrderInputType {
+  @Authorized([Role.admin, Role.store]) @Field() status!: OrderStatus;
+}
+
 @Resolver(OrderType)
 export class OrderResolver {
   @Authorized([Role.admin, Role.store])
@@ -108,11 +113,6 @@ export class OrderResolver {
       return newProd;
     });
   }
-}
-
-@InputType()
-export class UpdateOrderInputType {
-  @Authorized([Role.admin, Role.store]) @Field() status!: OrderStatus;
 }
 
 @ObjectType()

@@ -15,7 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OrderResolver = void 0;
+exports.OrderResolver = exports.UpdateOrderInputType = void 0;
 const type_graphql_1 = require("type-graphql");
 const Data_1 = require("../../Data");
 const Services_1 = require("../../Services");
@@ -24,6 +24,17 @@ const coupon_type_1 = require("../Coupon/coupon.type");
 const user_type_1 = __importDefault(require("../User/user.type"));
 const order_input_type_1 = require("./order-input.type");
 const order_type_1 = require("./order.type");
+let UpdateOrderInputType = class UpdateOrderInputType {
+};
+__decorate([
+    (0, type_graphql_1.Authorized)([auth_1.Role.admin, auth_1.Role.store]),
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], UpdateOrderInputType.prototype, "status", void 0);
+UpdateOrderInputType = __decorate([
+    (0, type_graphql_1.InputType)()
+], UpdateOrderInputType);
+exports.UpdateOrderInputType = UpdateOrderInputType;
 let OrderResolver = class OrderResolver {
     async orders(status) {
         return Services_1.OrderService.getAllOrders(status);
@@ -34,6 +45,11 @@ let OrderResolver = class OrderResolver {
     async userOrders(userId) {
         return Services_1.OrderService.getSingleUserOrders(userId);
     }
+    async checkProductAvailability(cartData) {
+        const cart = cartData;
+        return await Services_1.OrderService.checkItemsAvailability(cart);
+    }
+    //Mutations
     async addOrder(cartData) {
         const { cart, couponId, userId, shippingAddress, paymentMethod } = cartData;
         await Services_1.OrderService.createNewOrder({
@@ -51,10 +67,16 @@ let OrderResolver = class OrderResolver {
         const bill = await Services_1.OrderService.calculateBill(cart, couponId);
         return bill;
     }
-    async checkProductAvailability(cartData) {
-        const cart = cartData;
-        return await Services_1.OrderService.checkItemsAvailability(cart);
+    async updateOrder(id, data) {
+        try {
+            await Services_1.OrderService.updateOrder(id, data);
+            return true;
+        }
+        catch (error) {
+            return false;
+        }
     }
+    //FieldResolvers
     user(order) {
         return order.userId;
     }
@@ -101,6 +123,14 @@ __decorate([
 ], OrderResolver.prototype, "userOrders", null);
 __decorate([
     (0, type_graphql_1.Authorized)([auth_1.Role.user, auth_1.Role.admin]),
+    (0, type_graphql_1.Query)((returns) => [ProductAvailabilityResultType]),
+    __param(0, (0, type_graphql_1.Arg)("cartData", (type) => [order_input_type_1.CartItemInputType])),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Array]),
+    __metadata("design:returntype", Promise)
+], OrderResolver.prototype, "checkProductAvailability", null);
+__decorate([
+    (0, type_graphql_1.Authorized)([auth_1.Role.user, auth_1.Role.admin]),
     (0, type_graphql_1.Mutation)((returns) => Boolean),
     __param(0, (0, type_graphql_1.Arg)("cartData")),
     __metadata("design:type", Function),
@@ -115,13 +145,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], OrderResolver.prototype, "generateBill", null);
 __decorate([
-    (0, type_graphql_1.Authorized)([auth_1.Role.user, auth_1.Role.admin]),
-    (0, type_graphql_1.Query)((returns) => [ProductAvailabilityResultType]),
-    __param(0, (0, type_graphql_1.Arg)("cartData", (type) => [order_input_type_1.CartItemInputType])),
+    (0, type_graphql_1.Mutation)((returns) => Boolean),
+    __param(0, (0, type_graphql_1.Arg)("id")),
+    __param(1, (0, type_graphql_1.Arg)("data")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Array]),
+    __metadata("design:paramtypes", [String, UpdateOrderInputType]),
     __metadata("design:returntype", Promise)
-], OrderResolver.prototype, "checkProductAvailability", null);
+], OrderResolver.prototype, "updateOrder", null);
 __decorate([
     (0, type_graphql_1.FieldResolver)((type) => user_type_1.default),
     __param(0, (0, type_graphql_1.Root)()),

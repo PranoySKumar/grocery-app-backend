@@ -6,8 +6,8 @@ var OrderStatus;
 (function (OrderStatus) {
     OrderStatus["placed"] = "placed";
     OrderStatus["processing"] = "processing";
-    OrderStatus["outForDelivery"] = "out-for-delivery";
-    OrderStatus["orderDelivered"] = "order-delivered";
+    OrderStatus["outForDelivery"] = "outforDelivery";
+    OrderStatus["orderDelivered"] = "orderDelivered";
 })(OrderStatus || (OrderStatus = {}));
 var PaymentMethod;
 (function (PaymentMethod) {

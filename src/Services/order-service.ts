@@ -152,11 +152,8 @@ export default class OrderService {
   }
 
   static async updateOrder(orderId: string, data: IOrder | UpdateOrderInputType) {
-    return await Order.updateOne(
-      { _id: new Types.ObjectId(orderId) },
-      { $set: data },
-      { runValidators: true, omitUndefined: true }
-    );
+    console.log(data);
+    return await Order.updateOne({ _id: new Types.ObjectId(orderId) }, { $set: data });
   }
 
   static async deleteOrder(orderId: string) {

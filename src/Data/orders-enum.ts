@@ -3,8 +3,8 @@ import { registerEnumType } from "type-graphql";
 enum OrderStatus {
   placed = "placed",
   processing = "processing",
-  outForDelivery = "out-for-delivery",
-  orderDelivered = "order-delivered",
+  outForDelivery = "outforDelivery",
+  orderDelivered = "orderDelivered",
 }
 
 export enum PaymentMethod {
