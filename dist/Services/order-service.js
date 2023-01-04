@@ -6,14 +6,12 @@ class OrderService {
     static async getSingleUserOrders(userId) {
         return await Models_1.Order.find({ userId })
             .sort({ _id: -1 })
-            .populate("userId")
             .populate("cart.productId")
             .populate("couponId");
     }
     static async getAllOrders(status) {
         return await Models_1.Order.find(status ? { status } : {})
             .sort({ _id: -1 })
-            .populate("userId")
             .populate("cart.productId")
             .populate("couponId");
     }
@@ -21,7 +19,6 @@ class OrderService {
     static async getSingleOrder(id) {
         return await Models_1.Order.findById(id)
             .sort({ _id: -1 })
-            .populate("userId")
             .populate("cart.productId")
             .populate("couponId");
     }

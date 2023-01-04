@@ -10,7 +10,7 @@ export default class OrderService {
   static async getSingleUserOrders(userId: string) {
     return await Order.find({ userId })
       .sort({ _id: -1 })
-      .populate("userId")
+
       .populate("cart.productId")
       .populate("couponId");
   }
@@ -18,7 +18,6 @@ export default class OrderService {
   static async getAllOrders(status?: string) {
     return await Order.find(status ? { status } : {})
       .sort({ _id: -1 })
-      .populate("userId")
       .populate("cart.productId")
       .populate("couponId");
   }
@@ -26,7 +25,6 @@ export default class OrderService {
   static async getSingleOrder(id: string) {
     return await Order.findById(id)
       .sort({ _id: -1 })
-      .populate("userId")
       .populate("cart.productId")
       .populate("couponId");
   }

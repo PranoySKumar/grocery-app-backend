@@ -28,6 +28,8 @@ import { StoreService } from "./Services";
   app.use(errorHandler); //registering error handler.
 
   //connecting to db.
+
+  mongoose.set("strictQuery", true);
   await mongoose.connect(getEnv().DATA_BASE_URL);
   console.log("mongoose connected");
   //setting up graphql

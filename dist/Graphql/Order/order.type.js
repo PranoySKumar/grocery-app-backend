@@ -67,6 +67,10 @@ __decorate([
 ], OrderType.prototype, "tax", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], OrderType.prototype, "userId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
     __metadata("design:type", Number)
 ], OrderType.prototype, "orderNo", void 0);
 __decorate([
@@ -86,7 +90,7 @@ __decorate([
     __metadata("design:type", user_type_1.ShippingAddressType)
 ], OrderType.prototype, "shippingAddress", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type => Date), { nullable: true }),
+    (0, type_graphql_1.Field)((type) => Date, { nullable: true }),
     __metadata("design:type", Date)
 ], OrderType.prototype, "deliveredAt", void 0);
 __decorate([

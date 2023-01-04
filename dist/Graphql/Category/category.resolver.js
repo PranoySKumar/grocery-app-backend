@@ -17,13 +17,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const Services_1 = require("../../Services");
+const auth_1 = require("../../Utils/auth");
+const cloudinary_client_1 = __importDefault(require("../../Utils/cloudinary-client"));
 const category_type_1 = __importDefault(require("./category.type"));
 let CategoryResolver = class CategoryResolver {
     async categories(limit) {
-        return await Services_1.CategoryService.getAll(limit);
+        return await Services_1.CategoryService.getAllCategories(limit);
     }
     async category(id) {
-        return await Services_1.CategoryService.getOne(id);
+        return await Services_1.CategoryService.getSingleCategory(id);
+    }
+    async addCategory(name, image) {
+        try {
+            const res = await cloudinary_client_1.default.upload(image, {});
+            return await Services_1.CategoryService.addCategory(name, "meat", res.secure_url);
+        }
+        catch (error) {
+            console.log(error);
+            return null;
+        }
     }
 };
 __decorate([
@@ -40,6 +52,15 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], CategoryResolver.prototype, "category", null);
+__decorate([
+    (0, type_graphql_1.Authorized)([auth_1.Role.admin, auth_1.Role.store]),
+    (0, type_graphql_1.Mutation)((type) => category_type_1.default),
+    __param(0, (0, type_graphql_1.Arg)("name")),
+    __param(1, (0, type_graphql_1.Arg)("image")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], CategoryResolver.prototype, "addCategory", null);
 CategoryResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], CategoryResolver);

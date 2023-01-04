@@ -13,12 +13,13 @@ export class OrderType {
   @Field((type) => UserType) user!: UserType;
   @Field((type) => [CartItem]) cart!: CartItem[];
   @Field() tax!: number;
+  @Field() userId!: string;
   @Field() orderNo!: number;
   @Field((type) => CouponType, { nullable: true }) coupon!: CouponType;
   @Field() paymentMethod!: PaymentMethod;
   @Field((type) => Date) createdAt!: Date;
   @Field((type) => ShippingAddressType) shippingAddress!: ShippingAddressType;
-  @Field((type => Date), { nullable: true }) deliveredAt!: Date;
+  @Field((type) => Date, { nullable: true }) deliveredAt!: Date;
   @Field() shippingCharges!: number;
 }
 

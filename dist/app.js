@@ -26,6 +26,7 @@ const store_resolver_1 = require("./Graphql/Store/store.resolver");
     app.use(express_1.default.json()); //body-parser
     app.use(Middleware_1.errorHandler); //registering error handler.
     //connecting to db.
+    mongoose_1.default.set("strictQuery", true);
     await mongoose_1.default.connect((0, Config_1.getEnv)().DATA_BASE_URL);
     console.log("mongoose connected");
     //setting up graphql
