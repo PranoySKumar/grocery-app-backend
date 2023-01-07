@@ -1,7 +1,6 @@
 import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
 import { CategoryService, FileService } from "../../Services";
 import { Role } from "../../Utils/auth";
-import uploader from "../../Utils/cloudinary-client";
 import CategoryType from "./category.type";
 
 @Resolver()
@@ -18,10 +17,9 @@ export default class CategoryResolver {
 
   @Authorized([Role.admin, Role.store])
   @Mutation((type) => CategoryType)
-  async addCategory(@Arg("name") name: string, @Arg("image") image: string) {
+  async addCategory(@Arg("name") name: string, @Arg("imageUrl") imageUrl: string) {
     try {
-      const res = await uploader.upload(image, {});
-      return await CategoryService.addCategory(name, "meat", res.secure_url);
+      return await CategoryService.addCategory(name, "meat", imageUrl);
     } catch (error) {
       console.log(error);
       return null;
@@ -33,21 +31,16 @@ export default class CategoryResolver {
   async updateCategory(
     @Arg("id") id: string,
     @Arg("name", { nullable: true }) name?: string,
-    @Arg("image", { nullable: true }) image?: string
+    @Arg("imageUrl", { nullable: true }) imageUrl?: string
   ) {
     try {
-      if (image) {
-        const response = await uploader.upload(image, {});
+      const category = await CategoryService.updateCategory(id, {
+        name,
+        imageUrl,
+      });
+      if (imageUrl) await FileService.deleteFile(category?.imageUrl!);
 
-        const category = await CategoryService.updateCategory(id, {
-          name,
-          imageUrl: response.secure_url,
-        });
-        await uploader.destroy(category?.imageUrl.split("/").slice(-1)[0].split(".")[0]!);
-      } else {
-        await CategoryService.updateCategory(id, { name });
-      }
-      return CategoryService.getSingleCategory(id);
+      return await CategoryService.getSingleCategory(id);
     } catch (error) {
       console.log(error);
       return false;

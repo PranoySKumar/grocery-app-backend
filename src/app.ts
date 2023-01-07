@@ -14,7 +14,7 @@ import ProductResolver from "./Graphql/Product/product.resolver";
 import CategoryResolver from "./Graphql/Category/category.resolver";
 import { OrderResolver } from "./Graphql/Order/order.resolver";
 import { StoreResolver } from "./Graphql/Store/store.resolver";
-import { StoreService } from "./Services";
+import fileRoutes from "./Routes/file-routes";
 
 (async () => {
   dotenv.config(); //configuring env variables
@@ -37,6 +37,8 @@ import { StoreService } from "./Services";
     resolvers: [UserResolver, ProductResolver, CategoryResolver, OrderResolver, StoreResolver],
     authChecker: customAuthChecker,
   });
+
+  //registering graphql
   app.use(
     "/graphql",
     graphqlHTTP((req) => ({
@@ -45,6 +47,9 @@ import { StoreService } from "./Services";
       graphiql: true,
     }))
   );
+  //registering routes
+  app.use(fileRoutes);
+
   //staring server
   app.listen(process.env.PORT || 4000);
   console.log("server started at port 4000");

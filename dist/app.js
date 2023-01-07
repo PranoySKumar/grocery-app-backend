@@ -19,6 +19,7 @@ const product_resolver_1 = __importDefault(require("./Graphql/Product/product.re
 const category_resolver_1 = __importDefault(require("./Graphql/Category/category.resolver"));
 const order_resolver_1 = require("./Graphql/Order/order.resolver");
 const store_resolver_1 = require("./Graphql/Store/store.resolver");
+const file_routes_1 = __importDefault(require("./Routes/file-routes"));
 (async () => {
     dotenv_1.default.config(); //configuring env variables
     const app = (0, express_1.default)();
@@ -34,11 +35,14 @@ const store_resolver_1 = require("./Graphql/Store/store.resolver");
         resolvers: [user_resolver_1.UserResolver, product_resolver_1.default, category_resolver_1.default, order_resolver_1.OrderResolver, store_resolver_1.StoreResolver],
         authChecker: auth_1.customAuthChecker,
     });
+    //registering graphql
     app.use("/graphql", (0, express_graphql_1.graphqlHTTP)((req) => ({
         context: (0, graphql_context_1.default)(req),
         schema: schema,
         graphiql: true,
     })));
+    //registering routes
+    app.use(file_routes_1.default);
     //staring server
     app.listen(process.env.PORT || 4000);
     console.log("server started at port 4000");
