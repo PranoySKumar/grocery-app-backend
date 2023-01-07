@@ -25,8 +25,6 @@ import fileRoutes from "./Routes/file-routes";
 
   app.use(express.json()); //body-parser
 
-  app.use(errorHandler); //registering error handler.
-
   //connecting to db.
 
   mongoose.set("strictQuery", true);
@@ -49,6 +47,8 @@ import fileRoutes from "./Routes/file-routes";
   );
   //registering routes
   app.use(fileRoutes);
+
+  app.use(errorHandler); //registering error handler.
 
   //staring server
   app.listen(process.env.PORT || 4000);
