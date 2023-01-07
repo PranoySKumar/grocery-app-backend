@@ -1,6 +1,5 @@
-import { Category, ICategory } from "../Models";
+import { Category } from "../Models";
 import { Types } from "mongoose";
-import { FileService } from "./";
 
 export default class CategoryService {
   static async addCategory(name: string, type: string, imageUrl: string) {
@@ -17,11 +16,7 @@ export default class CategoryService {
     _id: string,
     data: { type?: string; name?: string; imageUrl?: string }
   ) {
-    return await Category.updateOne(
-      { _id: new Types.ObjectId(_id) },
-      { $set: data },
-      { runValidators: true, omitUndefined: true }
-    );
+    return await Category.findByIdAndUpdate(_id, { $set: data });
   }
 
   //gets all categories.
@@ -31,6 +26,6 @@ export default class CategoryService {
 
   //gets single category
   static async getSingleCategory(id: string) {
-    return await Category.findOne();
+    return await Category.findById(id);
   }
 }

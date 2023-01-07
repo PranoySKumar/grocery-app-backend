@@ -12,7 +12,7 @@ class CategoryService {
     }
     //updates category
     static async updateCategory(_id, data) {
-        return await Models_1.Category.updateOne({ _id: new mongoose_1.Types.ObjectId(_id) }, { $set: data }, { runValidators: true, omitUndefined: true });
+        return await Models_1.Category.findByIdAndUpdate(_id, { $set: data });
     }
     //gets all categories.
     static async getAllCategories(limit = 999) {
@@ -20,7 +20,7 @@ class CategoryService {
     }
     //gets single category
     static async getSingleCategory(id) {
-        return await Models_1.Category.findOne();
+        return await Models_1.Category.findById(id);
     }
 }
 exports.default = CategoryService;

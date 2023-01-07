@@ -17,7 +17,7 @@ import { IOrder } from "../../Models";
 import { OrderService } from "../../Services";
 import { Role } from "../../Utils/auth";
 import { CouponType } from "../Coupon/coupon.type";
-import UserType, { ShippingAddressType } from "../User/user.type";
+import UserType from "../User/user.type";
 import { AddOrderInputType, CartItemInputType, GenerateBillInputType } from "./order-input.type";
 import { CartItem, OrderType } from "./order.type";
 
@@ -63,7 +63,6 @@ export class OrderResolver {
 
     await OrderService.createNewOrder({
       cart,
-
       couponId,
       userId,
       shippingAddress,

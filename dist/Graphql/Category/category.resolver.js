@@ -37,6 +37,26 @@ let CategoryResolver = class CategoryResolver {
             return null;
         }
     }
+    async updateCategory(id, name, image) {
+        try {
+            if (image) {
+                const response = await cloudinary_client_1.default.upload(image, {});
+                const category = await Services_1.CategoryService.updateCategory(id, {
+                    name,
+                    imageUrl: response.secure_url,
+                });
+                await cloudinary_client_1.default.destroy(category === null || category === void 0 ? void 0 : category.imageUrl.split("/").slice(-1)[0].split(".")[0]);
+            }
+            else {
+                await Services_1.CategoryService.updateCategory(id, { name });
+            }
+            return Services_1.CategoryService.getSingleCategory(id);
+        }
+        catch (error) {
+            console.log(error);
+            return false;
+        }
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)((type) => [category_type_1.default]),
@@ -61,6 +81,16 @@ __decorate([
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], CategoryResolver.prototype, "addCategory", null);
+__decorate([
+    (0, type_graphql_1.Authorized)([auth_1.Role.admin, auth_1.Role.store]),
+    (0, type_graphql_1.Mutation)((type) => category_type_1.default),
+    __param(0, (0, type_graphql_1.Arg)("id")),
+    __param(1, (0, type_graphql_1.Arg)("name", { nullable: true })),
+    __param(2, (0, type_graphql_1.Arg)("image", { nullable: true })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:returntype", Promise)
+], CategoryResolver.prototype, "updateCategory", null);
 CategoryResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], CategoryResolver);

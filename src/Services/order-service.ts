@@ -150,7 +150,6 @@ export default class OrderService {
   }
 
   static async updateOrder(orderId: string, data: IOrder | UpdateOrderInputType) {
-    console.log(data);
     return await Order.updateOne({ _id: new Types.ObjectId(orderId) }, { $set: data });
   }
 

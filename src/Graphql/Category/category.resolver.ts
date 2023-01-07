@@ -28,9 +28,29 @@ export default class CategoryResolver {
     }
   }
 
-  // @Authorized([Role.admin, Role.store])
-  // @Mutation()
-  // async updateCategory(@Arg("id") id: string) {
-  //   return await CategoryService.getOne(id);
-  // }
+  @Authorized([Role.admin, Role.store])
+  @Mutation((type) => CategoryType)
+  async updateCategory(
+    @Arg("id") id: string,
+    @Arg("name", { nullable: true }) name?: string,
+    @Arg("image", { nullable: true }) image?: string
+  ) {
+    try {
+      if (image) {
+        const response = await uploader.upload(image, {});
+
+        const category = await CategoryService.updateCategory(id, {
+          name,
+          imageUrl: response.secure_url,
+        });
+        await uploader.destroy(category?.imageUrl.split("/").slice(-1)[0].split(".")[0]!);
+      } else {
+        await CategoryService.updateCategory(id, { name });
+      }
+      return CategoryService.getSingleCategory(id);
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
 }

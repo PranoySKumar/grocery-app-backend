@@ -119,7 +119,6 @@ class OrderService {
         return itemAvailabilityResult;
     }
     static async updateOrder(orderId, data) {
-        console.log(data);
         return await Models_1.Order.updateOne({ _id: new mongoose_1.Types.ObjectId(orderId) }, { $set: data });
     }
     static async deleteOrder(orderId) {
