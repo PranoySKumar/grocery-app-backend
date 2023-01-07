@@ -8,7 +8,6 @@ const cloudinary_client_1 = __importDefault(require("../Utils/cloudinary-client"
 const cloudinary_client_2 = __importDefault(require("../Utils/cloudinary-client"));
 class FileService {
     static async saveFile(file) {
-        console.log(file.path);
         const result = (await this.bufferUpload(file === null || file === void 0 ? void 0 : file.buffer));
         return result.secure_url;
     }

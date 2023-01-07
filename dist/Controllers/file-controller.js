@@ -6,7 +6,6 @@ class FileController {
     static async uploadImage(req, res, next) {
         try {
             const file = req.file;
-            console.log(req.file);
             const url = await Services_1.FileService.saveFile(file);
             res.json({ url });
         }

@@ -25,7 +25,6 @@ const file_routes_1 = __importDefault(require("./Routes/file-routes"));
     const app = (0, express_1.default)();
     app.use((0, cors_1.default)()); //CORS handler
     app.use(express_1.default.json()); //body-parser
-    app.use(Middleware_1.errorHandler); //registering error handler.
     //connecting to db.
     mongoose_1.default.set("strictQuery", true);
     await mongoose_1.default.connect((0, Config_1.getEnv)().DATA_BASE_URL);
@@ -43,6 +42,7 @@ const file_routes_1 = __importDefault(require("./Routes/file-routes"));
     })));
     //registering routes
     app.use(file_routes_1.default);
+    app.use(Middleware_1.errorHandler); //registering error handler.
     //staring server
     app.listen(process.env.PORT || 4000);
     console.log("server started at port 4000");

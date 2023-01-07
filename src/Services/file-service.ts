@@ -5,7 +5,6 @@ import cloudinaryClient from "../Utils/cloudinary-client";
 
 export default class FileService {
   static async saveFile(file?: Express.Multer.File) {
-    console.log(file!.path);
     const result = (await this.bufferUpload(file?.buffer!)) as UploadApiResponse;
     return result.secure_url;
   }

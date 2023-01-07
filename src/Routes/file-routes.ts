@@ -5,11 +5,6 @@ import { FileController } from "../Controllers/file-controller";
 
 const upload = multer();
 const fileRoutes = Router();
-fileRoutes.post(
-  "/file/image",
-
-  upload.single("image"),
-  FileController.uploadImage
-);
+fileRoutes.post("/file/image", isAuthToken, upload.single("image"), FileController.uploadImage);
 
 export default fileRoutes;
