@@ -8,41 +8,22 @@ import CategoryType from "../Category/category.type";
 class ProductQuantityType {
   @Field(() => QuantityType) type!: QuantityType;
   @Field() value!: number;
-  @Field() totalQuantity!: number;
 }
 
 @InputType("ProductInputType")
 @ObjectType()
 export class ProductType {
   @Field((type) => ID) id?: string;
-
   @Field() name?: string;
-
   @Field() description?: string;
-
   @Field() price?: number;
-
   @Authorized([Role.admin, Role.store]) @Field() unitsSold?: number;
-
-  @Field({ nullable: true })
-  discount?: number;
-
-  @Field((type) => ProductQuantityType)
-  quantity!: ProductQuantityType;
-
-  @Field((type) => [CategoryType])
-  categories?: CategoryType[]; 
-
-  @Field() 
-  imageUrl?: string;
-
+  @Field({ nullable: true }) discount?: number;
+  @Field((type) => ProductQuantityType) quantity!: ProductQuantityType;
+  @Field((type) => [CategoryType]) categories?: CategoryType[];
+  @Field() imageUrl?: string;
   @Field() isAvailable!: boolean;
-
-  @Authorized([Role.admin,Role.store]) @Field() maxUnitsSold!: number;
-
-  @Field()
-  createdAt?: Date;
-
-  @Field()
-  updatedAt?: Date;
+  @Authorized([Role.admin, Role.store]) @Field() unitsAvailable!: number;
+  @Field() createdAt?: Date;
+  @Field() updatedAt?: Date;
 }

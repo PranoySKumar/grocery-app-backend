@@ -27,10 +27,6 @@ __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", Number)
 ], ProductQuantityType.prototype, "value", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", Number)
-], ProductQuantityType.prototype, "totalQuantity", void 0);
 ProductQuantityType = __decorate([
     (0, type_graphql_1.InputType)("ProductQuantityInputType"),
     (0, type_graphql_1.ObjectType)()
@@ -82,7 +78,7 @@ __decorate([
     (0, type_graphql_1.Authorized)([auth_1.Role.admin, auth_1.Role.store]),
     (0, type_graphql_1.Field)(),
     __metadata("design:type", Number)
-], ProductType.prototype, "maxUnitsSold", void 0);
+], ProductType.prototype, "unitsAvailable", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", Date)

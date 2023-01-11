@@ -19,7 +19,7 @@ export default class CategoryResolver {
   @Mutation((type) => CategoryType)
   async addCategory(@Arg("name") name: string, @Arg("imageUrl") imageUrl: string) {
     try {
-      return await CategoryService.addCategory(name, "meat", imageUrl);
+      return await CategoryService.addCategory(name, "Meat", imageUrl);
     } catch (error) {
       console.log(error);
       return null;

@@ -7,7 +7,7 @@ class FileController {
         try {
             const file = req.file;
             const url = await Services_1.FileService.saveFile(file);
-            res.json({ url });
+            res.status(200).json({ url });
         }
         catch (error) {
             console.log(error);

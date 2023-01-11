@@ -6,7 +6,6 @@ const Data_1 = require("../Data");
 const quantitySchema = new mongoose_1.Schema({
     type: { type: String, enum: Object.values(Data_1.QuantityType), required: true },
     value: Number,
-    totalQuantity: { type: Number, required: true },
 }, { _id: false });
 //TODO: assign categoryId using Ref
 const productSchema = new mongoose_1.Schema({
@@ -14,7 +13,7 @@ const productSchema = new mongoose_1.Schema({
     description: { type: mongoose_1.SchemaTypes.String },
     price: { type: Number, required: true },
     quantity: { type: quantitySchema, required: true },
-    discount: { type: mongoose_1.SchemaTypes.Number },
+    discount: { type: mongoose_1.SchemaTypes.Number, default: 0 },
     unitsSold: { type: mongoose_1.SchemaTypes.Number, default: 0 },
     isAvailable: { type: mongoose_1.SchemaTypes.Boolean, default: true },
     unitsAvailable: { type: mongoose_1.SchemaTypes.Number, required: true },

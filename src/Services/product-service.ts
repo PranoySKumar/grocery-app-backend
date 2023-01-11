@@ -38,8 +38,8 @@ export default class ProductService {
   }
 
   //add new product;
-  static async addNewProduct(product: IProduct & { categoryId: string }) {
-    const data = { ...product, categoryId: new Types.ObjectId(product.categoryId) };
+  static async addNewProduct(product: IProduct) {
+    const data = { ...product };
     return await new Product(data).save();
   }
 

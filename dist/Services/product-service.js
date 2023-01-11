@@ -33,7 +33,7 @@ class ProductService {
     }
     //add new product;
     static async addNewProduct(product) {
-        const data = { ...product, categoryId: new mongoose_1.Types.ObjectId(product.categoryId) };
+        const data = { ...product };
         return await new Models_1.Product(data).save();
     }
     //edit single product;

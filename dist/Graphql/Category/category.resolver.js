@@ -28,7 +28,7 @@ let CategoryResolver = class CategoryResolver {
     }
     async addCategory(name, imageUrl) {
         try {
-            return await Services_1.CategoryService.addCategory(name, "meat", imageUrl);
+            return await Services_1.CategoryService.addCategory(name, "Meat", imageUrl);
         }
         catch (error) {
             console.log(error);

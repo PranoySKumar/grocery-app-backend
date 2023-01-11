@@ -15,8 +15,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = require("mongoose");
 const type_graphql_1 = require("type-graphql");
+const Data_1 = require("../../Data");
 const product_service_1 = __importDefault(require("../../Services/product-service"));
+const auth_1 = require("../../Utils/auth");
 const product_type_1 = require("./product.type");
 let ProductsQueryInputType = class ProductsQueryInputType {
 };
@@ -47,6 +50,47 @@ __decorate([
 ProductsQueryInputType = __decorate([
     (0, type_graphql_1.InputType)()
 ], ProductsQueryInputType);
+let AddProductInputType = class AddProductInputType {
+};
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], AddProductInputType.prototype, "name", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", Number)
+], AddProductInputType.prototype, "price", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true, defaultValue: 0 }),
+    __metadata("design:type", Number)
+], AddProductInputType.prototype, "discount", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], AddProductInputType.prototype, "description", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", Number)
+], AddProductInputType.prototype, "quantity", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], AddProductInputType.prototype, "quantityType", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], AddProductInputType.prototype, "categoryId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], AddProductInputType.prototype, "imageUrl", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", Number)
+], AddProductInputType.prototype, "unitsAvailable", void 0);
+AddProductInputType = __decorate([
+    (0, type_graphql_1.InputType)()
+], AddProductInputType);
 let ProductResolver = class ProductResolver {
     async products(options) {
         if (options.searchTerm)
@@ -61,6 +105,20 @@ let ProductResolver = class ProductResolver {
     }
     async product(id) {
         return await product_service_1.default.findProductById(id);
+    }
+    //mutations
+    async addProduct(data) {
+        const { categoryId, description, discount, imageUrl, name, price, quantity, quantityType, unitsAvailable, } = data;
+        return await product_service_1.default.addNewProduct({
+            name,
+            description,
+            discount,
+            price,
+            imageUrl,
+            unitsAvailable,
+            quantity: { type: quantityType, value: quantity },
+            categories: [new mongoose_1.Types.ObjectId(categoryId)],
+        });
     }
 };
 __decorate([
@@ -77,6 +135,14 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ProductResolver.prototype, "product", null);
+__decorate([
+    (0, type_graphql_1.Authorized)([auth_1.Role.admin, auth_1.Role.store]),
+    (0, type_graphql_1.Mutation)((type) => product_type_1.ProductType),
+    __param(0, (0, type_graphql_1.Arg)("data")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [AddProductInputType]),
+    __metadata("design:returntype", Promise)
+], ProductResolver.prototype, "addProduct", null);
 ProductResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], ProductResolver);
