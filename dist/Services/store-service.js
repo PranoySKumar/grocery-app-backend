@@ -22,5 +22,8 @@ class StoreService {
         }
         return await (0, Utils_1.generateToken)({ storeId: store === null || store === void 0 ? void 0 : store._id });
     }
+    static async updateStore(store) {
+        await Models_1.Store.updateOne({}, { $set: store });
+    }
 }
 exports.default = StoreService;

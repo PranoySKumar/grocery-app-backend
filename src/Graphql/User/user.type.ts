@@ -1,4 +1,3 @@
-import { isRequiredInputField } from "graphql";
 import { ObjectType, Field, ID, Int, FieldResolver, Root, InputType } from "type-graphql";
 import { AddressType } from "../../Data";
 import { CouponType } from "../Coupon/coupon.type";
@@ -39,8 +38,7 @@ export default class UserType {
   @Field((type) => ID)
   id!: string;
 
-  @Field()
-  userName!: string;
+  @Field() userName!: string;
 
   @Field((type) => Int, { nullable: true })
   pincode?: number;

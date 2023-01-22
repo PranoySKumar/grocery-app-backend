@@ -44,6 +44,8 @@ class UserInputType {
   @Field((type) => ID, { nullable: true })
   id?: string;
 
+  @Field({ nullable: true }) deviceId?: string;
+
   @Field({ nullable: true })
   userName?: string;
 

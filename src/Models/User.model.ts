@@ -12,6 +12,7 @@ export interface IUser {
   profileImageUrl?: string;
   coupons?: ObjectId[] | ICoupon[];
   favourites?: ObjectId[];
+  deviceId?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -40,6 +41,8 @@ const userSchema = new Schema<IUser>(
     userName: SchemaTypes.String,
     shippingAddresses: { type: [addressSchema], default: [] },
     pincode: Number,
+    deviceId: String,
+
     location: { type: { lat: SchemaTypes.Number, lng: SchemaTypes.Number } },
     favourites: { type: [SchemaTypes.ObjectId], ref: Product.modelName, default: [] },
     profileImageUrl: SchemaTypes.String,
