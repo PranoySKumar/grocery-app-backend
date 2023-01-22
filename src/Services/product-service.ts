@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 import { Category, IProduct, Product } from "../Models";
 
 export default class ProductService {
@@ -40,13 +40,17 @@ export default class ProductService {
   //add new product;
   static async addNewProduct(product: IProduct) {
     const data = { ...product };
+    data.categories = data.categories?.map((item) => new Types.ObjectId(item as string));
     return await new Product(data).save();
   }
 
   //edit single product;
-  static async editNewProduct(_id: string, productDetails: IProduct) {
+  static async updateProduct(_id: string, productDetails: IProduct) {
+    productDetails.categories = productDetails.categories?.map(
+      (item) => new Types.ObjectId(item as string)
+    );
+
     return await Product.updateOne({ _id: new Types.ObjectId(_id) }, productDetails, {
-      runValidators: true,
       omitUndefined: true,
     });
   }

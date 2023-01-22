@@ -33,13 +33,16 @@ class ProductService {
     }
     //add new product;
     static async addNewProduct(product) {
+        var _a;
         const data = { ...product };
+        data.categories = (_a = data.categories) === null || _a === void 0 ? void 0 : _a.map((item) => new mongoose_1.Types.ObjectId(item));
         return await new Models_1.Product(data).save();
     }
     //edit single product;
-    static async editNewProduct(_id, productDetails) {
+    static async updateProduct(_id, productDetails) {
+        var _a;
+        productDetails.categories = (_a = productDetails.categories) === null || _a === void 0 ? void 0 : _a.map((item) => new mongoose_1.Types.ObjectId(item));
         return await Models_1.Product.updateOne({ _id: new mongoose_1.Types.ObjectId(_id) }, productDetails, {
-            runValidators: true,
             omitUndefined: true,
         });
     }

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProductType = void 0;
+exports.ProductType = exports.ProductQuantityType = void 0;
 const type_graphql_1 = require("type-graphql");
 const Data_1 = require("../../Data");
 const auth_1 = require("../../Utils/auth");
@@ -31,6 +31,7 @@ ProductQuantityType = __decorate([
     (0, type_graphql_1.InputType)("ProductQuantityInputType"),
     (0, type_graphql_1.ObjectType)()
 ], ProductQuantityType);
+exports.ProductQuantityType = ProductQuantityType;
 let ProductType = class ProductType {
 };
 __decorate([

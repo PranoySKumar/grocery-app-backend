@@ -15,7 +15,7 @@ export interface IProduct {
   unitsSold?: number;
   discount?: number;
   quantity?: TQuantity;
-  categories?: Types.ObjectId[] | ICategory[];
+  categories?: Types.ObjectId[] | ICategory[] | string[];
   imageUrl?: string;
   isAvailable?: boolean;
   unitsAvailable?: number;

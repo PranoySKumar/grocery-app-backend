@@ -1,10 +1,8 @@
-import { isNullableType } from "graphql";
 import { ObjectId, Types } from "mongoose";
 import { Arg, Authorized, Field, InputType, Mutation, Query, Resolver } from "type-graphql";
-import { QuantityType } from "../../Data";
 import ProductService from "../../Services/product-service";
 import { Role } from "../../Utils/auth";
-import { ProductType } from "./product.type";
+import { ProductQuantityType, ProductType } from "./product.type";
 
 @InputType()
 class ProductsQueryInputType {
@@ -27,9 +25,20 @@ class AddProductInputType {
   @Field() price!: number;
   @Field({ nullable: true, defaultValue: 0 }) discount?: number;
   @Field() description!: string;
-  @Field() quantity!: number;
-  @Field() quantityType!: QuantityType;
-  @Field() categoryId!: string;
+  @Field() quantity!: ProductQuantityType;
+  @Field((type) => [String]) categories?: string[];
+  @Field() imageUrl!: string;
+  @Field() unitsAvailable!: number;
+}
+@InputType()
+class UpdateProductInputType {
+  @Field() id!: string;
+  @Field() name!: string;
+  @Field() price!: number;
+  @Field({ nullable: true, defaultValue: 0 }) discount?: number;
+  @Field() description!: string;
+  @Field() quantity!: ProductQuantityType;
+  @Field((type) => [String]) categories!: string[];
   @Field() imageUrl!: string;
   @Field() unitsAvailable!: number;
 }
@@ -57,27 +66,26 @@ export default class ProductResolver {
   @Authorized([Role.admin, Role.store])
   @Mutation((type) => ProductType)
   async addProduct(@Arg("data") data: AddProductInputType) {
-    const {
-      categoryId,
-      description,
-      discount,
-      imageUrl,
-      name,
-      price,
-      quantity,
-      quantityType,
-      unitsAvailable,
-    } = data;
-    return await ProductService.addNewProduct({
-      name,
-      description,
-      discount,
-      price,
-      imageUrl,
-      unitsAvailable,
+    return await ProductService.addNewProduct(data);
+  }
 
-      quantity: { type: quantityType, value: quantity },
-      categories: [new Types.ObjectId(categoryId)] as Types.ObjectId[],
-    });
+  @Authorized([Role.admin, Role.store])
+  @Mutation((type) => ProductType)
+  async updateProduct(@Arg("data") data: UpdateProductInputType) {
+    const { id } = data;
+    await ProductService.updateProduct(id, data);
+    return await ProductService.findProductById(id);
+  }
+
+  @Authorized([Role.admin, Role.store])
+  @Mutation((type) => Boolean)
+  async deleteProduct(@Arg("id") id: string) {
+    try {
+      await ProductService.deleteProduct(id);
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 }

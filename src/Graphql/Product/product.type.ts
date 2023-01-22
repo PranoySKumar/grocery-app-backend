@@ -5,7 +5,7 @@ import CategoryType from "../Category/category.type";
 
 @InputType("ProductQuantityInputType")
 @ObjectType()
-class ProductQuantityType {
+export class ProductQuantityType {
   @Field(() => QuantityType) type!: QuantityType;
   @Field() value!: number;
 }
