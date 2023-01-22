@@ -42,7 +42,7 @@ let CategoryResolver = class CategoryResolver {
                 imageUrl,
             });
             if (imageUrl)
-                await Services_1.FileService.deleteFile(category === null || category === void 0 ? void 0 : category.imageUrl);
+                await Services_1.FileService.deleteImageFile(category === null || category === void 0 ? void 0 : category.imageUrl);
             return await Services_1.CategoryService.getSingleCategory(id);
         }
         catch (error) {

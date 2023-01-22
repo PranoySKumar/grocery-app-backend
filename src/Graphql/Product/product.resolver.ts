@@ -1,5 +1,6 @@
 import { ObjectId, Types } from "mongoose";
 import { Arg, Authorized, Field, InputType, Mutation, Query, Resolver } from "type-graphql";
+import { FileService } from "../../Services";
 import ProductService from "../../Services/product-service";
 import { Role } from "../../Utils/auth";
 import { ProductQuantityType, ProductType } from "./product.type";
@@ -81,7 +82,8 @@ export default class ProductResolver {
   @Mutation((type) => Boolean)
   async deleteProduct(@Arg("id") id: string) {
     try {
-      await ProductService.deleteProduct(id);
+      const product = await ProductService.deleteProduct(id);
+      FileService.deleteImageFile(product?.imageUrl!);
       return true;
     } catch (error) {
       console.log(error);

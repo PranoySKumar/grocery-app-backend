@@ -16,6 +16,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
+const Services_1 = require("../../Services");
 const product_service_1 = __importDefault(require("../../Services/product-service"));
 const auth_1 = require("../../Utils/auth");
 const product_type_1 = require("./product.type");
@@ -152,7 +153,8 @@ let ProductResolver = class ProductResolver {
     }
     async deleteProduct(id) {
         try {
-            await product_service_1.default.deleteProduct(id);
+            const product = await product_service_1.default.deleteProduct(id);
+            Services_1.FileService.deleteImageFile(product === null || product === void 0 ? void 0 : product.imageUrl);
             return true;
         }
         catch (error) {

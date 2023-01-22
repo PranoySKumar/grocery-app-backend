@@ -7,11 +7,11 @@ const stream_1 = require("stream");
 const cloudinary_client_1 = __importDefault(require("../Utils/cloudinary-client"));
 const cloudinary_client_2 = __importDefault(require("../Utils/cloudinary-client"));
 class FileService {
-    static async saveFile(file) {
+    static async saveImageFile(file) {
         const result = (await this.bufferUpload(file === null || file === void 0 ? void 0 : file.buffer));
         return result.secure_url;
     }
-    static async deleteFile(url) {
+    static async deleteImageFile(url) {
         await cloudinary_client_1.default.destroy(url.split("/").slice(-1)[0].split(".")[0]);
     }
     static async bufferUpload(buffer) {
