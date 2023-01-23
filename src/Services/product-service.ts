@@ -1,5 +1,5 @@
-import { ObjectId, Types } from "mongoose";
-import { Category, IProduct, Product } from "../Models";
+import { Types } from "mongoose";
+import { IProduct, Product } from "../Models";
 
 export default class ProductService {
   //get all products;

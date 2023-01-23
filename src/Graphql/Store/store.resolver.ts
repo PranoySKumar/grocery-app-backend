@@ -11,7 +11,6 @@ import {
 } from "type-graphql";
 import { IStore, Store } from "../../Models";
 import { StoreService } from "../../Services";
-import { OrderType } from "../Order/order.type";
 import { StoreType } from "./store.type";
 
 @InputType()
@@ -45,7 +44,13 @@ export class StoreResolver {
   }
 
   @Mutation((returns) => Boolean) async updateStore(data: UpdateStoreInputType) {
-    await StoreService.updateStore(data);
+    try {
+      await StoreService.updateStore(data);
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 
   @FieldResolver((type) => String) id(@Root() store: IStore) {

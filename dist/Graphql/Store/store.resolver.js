@@ -65,7 +65,14 @@ let StoreResolver = class StoreResolver {
         }
     }
     async updateStore(data) {
-        await Services_1.StoreService.updateStore(data);
+        try {
+            await Services_1.StoreService.updateStore(data);
+            return true;
+        }
+        catch (error) {
+            console.log(error);
+            return false;
+        }
     }
     id(store) {
         return store._id.toString();

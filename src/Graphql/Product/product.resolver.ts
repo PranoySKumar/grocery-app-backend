@@ -8,15 +8,10 @@ import { ProductQuantityType, ProductType } from "./product.type";
 @InputType()
 class ProductsQueryInputType {
   @Field({ nullable: true }) discountFilter?: boolean;
-
   @Field({ nullable: true }) categoryId?: string;
-
   @Field({ nullable: true }) popularFilter?: boolean;
-
   @Field({ nullable: true }) searchTerm?: string;
-
   @Field({ nullable: true }) limit?: number;
-
   @Field({ nullable: true }) skip?: number;
 }
 
