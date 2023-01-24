@@ -7,7 +7,7 @@ export class FileController {
   static async uploadImage(req: Request, res: Response, next: NextFunction) {
     try {
       const file = req.file;
-      const url = await FileService.saveFile(file);
+      const url = await FileService.saveImageFile(file);
       res.status(200).json({ url });
     } catch (error) {
       console.log(error);

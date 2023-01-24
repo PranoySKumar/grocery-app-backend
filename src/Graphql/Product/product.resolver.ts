@@ -1,5 +1,6 @@
 import { ObjectId, Types } from "mongoose";
 import { Arg, Authorized, Field, InputType, Mutation, Query, Resolver } from "type-graphql";
+import { FileService } from "../../Services";
 import ProductService from "../../Services/product-service";
 import { Role } from "../../Utils/auth";
 import { ProductQuantityType, ProductType } from "./product.type";
@@ -7,15 +8,10 @@ import { ProductQuantityType, ProductType } from "./product.type";
 @InputType()
 class ProductsQueryInputType {
   @Field({ nullable: true }) discountFilter?: boolean;
-
   @Field({ nullable: true }) categoryId?: string;
-
   @Field({ nullable: true }) popularFilter?: boolean;
-
   @Field({ nullable: true }) searchTerm?: string;
-
   @Field({ nullable: true }) limit?: number;
-
   @Field({ nullable: true }) skip?: number;
 }
 
@@ -81,7 +77,8 @@ export default class ProductResolver {
   @Mutation((type) => Boolean)
   async deleteProduct(@Arg("id") id: string) {
     try {
-      await ProductService.deleteProduct(id);
+      const product = await ProductService.deleteProduct(id);
+      FileService.deleteImageFile(product?.imageUrl!);
       return true;
     } catch (error) {
       console.log(error);

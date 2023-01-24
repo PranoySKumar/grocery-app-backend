@@ -1,5 +1,4 @@
 import bcrypt from "bcrypt";
-import { Token } from "graphql";
 
 import { IStore, Store } from "../Models";
 import { generateToken } from "../Utils";
@@ -21,5 +20,9 @@ export default class StoreService {
     }
 
     return await generateToken({ storeId: store?._id });
+  }
+
+  static async updateStore(store: IStore & any) {
+    await Store.updateOne({}, { $set: store });
   }
 }

@@ -38,7 +38,7 @@ export default class CategoryResolver {
         name,
         imageUrl,
       });
-      if (imageUrl) await FileService.deleteFile(category?.imageUrl!);
+      if (imageUrl) await FileService.deleteImageFile(category?.imageUrl!);
 
       return await CategoryService.getSingleCategory(id);
     } catch (error) {

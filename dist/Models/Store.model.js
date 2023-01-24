@@ -13,6 +13,7 @@ const storeSchema = new mongoose_1.Schema({
     phoneNumber: { type: mongoose_1.SchemaTypes.Number, required: true },
     password: { type: mongoose_1.SchemaTypes.String, required: true },
     tax: { type: mongoose_1.SchemaTypes.Number, required: true, default: 0 },
+    deviceId: String,
     editing: editingSchema,
     shippingCharges: { type: mongoose_1.SchemaTypes.Number, required: true },
     deliveryTime: {
