@@ -43,7 +43,7 @@ export class StoreResolver {
     }
   }
 
-  @Mutation((returns) => Boolean) async updateStore(data: UpdateStoreInputType) {
+  @Mutation((returns) => Boolean) async updateStore(@Arg("data") data: UpdateStoreInputType) {
     try {
       await StoreService.updateStore(data);
       return true;

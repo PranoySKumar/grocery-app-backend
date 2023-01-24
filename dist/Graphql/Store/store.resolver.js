@@ -95,6 +95,7 @@ __decorate([
 ], StoreResolver.prototype, "storeLogin", null);
 __decorate([
     (0, type_graphql_1.Mutation)((returns) => Boolean),
+    __param(0, (0, type_graphql_1.Arg)("data")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [UpdateStoreInputType]),
     __metadata("design:returntype", Promise)
