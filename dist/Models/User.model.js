@@ -17,7 +17,6 @@ const userSchema = new mongoose_1.Schema({
     userName: mongoose_1.SchemaTypes.String,
     shippingAddresses: { type: [exports.addressSchema], default: [] },
     pincode: Number,
-    deviceId: String,
     location: { type: { lat: mongoose_1.SchemaTypes.Number, lng: mongoose_1.SchemaTypes.Number } },
     favourites: { type: [mongoose_1.SchemaTypes.ObjectId], ref: Product_model_1.Product.modelName, default: [] },
     profileImageUrl: mongoose_1.SchemaTypes.String,

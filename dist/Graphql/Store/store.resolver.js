@@ -14,7 +14,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StoreResolver = void 0;
 const type_graphql_1 = require("type-graphql");
-const Models_1 = require("../../Models");
 const Services_1 = require("../../Services");
 const store_type_1 = require("./store.type");
 let UpdateStoreInputType = class UpdateStoreInputType {
@@ -37,10 +36,6 @@ __decorate([
 ], UpdateStoreInputType.prototype, "tax", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], UpdateStoreInputType.prototype, "deviceId", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
 ], UpdateStoreInputType.prototype, "shippingCharges", void 0);
 __decorate([
@@ -54,13 +49,12 @@ let StoreResolver = class StoreResolver {
     async store() {
         return await Services_1.StoreService.getStore();
     }
-    async storeLogin(password, deviceId) {
+    async storeLogin(password) {
         const token = (await Services_1.StoreService.checkAuth(password));
         if (token == null) {
             return null;
         }
         else {
-            await Models_1.Store.updateOne({}, { $set: { deviceId } });
             return token;
         }
     }
@@ -88,9 +82,8 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Mutation)((returns) => String, { nullable: true }),
     __param(0, (0, type_graphql_1.Arg)("password")),
-    __param(1, (0, type_graphql_1.Arg)("deviceId")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], StoreResolver.prototype, "storeLogin", null);
 __decorate([

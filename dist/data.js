@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.productsdata = exports.categoriesData = void 0;
-const Data_1 = require("./Data");
 exports.categoriesData = [
     {
         name: "Mutton",
@@ -42,7 +41,7 @@ exports.productsdata = [
         discount: 30,
         price: 888,
         unitsSold: 10,
-        quantity: { type: Data_1.QuantityType.wgt, value: 500, totalQuantity: 10000 },
+        quantity: { type: "wgt", value: 500, totalQuantity: 10000 },
         categories: "638441894048e8d864c64cd6",
     },
     {
@@ -52,7 +51,7 @@ exports.productsdata = [
         discount: 5,
         price: 580,
         unitsSold: 15,
-        quantity: { type: Data_1.QuantityType.wgt, value: 500, totalQuantity: 10000 },
+        quantity: { type: "wgt", value: 500, totalQuantity: 10000 },
         categories: "638441894048e8d864c64cd9",
     },
     {
@@ -62,7 +61,7 @@ exports.productsdata = [
         dicount: 15,
         unitsSold: 30,
         price: 204,
-        quantity: { type: Data_1.QuantityType.wgt, value: 500, totalQuantity: 10000 },
+        quantity: { type: "wgt", value: 500, totalQuantity: 10000 },
         categories: "638441894048e8d864c64cda",
     },
     {
@@ -71,7 +70,7 @@ exports.productsdata = [
         description: "Peeled and cleaned with head and tail removed, our medium-sized Freshwater Prawns are deveined and ready for your pan. These prawns are juicy and flavourful while being rich in proteins, omega-3 fatty acids, and antioxidants. They have a moist texture and a mild sweet taste as compared to other seafood.",
         price: 211,
         unitsSold: 0,
-        quantity: { type: Data_1.QuantityType.wgt, value: 250, totalQuantity: 10000 },
+        quantity: { type: "wgt", value: 250, totalQuantity: 10000 },
         categories: "638441894048e8d864c64cd7",
     },
     {
@@ -81,7 +80,7 @@ exports.productsdata = [
         discount: 10,
         unitsSold: 25,
         price: 899,
-        quantity: { type: Data_1.QuantityType.wgt, value: 500, totalQuantity: 10000 },
+        quantity: { type: "wgt", value: 500, totalQuantity: 10000 },
         categories: "638441894048e8d864c64cd7",
     },
 ];

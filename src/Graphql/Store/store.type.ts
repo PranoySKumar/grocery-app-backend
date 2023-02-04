@@ -21,3 +21,4 @@ export class StoreType {
   @Authorized([Role.admin, Role.store]) @Field() createdAt!: Date;
   @Authorized([Role.admin, Role.store]) @Field() updatedAt!: Date;
 }
+

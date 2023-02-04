@@ -36,6 +36,7 @@ class UserLoginInput implements Partial<UserType> {
 
   @Field()
   phoneNumber!: string;
+  
 }
 
 //UserInputType
@@ -44,8 +45,7 @@ class UserInputType {
   @Field((type) => ID, { nullable: true })
   id?: string;
 
-  @Field({ nullable: true }) deviceId?: string;
-
+  
   @Field({ nullable: true })
   userName?: string;
 

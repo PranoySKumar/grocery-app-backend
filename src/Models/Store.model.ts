@@ -14,7 +14,6 @@ export interface IStore {
   password?: string;
   editing?: Editing;
   tax?: number;
-  deviceId?: string;
   deliveryTime?: string;
   shippingCharges: number;
   createdAt?: Date;
@@ -37,7 +36,6 @@ const storeSchema = new Schema<IStore>(
     phoneNumber: { type: SchemaTypes.Number, required: true },
     password: { type: SchemaTypes.String, required: true },
     tax: { type: SchemaTypes.Number, required: true, default: 0 },
-    deviceId: String,
 
     editing: editingSchema,
     shippingCharges: { type: SchemaTypes.Number, required: true },

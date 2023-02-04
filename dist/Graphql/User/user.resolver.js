@@ -74,10 +74,6 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], UserInputType.prototype, "deviceId", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
 ], UserInputType.prototype, "userName", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => type_graphql_1.Int, { nullable: true }),

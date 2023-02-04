@@ -19,7 +19,6 @@ class UpdateStoreInputType {
   @Field({ nullable: true }) email?: string;
   @Field({ nullable: true }) phoneNumber?: number;
   @Field({ nullable: true }) tax?: number;
-  @Field({ nullable: true }) deviceId?: string;
   @Field({ nullable: true }) shippingCharges?: number;
   @Field({ nullable: true }) deliveryTime?: string;
 }
@@ -32,13 +31,11 @@ export class StoreResolver {
 
   @Mutation((returns) => String, { nullable: true }) async storeLogin(
     @Arg("password") password: string,
-    @Arg("deviceId") deviceId: string
   ) {
     const token = (await StoreService.checkAuth(password)) as null | string;
     if (token == null) {
       return null;
     } else {
-      await Store.updateOne({}, { $set: { deviceId } });
       return token;
     }
   }
